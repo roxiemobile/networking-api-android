@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'me.tatarka.retrolambda'
+
+def OKVersion = '3.3.1'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '24.0.0'
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+        versionCode 1
+        versionName '0.1.0'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile "com.squareup.okhttp3:okhttp:$OKVersion"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$OKVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$OKVersion"
+
+    // External dependencies
+    compile 'com.annimon:stream:1.0.9'
+    compile 'com.roxiemobile.android:android-commons:0.1.1'
+
+    // Test dependencies
+    testCompile 'junit:junit:4.12'
+}
+
+// Deploy to Bintray
+apply from: 'push.gradle'

@@ -1,0 +1,34 @@
+
+// How to distribute your own Android library through jCenter and Maven Central from Android Studio
+// @link https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency
+// @link https://github.com/nuuneoi/FBLikeAndroid/blob/master/fb-like/build.gradle
+
+ext {
+    mBintrayRepo = 'maven'
+    mBintrayName = 'com.roxiemobile.networking-api'
+
+    mPackageName = 'Networking API Library'
+    mPackageDesc = 'Networking API is an HTTP library that makes networking for Android apps easier.'
+
+    mGroupId     = 'com.roxiemobile.android'
+    mArtifactId  = 'networking-api'
+    mVersionName = android.defaultConfig.versionName
+    mPackageType = 'aar'
+
+    mCompanyUrl  = 'http://roxiemobile.com'
+    mWebsiteUrl  = 'https://github.com/roxiemobile/networking-api.android'
+    mIssuesUrl   = 'https://github.com/roxiemobile/networking-api.android/issues'
+    mGitRepoUrl  = 'https://github.com/roxiemobile/networking-api.android.git'
+
+    mAuthorId    = 'roxiemobile'
+    mAuthorName  = 'Alexander Bragin'
+    mAuthorEmail = 'bragin-av@mediarium.com'
+
+    mLicenseName = 'The Apache Software License, Version 2.0'
+    mLicenseUrl  = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    mAllLicenses = ['Apache-2.0']
+}
+
+// Deploy to Bintray
+apply from: '../gradle/install.gradle'
+apply from: '../gradle/bintray.gradle'
