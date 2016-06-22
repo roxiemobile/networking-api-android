@@ -35,7 +35,7 @@ dependencies {
 
     // External dependencies
     compile 'com.annimon:stream:1.0.9'
-    compile 'com.roxiemobile.android:android-commons:0.1.1'
+    compile 'com.roxiemobile.android:android-commons:0.2.0'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'
