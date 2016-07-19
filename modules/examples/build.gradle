@@ -1,16 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
-def ASVersion = '24.0.0'
-
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    //noinspection GroovyAssignabilityCheck
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    //noinspection GroovyAssignabilityCheck
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId 'com.roxiemobile.example.networkingapi'
-        minSdkVersion 14
-        targetSdkVersion 24
+        //noinspection GroovyAssignabilityCheck
+        minSdkVersion rootProject.ext.minSdkVersion
+        //noinspection GroovyAssignabilityCheck
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '0.1.0'
     }
@@ -29,7 +31,10 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:$ASVersion"
+
+    // Android Support
+    final ANDROID_SUPPORT_VERSION = rootProject.ext.ANDROID_SUPPORT_VERSION
+    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
 
     // Internal dependencies
     compile project(':networking-api')

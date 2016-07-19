@@ -2,17 +2,19 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'me.tatarka.retrolambda'
 
-def OKVersion = '3.3.1'
-
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    //noinspection GroovyAssignabilityCheck
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    //noinspection GroovyAssignabilityCheck
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
-        versionCode 2
-        versionName '0.2.0'
+        //noinspection GroovyAssignabilityCheck
+        minSdkVersion rootProject.ext.minSdkVersion
+        //noinspection GroovyAssignabilityCheck
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 3
+        versionName '0.2.1'
     }
 
     compileOptions {
@@ -29,13 +31,16 @@ android {
 }
 
 dependencies {
-    compile "com.squareup.okhttp3:okhttp:$OKVersion"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$OKVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$OKVersion"
+
+    // OkHttp
+    final OKHTTP_VERSION = '3.4.1'
+    compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:$OKHTTP_VERSION"
+    compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
 
     // External dependencies
     compile 'com.annimon:stream:1.0.9'
-    compile 'com.roxiemobile.android:android-commons:0.2.0'
+    compile 'com.roxiemobile.android:android-commons:0.2.1'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'

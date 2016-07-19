@@ -19,6 +19,18 @@ allprojects {
     }
 }
 
+// Controlling Android properties of all your modules from the main project
+// @link http://tools.android.com/tech-docs/new-build-system/tips
+ext {
+    compileSdkVersion = 24
+    buildToolsVersion = '24.0.1'
+    minSdkVersion = 14
+    targetSdkVersion = 24
+
+    // Shared Dependencies
+    ANDROID_SUPPORT_VERSION = '24.1.0'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
