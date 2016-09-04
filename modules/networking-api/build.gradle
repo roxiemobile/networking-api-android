@@ -39,8 +39,8 @@ dependencies {
     compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
 
     // External dependencies
-    compile 'com.annimon:stream:1.0.9'
-    compile 'com.roxiemobile.android:android-commons:0.2.1'
+    compile 'com.annimon:stream:1.1.2'
+    compile 'com.roxiemobile.android:android-commons:0.2.2'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'

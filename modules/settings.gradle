@@ -1,1 +1,1 @@
-include ':examples', ':networking-api'
+include ':networking-api', ':examples'
