@@ -13,7 +13,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Unexpect
 
 import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
 
-abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T>
+public abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T>
 {
 // MARK: - Methods
 
