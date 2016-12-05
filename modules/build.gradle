@@ -4,12 +4,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
-        classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'me.tatarka:gradle-retrolambda:3.4.0'
 
         // Deploy to Bintray
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
     }
 }
 
@@ -22,13 +22,13 @@ allprojects {
 // Controlling Android properties of all your modules from the main project
 // @link http://tools.android.com/tech-docs/new-build-system/tips
 ext {
-    compileSdkVersion = 24
-    buildToolsVersion = '24.0.2'
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.1'
     minSdkVersion = 14
-    targetSdkVersion = 24
+    targetSdkVersion = 25
 
     // Shared Dependencies
-    ANDROID_SUPPORT_VERSION = '24.2.0'
+    ANDROID_SUPPORT_VERSION = '25.0.1'
 }
 
 task clean(type: Delete) {

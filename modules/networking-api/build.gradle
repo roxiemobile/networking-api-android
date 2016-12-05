@@ -33,14 +33,14 @@ android {
 dependencies {
 
     // OkHttp
-    final OKHTTP_VERSION = '3.4.1'
+    final OKHTTP_VERSION = '3.5.0'
     compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
     compile "com.squareup.okhttp3:okhttp-urlconnection:$OKHTTP_VERSION"
     compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
 
     // External dependencies
-    compile 'com.annimon:stream:1.1.2'
-    compile 'com.roxiemobile.android:android-commons:0.2.2'
+    compile 'com.annimon:stream:1.1.4'
+    compile 'com.roxiemobile.android:android-commons:0.2.3'
 
     // Test dependencies
     testCompile 'junit:junit:4.12'
