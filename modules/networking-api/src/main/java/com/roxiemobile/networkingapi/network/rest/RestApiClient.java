@@ -65,8 +65,20 @@ public final class RestApiClient
         return execute(MethodName.PUT, entity);
     }
 
+    public @NonNull HttpResult patch(@NonNull RequestEntity<HttpBody> entity) {
+        return execute(MethodName.PATCH, entity);
+    }
+
     public @NonNull HttpResult delete(@NonNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.DELETE, entity);
+    }
+
+    public @NonNull HttpResult head(@NonNull RequestEntity<HttpBody> entity) {
+        return execute(MethodName.HEAD, entity);
+    }
+
+    public @NonNull HttpResult options(@NonNull RequestEntity<HttpBody> entity) {
+        return execute(MethodName.OPTIONS, entity);
     }
 
 // MARK: - Private Methods

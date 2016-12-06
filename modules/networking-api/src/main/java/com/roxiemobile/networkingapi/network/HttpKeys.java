@@ -13,7 +13,6 @@ public interface HttpKeys
         String DELETE = "DELETE";
         String HEAD = "HEAD";
         String OPTIONS = "OPTIONS";
-        String TRACE = "TRACE";
     }
 
     interface CharsetName {
