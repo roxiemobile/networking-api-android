@@ -11,6 +11,10 @@ public class ByteArrayBody implements HttpBody
         mBody = body;
     }
 
+    public ByteArrayBody() {
+        mBody = EMPTY_ARRAY;
+    }
+
 // MARK: - Methods
 
     @Override
@@ -22,6 +26,10 @@ public class ByteArrayBody implements HttpBody
     public byte[] body() {
         return mBody;
     }
+
+// MARK: - Constants
+
+    private static final byte[] EMPTY_ARRAY = new byte[]{};
 
 // MARK: - Variables
 

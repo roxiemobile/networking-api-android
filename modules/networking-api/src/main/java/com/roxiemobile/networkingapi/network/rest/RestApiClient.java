@@ -17,6 +17,7 @@ import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.interceptor.RedirectInterceptor;
+import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
@@ -123,6 +124,11 @@ public final class RestApiClient
         // Create request body
         HttpBody entityBody = entity.body();
         RequestBody requestBody = null;
+
+        // NOTE: Workaround for OkHttp crash on POST with empty request body
+        if (entityBody == null && method.equals(MethodName.POST)) {
+            entityBody = EMPTY_HTTP_BODY;
+        }
 
         if (entityBody != null) {
             okhttp3.MediaType mediaType = okhttp3.MediaType.parse(entityBody.mediaType().toString());
@@ -331,6 +337,7 @@ public final class RestApiClient
     private static final String TAG = RestApiClient.class.getSimpleName();
 
     private static final OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
+    private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
 

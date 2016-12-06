@@ -182,10 +182,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * TODO
      */
     protected @NonNull RequestEntity<HttpBody> newRequestEntity(@NonNull HttpRoute route) {
-        RequestEntity<Ti> entity = requestEntity();
-
         // Create HTTP request entity
-        return new BasicRequestEntity.Builder<>(entity, (HttpBody) entity.body())
+        return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
                         .uri(route.toURI())
                         .headers(httpHeaders())
                         .build();
@@ -195,7 +193,14 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * TODO
      */
     protected @NonNull HttpHeaders httpHeaders() {
-        return HttpHeaders.readOnlyHttpHeaders(mRequestEntity.headers());
+        return HttpHeaders.readOnlyHttpHeaders(requestEntity().headers());
+    }
+
+    /**
+     * TODO
+     */
+    protected @NonNull HttpBody httpBody() {
+        return requestEntity().body();
     }
 
     /**
