@@ -4,10 +4,14 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.annimon.stream.Stream;
+import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
+import com.roxiemobile.networkingapi.network.HttpKeys.CharsetName;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +54,16 @@ public class FormBody implements HttpBody
 
             Stream.of(mValues.entrySet())
                     .filter(entry -> !StringUtils.isEmpty(entry.getKey()))
-                    .forEach(entry -> values.add(entry.getKey() + '=' + entry.getValue()));
+                    .forEach(entry -> {
+                        try {
+                            String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);
+                            String value = URLEncoder.encode(entry.getValue(), CharsetName.UTF_8);
+                            values.add(key + '=' + value);
+                        }
+                        catch (UnsupportedEncodingException e) {
+                            LogUtils.e(TAG, e);
+                        }
+                    });
 
             return TextUtils.join("&", values).getBytes();
         }
