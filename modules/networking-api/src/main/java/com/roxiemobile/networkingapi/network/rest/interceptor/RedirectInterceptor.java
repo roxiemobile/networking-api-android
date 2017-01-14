@@ -29,21 +29,25 @@ public class RedirectInterceptor implements Interceptor
         // Execute a HTTP request
         Response response = chain.proceed(request);
         if (response.isRedirect()) {
-
-            // Throw an exception on redirects
-            throw new HttpResponseException(unzip(response));
+            response = onRedirect(response);
         }
 
         // Done
         return response;
     }
 
-// MARK: - Private Methods
+    /**
+     * TODO
+     */
+    protected Response onRedirect(@NonNull Response response) throws IOException {
+        // Throw an exception on redirects
+        throw new HttpResponseException(unzip(response));
+    }
 
     /**
      * Returns a new response that does gzip decompression on {@code response}.
      */
-    private Response unzip(@NonNull Response response) throws IOException {
+    protected Response unzip(@NonNull Response response) throws IOException {
         requireNotNull(response, "response is null");
 
         ResponseBody body = response.body();
