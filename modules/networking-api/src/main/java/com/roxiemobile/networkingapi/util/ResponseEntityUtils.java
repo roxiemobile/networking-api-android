@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class ResponseEntityUtils
 {
@@ -19,7 +19,7 @@ public final class ResponseEntityUtils
 
     @Deprecated
     public static <Ti, To> ResponseEntity<To> copy(@NonNull ResponseEntity<Ti> entity) {
-        assertNotNull(entity, "entity == null");
+        requireNotNull(entity, "entity is null");
         //noinspection unchecked
         return copyWith(entity, (To) entity.body());
     }

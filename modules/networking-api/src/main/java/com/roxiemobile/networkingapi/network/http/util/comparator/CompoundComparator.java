@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertTrue;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * A comparator that chains a sequence of one or more more Comparators.
@@ -62,7 +62,7 @@ public class CompoundComparator<T> implements Comparator<T>, Serializable {
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public CompoundComparator(Comparator... comparators) {
-        assertNotNull(comparators, "comparators == null");
+        requireNotNull(comparators, "comparators is null");
         this.comparators = new ArrayList<InvertibleComparator<T>>(comparators.length);
         for (Comparator comparator : comparators) {
             this.addComparator(comparator);
@@ -164,7 +164,7 @@ public class CompoundComparator<T> implements Comparator<T>, Serializable {
     }
 
     public int compare(T o1, T o2) {
-        assertTrue(this.comparators.size() > 0, "No sort definitions have been added to this CompoundComparator to compare");
+        requireTrue(this.comparators.size() > 0, "No sort definitions have been added to this CompoundComparator to compare");
         for (InvertibleComparator<T> comparator : this.comparators) {
             int result = comparator.compare(o1, o2);
             if (result != 0) {

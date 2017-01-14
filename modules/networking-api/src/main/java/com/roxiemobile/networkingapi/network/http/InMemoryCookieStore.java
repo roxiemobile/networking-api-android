@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class InMemoryCookieStore implements CookieStore
 {
@@ -27,7 +27,7 @@ public final class InMemoryCookieStore implements CookieStore
 
     public InMemoryCookieStore(List<HttpCookie> cookies) {
         // Add cookies to CookieStore
-        if (!CollectionUtils.isEmpty(cookies)) {
+        if (!CollectionUtils.isNullOrEmpty(cookies)) {
             for (HttpCookie cookie : cookies) {
                 add(CookieUtils.cookiesUri(cookie), cookie);
             }
@@ -52,7 +52,7 @@ public final class InMemoryCookieStore implements CookieStore
 // MARK: - Methods
 
     public synchronized void add(URI uri, @NonNull HttpCookie cookie) {
-        assertNotNull(cookie, "cookie == null");
+        requireNotNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
         List<HttpCookie> cookies = map.get(uri);
@@ -67,7 +67,7 @@ public final class InMemoryCookieStore implements CookieStore
     }
 
     public synchronized List<HttpCookie> get(@NonNull URI uri) {
-        assertNotNull(uri, "uri == null");
+        requireNotNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
         final Date date = new Date();
@@ -136,7 +136,7 @@ public final class InMemoryCookieStore implements CookieStore
     }
 
     public synchronized boolean remove(URI uri, @NonNull HttpCookie cookie) {
-        assertNotNull(cookie, "cookie == null");
+        requireNotNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = map.get(CookieUtils.cookiesUri(uri));
         return (cookies != null) && cookies.remove(cookie);

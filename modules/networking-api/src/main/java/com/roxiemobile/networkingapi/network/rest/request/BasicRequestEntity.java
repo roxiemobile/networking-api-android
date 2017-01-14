@@ -7,7 +7,7 @@ import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
 import java.net.URI;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class BasicRequestEntity<T> implements RequestEntity<T>
 {
@@ -52,7 +52,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
         }
 
         public Builder(@NonNull RequestEntity<T> entity) {
-            assertNotNull(entity, "entity == null");
+            requireNotNull(entity, "entity is null");
 
             // Init instance variables
             mUri = entity.uri();
@@ -62,7 +62,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
         }
 
         public <Ti> Builder(@NonNull RequestEntity<Ti> entity, T body) {
-            assertNotNull(entity, "entity == null");
+            requireNotNull(entity, "entity is null");
 
             // Init instance variables
             mUri = entity.uri();
@@ -92,7 +92,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
         }
 
         public RequestEntity<T> build() {
-            assertNotNull(uri(), "url == null");
+            requireNotNull(uri(), "url is null");
             return new BasicRequestEntity<>(this);
         }
 

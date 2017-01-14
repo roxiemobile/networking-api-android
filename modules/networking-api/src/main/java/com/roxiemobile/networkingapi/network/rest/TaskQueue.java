@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.roxiemobile.androidcommons.concurrent.MainThreadExecutor;
 import com.roxiemobile.androidcommons.concurrent.ParallelWorkerThreadExecutor;
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
@@ -179,7 +179,7 @@ public class TaskQueue
                 result = future.get();
             }
             catch (ExecutionException | InterruptedException e) {
-                LogUtils.w(TAG, e);
+                Logger.w(TAG, e);
             }
             return result;
         }
@@ -193,7 +193,7 @@ public class TaskQueue
                     ((Cancellable) call).cancel();
                 }
                 catch (ClassCastException e) {
-                    LogUtils.w(TAG, e);
+                    Logger.w(TAG, e);
                 }
                 awaitDone(mExecutor.submit(() -> super.onCancel(call)), null);
             }

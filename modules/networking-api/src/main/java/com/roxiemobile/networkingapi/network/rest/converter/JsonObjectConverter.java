@@ -6,8 +6,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.NetworkConfig.DefaultCharset;
 import com.roxiemobile.networkingapi.network.http.MediaType;
@@ -30,18 +30,18 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to JSON object
-            if (!ArrayUtils.isEmpty(body)) {
+            if (!ArrayUtils.isNullOrEmpty(body)) {
 
                 String charsetName = entity.mediaType().getCharset(DefaultCharset.UTF_8).name();
                 String json = new String(entity.body(), charsetName).trim();
 
-                if (!StringUtils.isEmpty(json)) {
+                if (!StringUtils.isNullOrEmpty(json)) {
                     newBody = new JsonParser().parse(json).getAsJsonObject();
                 }
             }
         }
         catch (UnsupportedEncodingException | JsonSyntaxException | JsonIOException | IllegalStateException ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
             throw new ConversionException(entity, ex);
         }
 

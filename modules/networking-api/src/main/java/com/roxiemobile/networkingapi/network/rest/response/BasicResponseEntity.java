@@ -10,7 +10,7 @@ import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 
 import java.net.URI;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T>
 {
@@ -92,9 +92,9 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
         @Override
         public ResponseEntity<T> build() {
-            assertNotNull(uri(), "url == null");
-            assertNotNull(status(), "status == null");
-            assertNotNull(mediaType(), "mediaType == null");
+            requireNotNull(uri(), "url is null");
+            requireNotNull(status(), "status is null");
+            requireNotNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);
         }
 

@@ -2,8 +2,8 @@ package com.roxiemobile.networkingapi.network.rest.converter;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.networkingapi.network.NetworkConfig.DefaultCharset;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
@@ -25,13 +25,13 @@ public class StringConverter extends AbstractCallResultConverter<String>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to string
-            if (!ArrayUtils.isEmpty(body)) {
+            if (!ArrayUtils.isNullOrEmpty(body)) {
                 String charsetName = entity.mediaType().getCharset(DefaultCharset.UTF_8).name();
                 newBody = new String(body, charsetName);
             }
         }
         catch (UnsupportedEncodingException ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
             throw new ConversionException(entity, ex);
         }
 

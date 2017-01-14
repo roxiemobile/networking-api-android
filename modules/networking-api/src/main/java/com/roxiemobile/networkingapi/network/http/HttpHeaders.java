@@ -42,8 +42,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertTrue;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireFalse;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * Represents HTTP request and response headers, mapping string header names to list of string values.
@@ -352,7 +353,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * Private constructor that can create read-only {@code HttpHeader} instances.
      */
     private HttpHeaders(@NonNull Map<String, List<String>> headers, boolean readOnly) {
-        assertNotNull(headers, "headers == null");
+        requireNotNull(headers, "headers is null");
         if (readOnly) {
             Map<String, List<String>> map = new LinkedCaseInsensitiveMap<>(headers.size(), Locale.ENGLISH);
             for (Entry<String, List<String>> entry : headers.entrySet()) {
@@ -572,7 +573,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * @param filename the filename (may be {@code null})
      */
     public void setContentDispositionFormData(String name, String filename) {
-        assertNotNull(name, "name == null");
+        requireNotNull(name, "name is null");
         StringBuilder builder = new StringBuilder("form-data; name=\"");
         builder.append(name).append('\"');
         if (filename != null) {
@@ -636,8 +637,8 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * as specified by the {@code Content-Type} header.
      */
     public void setContentType(MediaType mediaType) {
-        assertTrue(!mediaType.isWildcardType(), "'Content-Type' cannot contain wildcard type '*'");
-        assertTrue(!mediaType.isWildcardSubtype(), "'Content-Type' cannot contain wildcard subtype '*'");
+        requireFalse(mediaType.isWildcardType(), "'Content-Type' cannot contain wildcard type '*'");
+        requireFalse(mediaType.isWildcardSubtype(), "'Content-Type' cannot contain wildcard subtype '*'");
         set(CONTENT_TYPE, mediaType.toString());
     }
 
@@ -648,7 +649,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      */
     public MediaType getContentType() {
         String value = getFirst(CONTENT_TYPE);
-        return (!StringUtils.isEmpty(value) ? MediaType.parseMediaType(value) : null);
+        return (!StringUtils.isNullOrEmpty(value) ? MediaType.parseMediaType(value) : null);
     }
 
     /**
@@ -677,8 +678,8 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      */
     public void setETag(String eTag) {
         if (eTag != null) {
-            assertTrue(eTag.startsWith("\"") || eTag.startsWith("W/"), "Invalid eTag, does not start with W/ or \"");
-            assertTrue(eTag.endsWith("\""), "Invalid eTag, does not end with \"");
+            requireTrue(eTag.startsWith("\"") || eTag.startsWith("W/"), "Invalid eTag, does not start with W/ or \"");
+            requireTrue(eTag.endsWith("\""), "Invalid eTag, does not end with \"");
         }
         set(ETAG, eTag);
     }
@@ -1026,7 +1027,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 
     @Override
     public void putAll(@NonNull Map<? extends String, ? extends List<String>> map) {
-        assertNotNull(map, "map == null");
+        requireNotNull(map, "map is null");
         this.headers.putAll(map);
     }
 
@@ -1081,12 +1082,12 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
         HttpHeaders result = new HttpHeaders();
 
         // Put all Headers from first argument
-        if (!CollectionUtils.isEmpty(headers)) {
+        if (!CollectionUtils.isNullOrEmpty(headers)) {
             result.putAll(headers);
         }
 
         // Merge Headers from second argument
-        if (!CollectionUtils.isEmpty(otherHeaders)) {
+        if (!CollectionUtils.isNullOrEmpty(otherHeaders)) {
             for (String key : otherHeaders.keySet()) {
                 result.remove(key);
                 result.put(key, otherHeaders.get(key));

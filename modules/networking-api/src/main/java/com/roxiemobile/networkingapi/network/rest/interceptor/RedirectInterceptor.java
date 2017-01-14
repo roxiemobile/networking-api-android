@@ -16,7 +16,7 @@ import okhttp3.internal.http.RealResponseBody;
 import okio.GzipSource;
 import okio.Okio;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class RedirectInterceptor implements Interceptor
 {
@@ -44,7 +44,7 @@ public class RedirectInterceptor implements Interceptor
      * Returns a new response that does gzip decompression on {@code response}.
      */
     private Response unzip(@NonNull Response response) throws IOException {
-        assertNotNull(response, "response == null");
+        requireNotNull(response, "response is null");
 
         ResponseBody body = response.body();
         if (body != null && "gzip".equalsIgnoreCase(response.header(HttpHeaders.CONTENT_ENCODING))) {

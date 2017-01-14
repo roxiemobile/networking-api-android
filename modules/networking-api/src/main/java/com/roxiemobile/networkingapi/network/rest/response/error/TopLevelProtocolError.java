@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.roxiemobile.androidcommons.data.model.SerializableObject;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 @Deprecated
 public class TopLevelProtocolError extends RestApiErrorImpl
@@ -14,7 +14,7 @@ public class TopLevelProtocolError extends RestApiErrorImpl
 
     public TopLevelProtocolError(@NonNull ResponseEntity<SerializableObject> entity) {
         super(null);
-        assertNotNull(entity, "entity == null");
+        requireNotNull(entity, "entity is null");
 
         // Init instance variables
         mResponseEntity = entity;

@@ -2,16 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    //noinspection GroovyAssignabilityCheck
     compileSdkVersion rootProject.ext.compileSdkVersion
-    //noinspection GroovyAssignabilityCheck
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId 'com.roxiemobile.example.networkingapi'
-        //noinspection GroovyAssignabilityCheck
         minSdkVersion rootProject.ext.minSdkVersion
-        //noinspection GroovyAssignabilityCheck
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName '0.1.0'

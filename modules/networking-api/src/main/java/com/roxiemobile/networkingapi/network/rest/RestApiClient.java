@@ -3,8 +3,9 @@ package com.roxiemobile.networkingapi.network.rest;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.roxiemobile.androidcommons.logging.Logger;
+import com.roxiemobile.androidcommons.logging.Logger.LogLevel;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.HttpKeys.MethodName;
 import com.roxiemobile.networkingapi.network.NetworkConfig;
@@ -39,9 +40,9 @@ import okhttp3.internal.Version;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertFalse;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertTrue;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 public final class RestApiClient
 {
@@ -85,8 +86,8 @@ public final class RestApiClient
 // MARK: - Private Methods
 
     private HttpResult execute(@NonNull String method, @NonNull RequestEntity<HttpBody> entity) {
-        assertFalse(StringUtils.isEmpty(method), "method is empty");
-        assertNotNull(entity, "entity == null");
+        requireNotEmpty(method, "method is empty");
+        requireNotNull(entity, "entity is null");
 
         // Execute HTTP request
         return execute(newRequest(method, entity), entity.cookieStore());
@@ -102,13 +103,13 @@ public final class RestApiClient
             result = HttpResult.success(newResponseEntity(response, cookieStore));
         }
         catch (HttpResponseException ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
 
             // Handle interrupted HTTP requests
             result = HttpResult.success(newResponseEntity(ex.getResponse(), cookieStore));
         }
         catch (Exception ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
 
             // Handle any other errors
             result = HttpResult.failure(ex);
@@ -156,7 +157,7 @@ public final class RestApiClient
     }
 
     private @NonNull OkHttpClient newClient(@NonNull CookieStore cookieStore) {
-        assertNotNull(cookieStore, "cookieStore == null");
+        requireNotNull(cookieStore, "cookieStore is null");
 
         CookieManager cookieManager = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
         CookieJar cookieJar = new CompatJavaNetCookieJar(cookieManager);
@@ -181,7 +182,7 @@ public final class RestApiClient
         }
 
         // Set an interceptor which logs request and response information
-        if (LogUtils.isLoggable(Log.DEBUG)) {
+        if (Logger.isLoggable(LogLevel.Debug)) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
             // Log request and response lines and their respective headers and bodies (if present).
@@ -194,8 +195,8 @@ public final class RestApiClient
     }
 
     private @NonNull ResponseEntity<byte[]> newResponseEntity(@NonNull Response response, @NonNull CookieStore cookieStore) {
-        assertNotNull(response, "response == null");
-        assertNotNull(cookieStore, "cookieStore == null");
+        requireNotNull(response, "response is null");
+        requireNotNull(cookieStore, "cookieStore is null");
 
         // Handle HTTP response
         HttpStatus statusCode = HttpStatus.valueOf(response.code());
@@ -221,7 +222,7 @@ public final class RestApiClient
                 entityBuilder.body(ArrayUtils.emptyToNull(body.bytes()));
             }
             catch (Exception ex) {
-                LogUtils.w(TAG, ex);
+                Logger.w(TAG, ex);
             }
         }
 
@@ -271,13 +272,13 @@ public final class RestApiClient
         }
 
         public Builder connectTimeout(int timeout) {
-            assertTrue(timeout >= 0, "timeout < 0");
+            requireTrue(timeout >= 0, "timeout < 0");
             mOptions.mConnectionTimeout = timeout;
             return this;
         }
 
         public Builder readTimeout(int timeout) {
-            assertTrue(timeout >= 0, "timeout < 0");
+            requireTrue(timeout >= 0, "timeout < 0");
             mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
             return this;
         }

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class PersistentCookieStore implements CookieStore
 {
@@ -35,7 +35,7 @@ public final class PersistentCookieStore implements CookieStore
         this(context);
 
         // Add cookies to CookieStore
-        if (!CollectionUtils.isEmpty(cookies)) {
+        if (!CollectionUtils.isNullOrEmpty(cookies)) {
             for (HttpCookie cookie : cookies) {
                 add(CookieUtils.cookiesUri(cookie), cookie);
             }
@@ -64,7 +64,7 @@ public final class PersistentCookieStore implements CookieStore
 // MARK: - Methods
 
     public synchronized void add(URI uri, @NonNull HttpCookie cookie) {
-        assertNotNull(cookie, "cookie == null");
+        requireNotNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
         List<HttpCookie> cookies = mMap.get(uri);
@@ -80,7 +80,7 @@ public final class PersistentCookieStore implements CookieStore
     }
 
     public synchronized List<HttpCookie> get(@NonNull URI uri) {
-        assertNotNull(uri, "uri == null");
+        requireNotNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
         List<HttpCookie> cookiesToRemoveFromPersistence = new ArrayList<>();
@@ -161,7 +161,7 @@ public final class PersistentCookieStore implements CookieStore
     }
 
     public synchronized boolean remove(URI uri, @NonNull HttpCookie cookie) {
-        assertNotNull(cookie, "cookie == null");
+        requireNotNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = mMap.get(CookieUtils.cookiesUri(uri));
         boolean result = false;

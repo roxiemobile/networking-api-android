@@ -3,13 +3,13 @@ package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.function.Consumer;
-import com.roxiemobile.androidcommons.util.LogUtils;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.rest.CallResultConverter;
 import com.roxiemobile.networkingapi.network.rest.converter.StringConverter;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 abstract class NestedErrorImpl extends Exception
         implements ResponseEntityHolder
@@ -28,7 +28,7 @@ abstract class NestedErrorImpl extends Exception
      */
     public NestedErrorImpl(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
         super(cause);
-        assertNotNull(entity, "entity == null");
+        requireNotNull(entity, "entity is null");
 
         // Init instance variables
         mResponseEntity = entity;
@@ -61,7 +61,7 @@ abstract class NestedErrorImpl extends Exception
             return CONVERTER.convert(mResponseEntity).body();
         }
         catch (ConversionException ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
 
             // Should not occur
             throw new InternalError(ex.getMessage());
@@ -76,7 +76,7 @@ abstract class NestedErrorImpl extends Exception
     public void printErrorDescription(@NonNull Consumer<String> consumer) {
         String message = getResponseBodyAsString();
 
-        if (!StringUtils.isEmpty(message)) {
+        if (!StringUtils.isNullOrEmpty(message)) {
             consumer.accept(message);
         }
     }

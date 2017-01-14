@@ -6,7 +6,7 @@ import com.annimon.stream.function.Consumer;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseEntityHolder;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class ApplicationLayerError extends RestApiErrorImpl
 {
@@ -14,7 +14,7 @@ public class ApplicationLayerError extends RestApiErrorImpl
 
     public ApplicationLayerError(@NonNull Throwable cause) {
         super(cause);
-        assertNotNull(cause, "cause == null");
+        requireNotNull(cause, "cause is null");
     }
 
 // MARK: - Properties

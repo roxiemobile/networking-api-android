@@ -1,11 +1,10 @@
 package com.roxiemobile.networkingapi.util;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.annimon.stream.Stream;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpCookie;
 
@@ -15,8 +14,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertFalse;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class CookieUtils
 {
@@ -33,8 +32,8 @@ public final class CookieUtils
     }
 
     public static HttpCookie getCookie(@NonNull List<HttpCookie> cookies, @NonNull String cookieName) {
-        assertNotNull(cookies, "cookies == null");
-        assertFalse(TextUtils.isEmpty(cookieName), "cookieName is empty");
+        requireNotNull(cookies, "cookies is null");
+        requireNotEmpty(cookieName, "cookieName is empty");
 
         return Stream.of(cookies)
                 .filter(cookie -> cookie.getName().equals(cookieName))
@@ -62,7 +61,7 @@ public final class CookieUtils
                 uri = new URI("http", uri.getHost(), null, null);
             }
             catch (URISyntaxException e) {
-                LogUtils.w(TAG, e);
+                Logger.w(TAG, e);
                 uri = null;
             }
         }
@@ -76,7 +75,7 @@ public final class CookieUtils
                 uri = new URI("http", cookie.getDomain(), null, null);
             }
             catch (URISyntaxException e) {
-                LogUtils.w(TAG, e);
+                Logger.w(TAG, e);
                 uri = null;
             }
         }
@@ -89,7 +88,7 @@ public final class CookieUtils
         if (cookieStore != null) {
             List<HttpCookie> cookieList = cookieStore.getCookies();
 
-            if (!CollectionUtils.isEmpty(cookieList)) {
+            if (!CollectionUtils.isNullOrEmpty(cookieList)) {
                 cookies = cookieList.toArray(new HttpCookie[cookieList.size()]);
             }
         }

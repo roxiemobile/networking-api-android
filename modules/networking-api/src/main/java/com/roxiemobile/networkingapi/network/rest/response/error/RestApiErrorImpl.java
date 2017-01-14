@@ -8,7 +8,7 @@ import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 abstract class RestApiErrorImpl implements RestApiError
 {
@@ -34,7 +34,7 @@ abstract class RestApiErrorImpl implements RestApiError
      */
     @Override
     public void printErrorDescription(@NonNull Consumer<String> consumer) {
-        assertNotNull(consumer, "consumer == null");
+        requireNotNull(consumer, "consumer is null");
 
         if (mCause != null) {
             StringWriter stringWriter = new StringWriter();

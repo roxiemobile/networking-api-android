@@ -1077,7 +1077,7 @@ public abstract class CompatStringUtils {
      * @return the delimited String
      */
     public static String collectionToDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
-        if (CollectionUtils.isEmpty(coll)) {
+        if (CollectionUtils.isNullOrEmpty(coll)) {
             return "";
         }
         StringBuilder sb = new StringBuilder();

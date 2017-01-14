@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.annimon.stream.Stream;
-import com.roxiemobile.androidcommons.util.LogUtils;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.HttpKeys.CharsetName;
 import com.roxiemobile.networkingapi.network.http.MediaType;
@@ -53,7 +53,7 @@ public class FormBody implements HttpBody
             List<String> values = new ArrayList<>();
 
             Stream.of(mValues.entrySet())
-                    .filter(entry -> !StringUtils.isEmpty(entry.getKey()))
+                    .filter(entry -> !StringUtils.isNullOrEmpty(entry.getKey()))
                     .forEach(entry -> {
                         try {
                             String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);
@@ -61,7 +61,7 @@ public class FormBody implements HttpBody
                             values.add(key + '=' + value);
                         }
                         catch (UnsupportedEncodingException e) {
-                            LogUtils.e(TAG, e);
+                            Logger.e(TAG, e);
                         }
                     });
 

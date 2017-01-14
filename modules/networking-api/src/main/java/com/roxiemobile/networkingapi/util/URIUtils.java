@@ -1,6 +1,6 @@
 package com.roxiemobile.networkingapi.util;
 
-import com.roxiemobile.androidcommons.util.LogUtils;
+import com.roxiemobile.androidcommons.logging.Logger;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,7 +26,7 @@ public final class URIUtils
             }
         }
         catch (URISyntaxException e) {
-            LogUtils.w(TAG, e);
+            Logger.w(TAG, e);
         }
         return result;
     }

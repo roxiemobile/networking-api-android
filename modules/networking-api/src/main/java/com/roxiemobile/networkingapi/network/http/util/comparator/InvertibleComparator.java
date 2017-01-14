@@ -19,7 +19,7 @@ package com.roxiemobile.networkingapi.network.http.util.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 /**
  * A decorator for a comparator, with an "ascending" flag denoting
@@ -44,7 +44,7 @@ public class InvertibleComparator<T> implements Comparator<T>, Serializable {
      * @param comparator the comparator to decorate
      */
     public InvertibleComparator(Comparator<T> comparator) {
-        assertNotNull(comparator, "comparator == null");
+        requireNotNull(comparator, "comparator is null");
         this.comparator = comparator;
     }
 
@@ -55,7 +55,7 @@ public class InvertibleComparator<T> implements Comparator<T>, Serializable {
      * @param ascending the sort order: ascending (true) or descending (false)
      */
     public InvertibleComparator(Comparator<T> comparator, boolean ascending) {
-        assertNotNull(comparator, "comparator == null");
+        requireNotNull(comparator, "comparator is null");
         this.comparator = comparator;
         setAscending(ascending);
     }

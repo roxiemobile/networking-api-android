@@ -26,15 +26,15 @@ import com.roxiemobile.networkingapi.network.rest.routing.HttpRoute;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertFalse;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireFalse;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, To>, Cancellable
 {
 // MARK: - Construction
 
     protected AbstractTask(@NonNull TaskBuilder<Ti, To> builder) {
-        assertNotNull(builder, "builder == null");
+        requireNotNull(builder, "builder is null");
 
         // Init instance variables
         mTag = builder.tag();
@@ -102,7 +102,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * May return null if this call was canceled.
      */
     protected final CallResult<To> call() throws Exception {
-        assertFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
+        requireFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
         CallResult<To> result = null;
 
         // Send request to the server
@@ -239,7 +239,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 // MARK: - Private Methods
 
     private void yield(CallResult<To> result, @NonNull Callback<Ti, To> callback) {
-        assertNotNull(callback, "callback == null");
+        requireNotNull(callback, "callback is null");
 
         if (!isCancelled())
         {
@@ -302,8 +302,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
         }
 
         protected void checkInvalidState() {
-            assertNotNull(mRequestEntity, "requestEntity == null");
-            assertNotNull(mRequestEntity.uri(), "requestEntity.uri == null");
+            requireNotNull(mRequestEntity, "requestEntity is null");
+            requireNotNull(mRequestEntity.uri(), "requestEntity.uri is null");
         }
 
         protected abstract @NonNull Task<Ti, To> newTask();

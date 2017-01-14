@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
@@ -24,12 +24,12 @@ public class ImageConverter extends AbstractCallResultConverter<Bitmap>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to Bitmap
-            if (!ArrayUtils.isEmpty(body)) {
+            if (!ArrayUtils.isNullOrEmpty(body)) {
                 newBody = BitmapFactory.decodeByteArray(body, 0, body.length);
             }
         }
         catch (Exception ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
             throw new ConversionException(entity, ex);
         }
 

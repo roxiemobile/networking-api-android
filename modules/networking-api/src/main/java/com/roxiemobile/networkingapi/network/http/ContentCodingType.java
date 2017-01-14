@@ -16,6 +16,8 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
+import android.support.annotation.NonNull;
+
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
@@ -33,9 +35,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotEmpty;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertTrue;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * Represents a Compression Type, as defined in the HTTP specification.
@@ -132,7 +134,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @param type the type
      */
     public ContentCodingType(String type) {
-        this(type, Collections.<String, String> emptyMap());
+        this(type, Collections.emptyMap());
     }
 
     /**
@@ -153,11 +155,11 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if any of the parameters contain illegal characters
      */
     public ContentCodingType(String type, Map<String, String> parameters) {
-        assertNotEmpty(type, "type is empty");
+        requireNotEmpty(type, "type is empty");
         checkToken(type);
         this.type = type.toLowerCase(Locale.ENGLISH);
-        if (!CollectionUtils.isEmpty(parameters)) {
-            Map<String, String> m = new LinkedCaseInsensitiveMap<String>(parameters.size(), Locale.ENGLISH);
+        if (!CollectionUtils.isNullOrEmpty(parameters)) {
+            Map<String, String> m = new LinkedCaseInsensitiveMap<>(parameters.size(), Locale.ENGLISH);
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String attribute = entry.getKey();
                 String value = entry.getValue();
@@ -185,13 +187,13 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
     }
 
     private void checkParameters(String attribute, String value) {
-        assertNotEmpty(attribute, "attribute is empty");
-        assertNotEmpty(value, "value is empty");
+        requireNotEmpty(attribute, "attribute is empty");
+        requireNotEmpty(value, "value is empty");
         checkToken(attribute);
         if (PARAM_QUALITY_FACTOR.equals(attribute)) {
             value = unquote(value);
             double d = Double.parseDouble(value);
-            assertTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
+            requireTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
         } else if (!isQuotedString(value)) {
             checkToken(value);
         }
@@ -285,7 +287,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * Compares this {@code ContentCodingType} to another alphabetically.
      * @param other content coding type to compare to
      */
-    public int compareTo(ContentCodingType other) {
+    public int compareTo(@NonNull ContentCodingType other) {
         int comp = this.type.compareToIgnoreCase(other.type);
         if (comp != 0) {
             return comp;
@@ -294,9 +296,9 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
         if (comp != 0) {
             return comp;
         }
-        TreeSet<String> thisAttributes = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        TreeSet<String> thisAttributes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         thisAttributes.addAll(this.parameters.keySet());
-        TreeSet<String> otherAttributes = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        TreeSet<String> otherAttributes = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         otherAttributes.addAll(other.parameters.keySet());
         Iterator<String> thisAttributesIterator = thisAttributes.iterator();
         Iterator<String> otherAttributesIterator = otherAttributes.iterator();
@@ -375,13 +377,13 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if the string cannot be parsed
      */
     public static ContentCodingType parseCodingType(String codingType) {
-        assertNotEmpty(codingType, "codingType is empty");
+        requireNotEmpty(codingType, "codingType is empty");
         String[] parts = CompatStringUtils.tokenizeToStringArray(codingType, ";");
         String type = parts[0].trim();
 
         Map<String, String> parameters = null;
         if (parts.length > 1) {
-            parameters = new LinkedHashMap<String, String>(parts.length - 1);
+            parameters = new LinkedHashMap<>(parts.length - 1);
             for (int i = 1; i < parts.length; i++) {
                 String parameter = parts[i];
                 int eqIndex = parameter.indexOf('=');
@@ -406,11 +408,11 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if the string cannot be parsed
      */
     public static List<ContentCodingType> parseCodingTypes(String codingTypes) {
-        if (StringUtils.isEmpty(codingTypes)) {
+        if (StringUtils.isNullOrEmpty(codingTypes)) {
             return Collections.emptyList();
         }
         String[] tokens = codingTypes.split(",");
-        List<ContentCodingType> result = new ArrayList<ContentCodingType>(tokens.length);
+        List<ContentCodingType> result = new ArrayList<>(tokens.length);
         for (String token : tokens) {
             result.add(parseCodingType(token));
         }
@@ -452,7 +454,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @see #getQualityValue()
      */
     public static void sortByQualityValue(List<ContentCodingType> codingTypes) {
-        assertNotNull(codingTypes, "codingTypes == null");
+        requireNotNull(codingTypes, "codingTypes is null");
         if (codingTypes.size() > 1) {
             Collections.sort(codingTypes, QUALITY_VALUE_COMPARATOR);
         }

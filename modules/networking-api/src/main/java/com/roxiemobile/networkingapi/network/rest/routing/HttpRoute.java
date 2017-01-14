@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.routing;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
 import com.roxiemobile.networkingapi.network.http.util.MultiValueMap;
 
@@ -16,14 +16,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class HttpRoute
 {
 // MARK: - Construction
 
     private HttpRoute(@NonNull URI uri) {
-        assertNotNull(uri, "uri == null");
+        requireNotNull(uri, "uri is null");
 
         // Init instance variables
         mUri = uri;
@@ -65,7 +65,7 @@ public final class HttpRoute
             }
         }
         catch (URISyntaxException e) {
-            LogUtils.e(TAG, e);
+            Logger.e(TAG, e);
         }
 
         // Validate result
@@ -97,7 +97,7 @@ public final class HttpRoute
             }
         }
         catch (UnsupportedEncodingException e) {
-            LogUtils.e(TAG, e);
+            Logger.e(TAG, e);
 
             // Re-throw internal error
             throw new IllegalStateException("Could not build query string.", e);
@@ -111,7 +111,7 @@ public final class HttpRoute
     private static List<String> buildQueryStringComponents(String key, List<String> values, String charsetName)
             throws UnsupportedEncodingException {
 
-        if (key == null || CollectionUtils.isEmpty(values) || charsetName == null) {
+        if (key == null || CollectionUtils.isNullOrEmpty(values) || charsetName == null) {
             throw new IllegalArgumentException();
         }
 

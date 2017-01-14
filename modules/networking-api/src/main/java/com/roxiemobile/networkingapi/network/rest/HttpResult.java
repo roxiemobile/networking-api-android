@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]>
 {
@@ -21,12 +21,12 @@ public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]
 // MARK: - Methods
 
     public static HttpResult success(@NonNull ResponseEntity<byte[]> response) {
-        assertNotNull(response, "response == null");
+        requireNotNull(response, "response is null");
         return new HttpResult(response);
     }
 
     public static HttpResult failure(@NonNull Throwable error) {
-        assertNotNull(error, "error == null");
+        requireNotNull(error, "error is null");
         return new HttpResult(error);
     }
 

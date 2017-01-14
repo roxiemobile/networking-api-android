@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 
-import static com.roxiemobile.androidcommons.util.AssertUtils.assertNotNull;
+import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class RequestEntityUtils
 {
@@ -18,7 +18,7 @@ public final class RequestEntityUtils
 // MARK: - Methods
 
     public static <Ti, To> RequestEntity<To> copy(@NonNull RequestEntity<Ti> entity) {
-        assertNotNull(entity, "entity == null");
+        requireNotNull(entity, "entity is null");
         //noinspection unchecked
         return copyWith(entity, (To) entity.body());
     }

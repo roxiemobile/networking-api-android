@@ -6,8 +6,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.mapper.DataMapper;
 import com.roxiemobile.androidcommons.data.model.SerializableObject;
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.LogUtils;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
@@ -34,13 +34,13 @@ public abstract class AbstractSerializableModelConverter<T extends SerializableO
             byte[] body = entity.body();
 
             // Try to convert HTTP response to POJO
-            if (!ArrayUtils.isEmpty(body)) {
+            if (!ArrayUtils.isNullOrEmpty(body)) {
                 ByteArrayInputStream stream = new ByteArrayInputStream(body);
                 newBody = DataMapper.fromJson(new InputStreamReader(stream), mClassOfType);
             }
         }
         catch (JsonSyntaxException | JsonIOException ex) {
-            LogUtils.e(TAG, ex);
+            Logger.e(TAG, ex);
             throw new ConversionException(entity, ex);
         }
 
