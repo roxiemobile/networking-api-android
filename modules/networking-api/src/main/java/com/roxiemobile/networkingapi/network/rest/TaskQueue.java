@@ -2,6 +2,7 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import android.support.annotation.NonNull;
 
+import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.concurrent.MainThreadExecutor;
 import com.roxiemobile.androidcommons.concurrent.ParallelWorkerThreadExecutor;
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
@@ -11,11 +12,19 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
 import java.util.List;
+import java.util.concurrent.AbstractExecutorService;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskQueue
 {
@@ -48,7 +57,7 @@ public class TaskQueue
 
         // Create new cancellable task
         final InnerFutureTask futureTask = new InnerFutureTask<>(new InnerRunnableTask<>(task, callback, callbackOnUiThread));
-        synchronized (sLock) {
+        synchronized (sInnerLock) {
             sTasks.add(task.tag(), futureTask);
         }
 
@@ -59,25 +68,24 @@ public class TaskQueue
         return futureTask;
     }
 
-    // FIXME: Code refactoring needed
+    /**
+     * TODO
+     */
     public static void cancel(String tag) {
         List<Cancellable> cancellableTasks;
 
-        synchronized (sLock) {
+        synchronized (sInnerLock) {
             cancellableTasks = sTasks.remove(tag);
         }
 
         if (cancellableTasks != null) {
-            for (Cancellable task : cancellableTasks) {
-                task.cancel();
-            }
+            Stream.of(cancellableTasks).forEach(Cancellable::cancel);
         }
     }
 
 // MARK: - Inner Types
 
-    private static final class InnerFutureTask<Ti, To> extends FutureTask<Void>
-            implements Cancellable
+    private static final class InnerFutureTask<Ti, To> extends FutureTask<Void> implements Cancellable
     {
         public InnerFutureTask(@NonNull InnerRunnableTask<Ti, To> runnableTask) {
             super(runnableTask, null);
@@ -91,7 +99,7 @@ public class TaskQueue
             super.done();
 
             // Remove the completed task
-            synchronized (sLock) {
+            synchronized (sInnerLock) {
                 List<Cancellable> tasks = sTasks.get(mRunnableTask.mTask.tag());
 
                 if (tasks != null) {
@@ -114,8 +122,7 @@ public class TaskQueue
         private final InnerRunnableTask<Ti, To> mRunnableTask;
     }
 
-    private static final class InnerRunnableTask<Ti, To>
-            implements Runnable, Cancellable
+    private static final class InnerRunnableTask<Ti, To> implements Runnable, Cancellable
     {
         public InnerRunnableTask(@NonNull Task<Ti, To> task, Callback<Ti, To> callback, boolean callbackOnUiThread) {
             // Init instance variables
@@ -143,7 +150,7 @@ public class TaskQueue
             super(callback);
 
             // Init instance variables
-            mExecutor = callbackOnUiThread ? MainThreadExecutor.instance() : ParallelWorkerThreadExecutor.instance();
+            mExecutor = callbackOnUiThread ? MainThreadExecutor.instance() : InnerParallelWorkerThreadExecutor.instance();
         }
 
         @Override
@@ -204,6 +211,78 @@ public class TaskQueue
         private final AtomicBoolean mDone = new AtomicBoolean(false);
     }
 
+    private static final class InnerParallelWorkerThreadExecutor extends AbstractExecutorService
+    {
+        public static class SingletonHolder {
+            public static final InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
+        }
+
+        public static InnerParallelWorkerThreadExecutor instance() {
+            return SingletonHolder.SHARED_INSTANCE;
+        }
+
+        private InnerParallelWorkerThreadExecutor() {
+            // Do nothing
+        }
+
+        @Override
+        public void execute(@NonNull Runnable runnable) {
+            sThreadPoolExecutor.execute(runnable);
+        }
+
+        @Deprecated
+        @Override
+        public void shutdown() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Deprecated
+        @Override
+        public @NonNull List<Runnable> shutdownNow() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isShutdown() {
+            return false;
+        }
+
+        @Override
+        public boolean isTerminated() {
+            return false;
+        }
+
+        @Deprecated
+        @Override
+        public boolean awaitTermination(long l, @NonNull TimeUnit timeUnit) throws InterruptedException {
+            throw new UnsupportedOperationException();
+        }
+
+        private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
+        private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
+        private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
+        private static final int KEEP_ALIVE = 1;
+
+        private static final ThreadFactory sThreadFactory = new ThreadFactory() {
+            private final AtomicInteger mCount = new AtomicInteger(1);
+
+            public Thread newThread(final @NonNull Runnable runnable) {
+                String threadName = InnerParallelWorkerThreadExecutor.class.getSimpleName() + " #" + mCount.getAndIncrement();
+
+                return new Thread(() -> {
+                    android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+                    runnable.run();
+                }, threadName);
+            }
+        };
+
+        private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(128);
+
+        // An {@link Executor} that can be used to execute tasks in parallel.
+        private final Executor sThreadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
+    }
+
 // MARK: - Constants
 
     private static final String TAG = TaskQueue.class.getSimpleName();
@@ -211,6 +290,6 @@ public class TaskQueue
 // MARK: - Variables
 
     private static final LinkedMultiValueMap<String, Cancellable> sTasks = new LinkedMultiValueMap<>();
-    private static final Object sLock = new Object();
+    private static final Object sInnerLock = new Object();
 
 }
