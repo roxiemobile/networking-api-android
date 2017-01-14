@@ -159,9 +159,9 @@ public class TaskQueue
         }
 
         @Override
-        public void onResponse(Call<Ti> call, ResponseEntity<To> entity) {
+        public void onSuccess(Call<Ti> call, ResponseEntity<To> entity) {
             if (!mDone.getAndSet(true)) {
-                mExecutor.execute(() -> super.onResponse(call, entity));
+                mExecutor.execute(() -> super.onSuccess(call, entity));
             }
         }
 

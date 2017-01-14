@@ -1,7 +1,6 @@
 package com.roxiemobile.networkingapi.network.rest;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.logging.Logger.LogLevel;

@@ -246,7 +246,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             if (result != null)
             {
                 if (result.isSuccess()) {
-                    callback.onResponse(this, result.value());
+                    callback.onSuccess(this, result.value());
                 }
                 else {
                     callback.onFailure(this, result.error());

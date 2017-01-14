@@ -13,7 +13,7 @@ public interface Callback<Ti, To>
     /**
      * TODO
      */
-    void onResponse(Call<Ti> call, ResponseEntity<To> entity);
+    void onSuccess(Call<Ti> call, ResponseEntity<To> entity);
 
     /**
      * TODO

@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.http;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.IOUtils;
 import com.roxiemobile.networkingapi.util.CookieUtils;
@@ -209,7 +209,7 @@ public final class PersistentCookieStore implements CookieStore
                 targetCookies.add(cookie);
             }
             catch (URISyntaxException ex) {
-                Log.w(TAG, ex);
+                Logger.w(TAG, ex);
             }
         }
     }
