@@ -8,7 +8,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Response
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-public class ApplicationLayerError extends RestApiErrorImpl
+public class ApplicationLayerError extends AbstractRestApiError
 {
 // MARK: - Construction
 

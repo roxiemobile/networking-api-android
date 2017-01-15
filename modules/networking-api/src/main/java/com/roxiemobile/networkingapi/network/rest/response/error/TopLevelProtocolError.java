@@ -2,17 +2,15 @@ package com.roxiemobile.networkingapi.network.rest.response.error;
 
 import android.support.annotation.NonNull;
 
-import com.roxiemobile.androidcommons.data.model.SerializableObject;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-@Deprecated
-public class TopLevelProtocolError extends RestApiErrorImpl
+public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
 {
 // MARK: - Construction
 
-    public TopLevelProtocolError(@NonNull ResponseEntity<SerializableObject> entity) {
+    public TopLevelProtocolError(@NonNull ResponseEntity<T> entity) {
         super(null);
         requireNotNull(entity, "entity is null");
 
@@ -31,14 +29,14 @@ public class TopLevelProtocolError extends RestApiErrorImpl
     }
 
     /**
-     * Returns the HTTP response entity.
+     * Returns the response entity.
      */
-    public @NonNull ResponseEntity<SerializableObject> getResponseEntity() {
+    public @NonNull ResponseEntity<T> getResponseEntity() {
         return mResponseEntity;
     }
 
 // MARK: - Variables
 
-    private final ResponseEntity<SerializableObject> mResponseEntity;
+    private final ResponseEntity<T> mResponseEntity;
 
 }

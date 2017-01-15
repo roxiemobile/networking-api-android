@@ -41,13 +41,13 @@ public class RedirectInterceptor implements Interceptor
      */
     protected Response onRedirect(@NonNull Response response) throws IOException {
         // Throw an exception on redirects
-        throw new HttpResponseException(unzip(response));
+        throw new HttpResponseException(decompressResponse(response));
     }
 
     /**
      * Returns a new response that does gzip decompression on {@code response}.
      */
-    protected Response unzip(@NonNull Response response) throws IOException {
+    protected Response decompressResponse(@NonNull Response response) throws IOException {
         requireNotNull(response, "response is null");
 
         ResponseBody body = response.body();

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-public class UnexpectedMediaTypeException extends NestedErrorImpl
+public class UnexpectedMediaTypeException extends AbstractNestedError
 {
 // MARK: - Construction
 

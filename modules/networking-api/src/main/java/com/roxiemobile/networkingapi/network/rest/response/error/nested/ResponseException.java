@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-public class ResponseException extends NestedErrorImpl
+public class ResponseException extends AbstractNestedError
 {
 // MARK: - Construction
 

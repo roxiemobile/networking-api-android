@@ -11,7 +11,7 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-abstract class NestedErrorImpl extends Exception
+abstract class AbstractNestedError extends Exception
         implements ResponseEntityHolder
 {
 // MARK: - Construction
@@ -19,14 +19,14 @@ abstract class NestedErrorImpl extends Exception
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity}.
      */
-    public NestedErrorImpl(@NonNull ResponseEntity<byte[]> entity) {
+    public AbstractNestedError(@NonNull ResponseEntity<byte[]> entity) {
         this(entity, null);
     }
 
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity} and cause.
      */
-    public NestedErrorImpl(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
+    public AbstractNestedError(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
         super(cause);
         requireNotNull(entity, "entity is null");
 
@@ -83,7 +83,7 @@ abstract class NestedErrorImpl extends Exception
 
 // MARK: - Constants
 
-    private static final String TAG = NestedErrorImpl.class.getSimpleName();
+    private static final String TAG = AbstractNestedError.class.getSimpleName();
 
     private static final CallResultConverter<byte[], String> CONVERTER =
             new StringConverter();

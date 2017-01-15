@@ -10,11 +10,11 @@ import java.io.StringWriter;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-abstract class RestApiErrorImpl implements RestApiError
+abstract class AbstractRestApiError implements RestApiError
 {
 // MARK: - Construction
 
-    RestApiErrorImpl(Throwable cause) {
+    AbstractRestApiError(Throwable cause) {
         // Init instance variables
         mCause = cause;
     }

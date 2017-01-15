@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-public class TransportLayerError extends RestApiErrorImpl
+public class TransportLayerError extends AbstractRestApiError
 {
 // MARK: - Construction
 
