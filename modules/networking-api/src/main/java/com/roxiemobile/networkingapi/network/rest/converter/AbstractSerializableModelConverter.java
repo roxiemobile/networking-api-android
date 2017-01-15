@@ -6,6 +6,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.mapper.DataMapper;
 import com.roxiemobile.androidcommons.data.model.SerializableObject;
+import com.roxiemobile.androidcommons.diagnostics.ExpectationException;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
@@ -39,7 +40,7 @@ public abstract class AbstractSerializableModelConverter<T extends SerializableO
                 newBody = DataMapper.fromJson(new InputStreamReader(stream), mClassOfType);
             }
         }
-        catch (JsonSyntaxException | JsonIOException ex) {
+        catch (JsonSyntaxException | JsonIOException | ExpectationException ex) {
             Logger.e(TAG, ex);
             throw new ConversionException(entity, ex);
         }
