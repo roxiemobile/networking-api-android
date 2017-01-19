@@ -16,6 +16,7 @@
 
 package com.roxiemobile.networkingapi.network.http.util;
 
+import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -724,7 +725,7 @@ public abstract class CompatStringUtils {
      * @return the new array (never {@code null})
      */
     public static String[] addStringToArray(String[] array, String str) {
-        if (ObjectUtils.isEmpty(array)) {
+        if (ArrayUtils.isNullOrEmpty(array)) {
             return new String[] {str};
         }
         String[] newArr = new String[array.length + 1];
@@ -742,10 +743,10 @@ public abstract class CompatStringUtils {
      * @return the new array ({@code null} if both given arrays were {@code null})
      */
     public static String[] concatenateStringArrays(String[] array1, String[] array2) {
-        if (ObjectUtils.isEmpty(array1)) {
+        if (ArrayUtils.isNullOrEmpty(array1)) {
             return array2;
         }
-        if (ObjectUtils.isEmpty(array2)) {
+        if (ArrayUtils.isNullOrEmpty(array2)) {
             return array1;
         }
         String[] newArr = new String[array1.length + array2.length];
@@ -765,13 +766,13 @@ public abstract class CompatStringUtils {
      * @return the new array ({@code null} if both given arrays were {@code null})
      */
     public static String[] mergeStringArrays(String[] array1, String[] array2) {
-        if (ObjectUtils.isEmpty(array1)) {
+        if (ArrayUtils.isNullOrEmpty(array1)) {
             return array2;
         }
-        if (ObjectUtils.isEmpty(array2)) {
+        if (ArrayUtils.isNullOrEmpty(array2)) {
             return array1;
         }
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         result.addAll(Arrays.asList(array1));
         for (String str : array2) {
             if (!result.contains(str)) {
@@ -787,7 +788,7 @@ public abstract class CompatStringUtils {
      * @return the sorted array (never {@code null})
      */
     public static String[] sortStringArray(String[] array) {
-        if (ObjectUtils.isEmpty(array)) {
+        if (ArrayUtils.isNullOrEmpty(array)) {
             return new String[0];
         }
         Arrays.sort(array);
@@ -830,7 +831,7 @@ public abstract class CompatStringUtils {
      * @return the resulting array (of the same size) with trimmed elements
      */
     public static String[] trimArrayElements(String[] array) {
-        if (ObjectUtils.isEmpty(array)) {
+        if (ArrayUtils.isNullOrEmpty(array)) {
             return new String[0];
         }
         String[] result = new String[array.length];
@@ -848,13 +849,11 @@ public abstract class CompatStringUtils {
      * @return an array without duplicates, in natural sort order
      */
     public static String[] removeDuplicateStrings(String[] array) {
-        if (ObjectUtils.isEmpty(array)) {
+        if (ArrayUtils.isNullOrEmpty(array)) {
             return array;
         }
-        Set<String> set = new TreeSet<String>();
-        for (String element : array) {
-            set.add(element);
-        }
+        Set<String> set = new TreeSet<>();
+        Collections.addAll(set, array);
         return toStringArray(set);
     }
 
@@ -912,7 +911,7 @@ public abstract class CompatStringUtils {
     public static Properties splitArrayElementsIntoProperties(
             String[] array, String delimiter, String charsToDelete) {
 
-        if (ObjectUtils.isEmpty(array)) {
+        if (ArrayUtils.isNullOrEmpty(array)) {
             return null;
         }
         Properties result = new Properties();
@@ -974,7 +973,7 @@ public abstract class CompatStringUtils {
             return null;
         }
         StringTokenizer st = new StringTokenizer(str, delimiters);
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
             if (trimTokens) {
@@ -1022,7 +1021,7 @@ public abstract class CompatStringUtils {
         if (delimiter == null) {
             return new String[] {str};
         }
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         if ("".equals(delimiter)) {
             for (int i = 0; i < str.length(); i++) {
                 result.add(deleteAny(str.substring(i, i + 1), charsToDelete));
@@ -1059,11 +1058,9 @@ public abstract class CompatStringUtils {
      * @return a Set of String entries in the list
      */
     public static Set<String> commaDelimitedListToSet(String str) {
-        Set<String> set = new TreeSet<String>();
+        Set<String> set = new TreeSet<>();
         String[] tokens = commaDelimitedListToStringArray(str);
-        for (String token : tokens) {
-            set.add(token);
-        }
+        Collections.addAll(set, tokens);
         return set;
     }
 
@@ -1120,7 +1117,7 @@ public abstract class CompatStringUtils {
      * @return the delimited String
      */
     public static String arrayToDelimitedString(Object[] arr, String delim) {
-        if (ObjectUtils.isEmpty(arr)) {
+        if (ArrayUtils.isNullOrEmpty(arr)) {
             return "";
         }
         if (arr.length == 1) {

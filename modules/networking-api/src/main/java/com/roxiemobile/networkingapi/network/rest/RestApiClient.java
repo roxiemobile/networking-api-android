@@ -2,10 +2,9 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import android.support.annotation.NonNull;
 
+import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.logging.Logger;
-import com.roxiemobile.androidcommons.logging.Logger.LogLevel;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.HttpKeys.MethodName;
 import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.http.CompatJavaNetCookieJar;
@@ -16,13 +15,13 @@ import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore;
 import com.roxiemobile.networkingapi.network.http.MediaType;
-import com.roxiemobile.networkingapi.network.rest.interceptor.RedirectInterceptor;
 import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -35,9 +34,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Version;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
@@ -140,8 +136,7 @@ public final class RestApiClient
 
         instance.method(method, requestBody)
                 .url(entity.uri().toString())
-                .headers(mapping(entityHeaders))
-                .header(HttpHeaders.USER_AGENT, newUserAgent(entityHeaders));
+                .headers(mapping(entityHeaders));
 
         if (requestBody != null) {
             instance.header(HttpHeaders.CONTENT_TYPE, requestBody.contentType().toString());
@@ -149,10 +144,6 @@ public final class RestApiClient
 
         // Done
         return instance.build();
-    }
-
-    private String newUserAgent(HttpHeaders headers) {
-        return (StringUtils.nullToEmpty(headers.getUserAgent()).trim() + " " + Version.userAgent()).trim();
     }
 
     private @NonNull OkHttpClient newClient(@NonNull CookieStore cookieStore) {
@@ -174,20 +165,13 @@ public final class RestApiClient
                 // Set the handler that can accept cookies from incoming HTTP responses and provides cookies to outgoing HTTP requests
                 .cookieJar(cookieJar);
 
-        // Set an interceptor which handles HTTP redirects
-        Interceptor interceptor = mOptions.mRedirectInterceptor;
-        if (interceptor != null) {
-            builder.addNetworkInterceptor(interceptor);
-        }
+        // Set a application interceptors
+        Stream.of(nullToEmpty(mOptions.mInterceptors))
+                .filter(obj -> obj != null).forEach(builder::addInterceptor);
 
-        // Set an interceptor which logs request and response information
-        if (Logger.isLoggable(LogLevel.Debug)) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
-            // Log request and response lines and their respective headers and bodies (if present).
-            logging.setLevel(Level.BODY);
-            builder.addNetworkInterceptor(logging);
-        }
+        // Set a network interceptors
+        Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
+                .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
 
         // Done
         return builder.build();
@@ -262,6 +246,12 @@ public final class RestApiClient
         return builder.build();
     }
 
+// MARK: - Private Methods
+
+    private <T> List<T> nullToEmpty(List<T> list) {
+        return (list != null) ? list : Collections.EMPTY_LIST;
+    }
+
 // MARK: - Inner Types
 
     public static final class Builder
@@ -282,8 +272,13 @@ public final class RestApiClient
             return this;
         }
 
-        public Builder redirectInterceptor(RedirectInterceptor interceptor) {
-            mOptions.mRedirectInterceptor = interceptor;
+        public Builder interceptors(List<Interceptor> interceptors) {
+            mOptions.mInterceptors = interceptors;
+            return this;
+        }
+
+        public Builder networkInterceptors(List<Interceptor> interceptors) {
+            mOptions.mNetworkInterceptors = interceptors;
             return this;
         }
 
@@ -308,7 +303,8 @@ public final class RestApiClient
             // Copy object's state
             other.mConnectionTimeout = mConnectionTimeout;
             other.mReadTimeout = mReadTimeout;
-            other.mRedirectInterceptor = mRedirectInterceptor;
+            other.mInterceptors = mInterceptors;
+            other.mNetworkInterceptors = mNetworkInterceptors;
 
             // Done
             return other;
@@ -316,7 +312,8 @@ public final class RestApiClient
 
         private int mConnectionTimeout = NetworkConfig.Timeout.CONNECTION;
         private int mReadTimeout = NetworkConfig.Timeout.READ;
-        private RedirectInterceptor mRedirectInterceptor;
+        private List<Interceptor> mInterceptors;
+        private List<Interceptor> mNetworkInterceptors;
     }
 
     public static class HttpResponseException extends IOException

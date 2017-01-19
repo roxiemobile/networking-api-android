@@ -3,7 +3,6 @@ package com.roxiemobile.networkingapi.network.rest.request;
 import android.support.annotation.NonNull;
 
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
-import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.rest.CallResult;
@@ -14,7 +13,8 @@ import com.roxiemobile.networkingapi.network.rest.HttpResult;
 import com.roxiemobile.networkingapi.network.rest.RestApiClient;
 import com.roxiemobile.networkingapi.network.rest.Task;
 import com.roxiemobile.networkingapi.network.rest.TaskQueue;
-import com.roxiemobile.networkingapi.network.rest.interceptor.RedirectInterceptor;
+import com.roxiemobile.networkingapi.network.rest.config.DefaultHttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.config.HttpClientConfig;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 import com.roxiemobile.networkingapi.network.rest.response.error.ApplicationLayerError;
@@ -156,16 +156,20 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * TODO
      */
     protected final @NonNull RestApiClient newClient() {
-        RestApiClient.Builder builder;
+        // Get HTTP client config
+        HttpClientConfig config = httpClientConfig();
+        requireNotNull(config, "config is null");
 
         // Create/init HTTP client
-        builder = new RestApiClient.Builder()
+        RestApiClient.Builder builder = new RestApiClient.Builder()
                 // Set the timeout until a connection is established
-                .connectTimeout(NetworkConfig.Timeout.CONNECTION)
+                .connectTimeout(config.connectTimeout())
                 // Set the default socket timeout which is the timeout for waiting for data
-                .readTimeout(NetworkConfig.Timeout.READ)
-                // Handle redirects
-                .redirectInterceptor(newRedirectInterceptor());
+                .readTimeout(config.readTimeout())
+                // Set an application interceptors
+                .interceptors(config.interceptors())
+                // Set an network interceptors
+                .networkInterceptors(config.networkInterceptors());
 
         // Done
         return builder.build();
@@ -174,8 +178,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected RedirectInterceptor newRedirectInterceptor() {
-        return null;
+    protected @NonNull HttpClientConfig httpClientConfig() {
+        return DEFAULT_HTTP_CLIENT_CONFIG;
     }
 
     /**
@@ -311,6 +315,11 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
         private String mTag;
         private RequestEntity<Ti> mRequestEntity;
     }
+
+// MARK: - Constants
+
+    private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
+            new DefaultHttpClientConfig();
 
 // MARK: - Variables
 

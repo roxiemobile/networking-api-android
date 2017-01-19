@@ -7,6 +7,7 @@ import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import java.io.IOException;
 
 import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -16,7 +17,7 @@ import okio.Okio;
 
 import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
-public abstract class AbstractRedirectInterceptor implements RedirectInterceptor
+public abstract class AbstractRedirectInterceptor implements Interceptor
 {
 // MARK: - Methods
 
@@ -35,6 +36,11 @@ public abstract class AbstractRedirectInterceptor implements RedirectInterceptor
         // Done
         return response;
     }
+
+    /**
+     * TODO
+     */
+    public abstract Response onRedirect(@NonNull Response response) throws IOException;
 
     /**
      * Returns a new response that does gzip decompression on {@code response}.
