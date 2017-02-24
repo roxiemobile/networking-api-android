@@ -49,5 +49,4 @@ public class ByteArrayBody implements HttpBody
     private final MediaType mMediaType;
 
     private final byte[] mBody;
-
 }

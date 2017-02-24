@@ -4,7 +4,8 @@ public interface HttpKeys
 {
 // MARK: - Constants
 
-    interface MethodName {
+    interface MethodName
+    {
         // Values
         String GET = "GET";
         String POST = "POST";
@@ -15,7 +16,8 @@ public interface HttpKeys
         String OPTIONS = "OPTIONS";
     }
 
-    interface CharsetName {
+    interface CharsetName
+    {
         // Values
         String ISO_8859_1 = "ISO-8859-1";
         String US_ASCII = "US-ASCII";
@@ -24,5 +26,4 @@ public interface HttpKeys
         String UTF_16BE = "UTF-16BE";
         String UTF_16LE = "UTF-16LE";
     }
-
 }

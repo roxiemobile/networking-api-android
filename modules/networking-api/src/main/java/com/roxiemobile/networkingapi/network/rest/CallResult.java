@@ -30,5 +30,4 @@ public class CallResult<T> extends Result<ResponseEntity<T>, RestApiError, T>
         requireNotNull(error, "error is null");
         return new CallResult<>(error);
     }
-
 }

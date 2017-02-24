@@ -34,5 +34,4 @@ public class JsonBody implements HttpBody
 // MARK: - Variables
 
     private JsonElement mBody;
-
 }

@@ -53,17 +53,17 @@ public class FormBody implements HttpBody
             List<String> values = new ArrayList<>();
 
             Stream.of(mValues.entrySet())
-                    .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
-                    .forEach(entry -> {
-                        try {
-                            String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);
-                            String value = URLEncoder.encode(entry.getValue(), CharsetName.UTF_8);
-                            values.add(key + '=' + value);
-                        }
-                        catch (UnsupportedEncodingException e) {
-                            Logger.e(TAG, e);
-                        }
-                    });
+                  .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
+                  .forEach(entry -> {
+                      try {
+                          String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);
+                          String value = URLEncoder.encode(entry.getValue(), CharsetName.UTF_8);
+                          values.add(key + '=' + value);
+                      }
+                      catch (UnsupportedEncodingException e) {
+                          Logger.e(TAG, e);
+                      }
+                  });
 
             return TextUtils.join("&", values).getBytes();
         }
@@ -78,5 +78,4 @@ public class FormBody implements HttpBody
 // MARK: - Variables
 
     private byte[] mBody;
-
 }

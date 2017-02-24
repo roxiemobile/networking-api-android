@@ -16,7 +16,8 @@ import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
-public abstract class AbstractSerializableModelConverter<T extends SerializableObject> extends AbstractCallResultConverter<T>
+public abstract class AbstractSerializableModelConverter<T extends SerializableObject>
+        extends AbstractCallResultConverter<T>
 {
 // MARK: - Construction
 
@@ -57,5 +58,4 @@ public abstract class AbstractSerializableModelConverter<T extends SerializableO
 // MARK: - Variables
 
     private final Class<T> mClassOfType;
-
 }

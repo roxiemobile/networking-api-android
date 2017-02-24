@@ -29,5 +29,4 @@ public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]
         requireNotNull(error, "error is null");
         return new HttpResult(error);
     }
-
 }

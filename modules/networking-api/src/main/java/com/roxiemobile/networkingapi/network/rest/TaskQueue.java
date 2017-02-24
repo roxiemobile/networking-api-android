@@ -150,7 +150,7 @@ public class TaskQueue
             super(callback);
 
             // Init instance variables
-            mExecutor = callbackOnUiThread ? MainThreadExecutor.shared() : InnerParallelWorkerThreadExecutor.instance();
+            mExecutor = callbackOnUiThread ? MainThreadExecutor.shared() : InnerParallelWorkerThreadExecutor.shared();
         }
 
         @Override
@@ -217,7 +217,7 @@ public class TaskQueue
             public static final InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
         }
 
-        public static InnerParallelWorkerThreadExecutor instance() {
+        public static InnerParallelWorkerThreadExecutor shared() {
             return SingletonHolder.SHARED_INSTANCE;
         }
 
@@ -291,5 +291,4 @@ public class TaskQueue
 
     private static final LinkedMultiValueMap<String, Cancellable> sTasks = new LinkedMultiValueMap<>();
     private static final Object sInnerLock = new Object();
-
 }

@@ -167,11 +167,11 @@ public final class RestApiClient
 
         // Set a application interceptors
         Stream.of(nullToEmpty(mOptions.mInterceptors))
-                .filter(obj -> obj != null).forEach(builder::addInterceptor);
+              .filter(obj -> obj != null).forEach(builder::addInterceptor);
 
         // Set a network interceptors
         Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
-                .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
+              .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
 
         // Done
         return builder.build();
@@ -339,5 +339,4 @@ public final class RestApiClient
 // MARK: - Variables
 
     private Options mOptions;
-
 }

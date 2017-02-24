@@ -115,5 +115,4 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
     private final CookieStore mCookieStore;
 
     private final T mBody;
-
 }

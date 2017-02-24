@@ -23,7 +23,7 @@ public class ApplicationLayerError extends AbstractRestApiError
      * Returns the type of an error.
      */
     public RestApiErrorType getType() {
-        return RestApiErrorType.kApplicationLayer;
+        return RestApiErrorType.APPLICATION_LAYER;
     }
 
 // MARK: - Methods
@@ -53,5 +53,4 @@ public class ApplicationLayerError extends AbstractRestApiError
             super.printErrorDescription(consumer);
         }
     }
-
 }

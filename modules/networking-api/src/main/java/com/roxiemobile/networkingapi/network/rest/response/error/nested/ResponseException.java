@@ -25,5 +25,4 @@ public class ResponseException extends AbstractNestedError
 // MARK: - Constants
 
     private static final long serialVersionUID = 7228322733394988817L;
-
 }

@@ -51,5 +51,4 @@ public class ImageConverter extends AbstractCallResultConverter<Bitmap>
             MediaType.IMAGE_JPEG,
             MediaType.IMAGE_PNG,
     };
-
 }

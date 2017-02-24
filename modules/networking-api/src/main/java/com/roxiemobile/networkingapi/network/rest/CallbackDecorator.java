@@ -46,5 +46,4 @@ public class CallbackDecorator<Ti, To> implements Callback<Ti, To>
 // MARK: - Variables
 
     private final Callback<Ti, To> mCallback;
-
 }

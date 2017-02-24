@@ -115,5 +115,4 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
     private final @NonNull HttpStatus mStatus;
 
     private final @NonNull MediaType mMediaType;
-
 }

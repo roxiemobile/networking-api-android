@@ -22,5 +22,4 @@ public class VoidBody implements HttpBody
     public byte[] body() {
         return null;
     }
-
 }

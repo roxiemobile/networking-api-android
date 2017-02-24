@@ -30,7 +30,6 @@ public interface RestApiError
      * The type of an error.
      */
     enum RestApiErrorType {
-        kTransportLayer, kApplicationLayer, kTopLevelProtocol
+        TRANSPORT_LAYER, APPLICATION_LAYER, TOP_LEVEL_PROTOCOL
     }
-
 }

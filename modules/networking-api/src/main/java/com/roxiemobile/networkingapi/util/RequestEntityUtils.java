@@ -26,5 +26,4 @@ public final class RequestEntityUtils
     public static <Ti, To> RequestEntity<To> copyWith(RequestEntity<Ti> entity, To body) {
         return new BasicRequestEntity.Builder<>(entity, body).build();
     }
-
 }

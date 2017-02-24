@@ -11,14 +11,14 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType>
 
     Result(S success) {
         // Init instance variables
-        mState = State.kSuccess;
+        mState = State.SUCCESS;
         mSuccess = success;
         mFailure = null;
     }
 
     Result(F failure) {
         // Init instance variables
-        mState = State.kFailure;
+        mState = State.FAILURE;
         mSuccess = null;
         mFailure = failure;
     }
@@ -26,21 +26,21 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType>
 // MARK: - Methods
 
     public S value() {
-        return (mState == State.kSuccess) ? mSuccess : null;
+        return (mState == State.SUCCESS) ? mSuccess : null;
     }
 
     public F error() {
-        return (mState == State.kFailure) ? mFailure : null;
+        return (mState == State.FAILURE) ? mFailure : null;
     }
 
     public boolean isSuccess() {
-        return (mState == State.kSuccess);
+        return (mState == State.SUCCESS);
     }
 
 // MARK: - Inner Types
 
     private enum State {
-        kSuccess, kFailure
+        SUCCESS, FAILURE
     }
 
 // MARK: - Variables
@@ -49,5 +49,4 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType>
 
     private final S mSuccess;
     private final F mFailure;
-
 }

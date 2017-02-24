@@ -196,5 +196,4 @@ public class CompoundComparator<T> implements Comparator<T>, Serializable {
     public String toString() {
         return "CompoundComparator: " + this.comparators;
     }
-
 }

@@ -123,5 +123,4 @@ public class InvertibleComparator<T> implements Comparator<T>, Serializable {
     public String toString() {
         return "InvertibleComparator: [" + this.comparator + "]; ascending=" + this.ascending;
     }
-
 }

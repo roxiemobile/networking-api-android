@@ -14,5 +14,4 @@ public class ConnectionException extends Exception
 // MARK: - Constants
 
     private static final long serialVersionUID = 6805154194145428738L;
-
 }

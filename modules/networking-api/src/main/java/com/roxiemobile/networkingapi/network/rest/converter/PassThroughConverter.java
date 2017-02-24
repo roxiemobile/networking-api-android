@@ -25,5 +25,4 @@ public class PassThroughConverter extends AbstractCallResultConverter<byte[]>
     private static final MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.ALL
     };
-
 }

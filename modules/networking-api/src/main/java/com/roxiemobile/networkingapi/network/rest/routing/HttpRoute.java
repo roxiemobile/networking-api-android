@@ -157,5 +157,4 @@ public final class HttpRoute
 // MARK: - Variables
 
     private URI mUri;
-
 }

@@ -33,5 +33,4 @@ public class StringBody implements HttpBody
 // MARK: - Variables
 
     private String mBody;
-
 }

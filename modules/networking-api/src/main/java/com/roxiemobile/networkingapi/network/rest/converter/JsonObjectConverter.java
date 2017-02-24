@@ -62,5 +62,4 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
     private static final MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.APPLICATION_JSON,
     };
-
 }

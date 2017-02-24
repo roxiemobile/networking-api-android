@@ -25,7 +25,7 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
      */
     @Override
     public RestApiErrorType getType() {
-        return RestApiErrorType.kTopLevelProtocol;
+        return RestApiErrorType.TOP_LEVEL_PROTOCOL;
     }
 
     /**
@@ -38,5 +38,4 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
 // MARK: - Variables
 
     private final ResponseEntity<T> mResponseEntity;
-
 }

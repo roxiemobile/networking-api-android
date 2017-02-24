@@ -73,5 +73,4 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
             throw new UnexpectedMediaTypeException(entity);
         }
     }
-
 }

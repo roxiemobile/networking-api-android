@@ -25,5 +25,4 @@ public class UnexpectedMediaTypeException extends AbstractNestedError
 // MARK: - Constants
 
     private static final long serialVersionUID = -3309836591177713721L;
-
 }

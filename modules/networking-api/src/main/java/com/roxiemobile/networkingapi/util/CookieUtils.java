@@ -36,9 +36,9 @@ public final class CookieUtils
         requireNotEmpty(cookieName, "cookieName is empty");
 
         return Stream.of(cookies)
-                .filter(cookie -> cookie.getName().equals(cookieName))
-                .findFirst()
-                .orElse(null);
+                     .filter(cookie -> cookie.getName().equals(cookieName))
+                     .findFirst()
+                     .orElse(null);
     }
 
     public static boolean isExpiredOrNull(HttpCookie cookie) {
@@ -100,5 +100,4 @@ public final class CookieUtils
     private static final String TAG = CookieUtils.class.getSimpleName();
 
     private static final HttpCookie[] EMPTY_COOKIE_ARRAY = new HttpCookie[]{};
-
 }

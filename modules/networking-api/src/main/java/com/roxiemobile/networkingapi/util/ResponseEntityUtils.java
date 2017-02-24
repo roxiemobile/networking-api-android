@@ -28,5 +28,4 @@ public final class ResponseEntityUtils
     public static <Ti, To> ResponseEntity<To> copyWith(ResponseEntity<Ti> entity, To body) {
         return new BasicResponseEntity.Builder<>(entity, body).build();
     }
-
 }

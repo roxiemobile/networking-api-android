@@ -25,5 +25,4 @@ public class ConversionException extends AbstractNestedError
 // MARK: - Constants
 
     private static final long serialVersionUID = -2046452406935471379L;
-
 }

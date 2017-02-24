@@ -34,9 +34,9 @@ public class UserAgentRequestInterceptor implements Interceptor
     private String newUserAgent(Headers headers)
     {
         String value = Stream.of(headers.values(HttpHeaders.USER_AGENT))
-                .filterNot(s -> s.contains(OKHTTP_VERSION))
-                .map(s -> s + " " + OKHTTP_VERSION)
-                .single();
+                             .filterNot(s -> s.contains(OKHTTP_VERSION))
+                             .map(s -> s + " " + OKHTTP_VERSION)
+                             .single();
 
         return (value == null) ? OKHTTP_VERSION : value;
     }
@@ -44,5 +44,4 @@ public class UserAgentRequestInterceptor implements Interceptor
 // MARK: - Constants
 
     public static final String OKHTTP_VERSION = Version.userAgent();
-
 }

@@ -91,5 +91,4 @@ abstract class AbstractNestedError extends Exception
 // MARK: - Variables
 
     private final ResponseEntity<byte[]> mResponseEntity;
-
 }
