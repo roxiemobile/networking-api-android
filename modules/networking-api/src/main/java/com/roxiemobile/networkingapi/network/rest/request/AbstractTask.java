@@ -80,7 +80,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             }
         }
         catch (Throwable ex) {
-            result = CallResult.<To>failure(new ApplicationLayerError(ex));
+            result = CallResult.failure(new ApplicationLayerError(ex));
         }
 
         // Yielding result to listener
@@ -120,7 +120,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 
                 // Create a new call result
                 if (status.is2xxSuccessful()) {
-                    result = onResult(CallResult.success(entity));
+                    result = onSuccess(CallResult.success(entity));
                 }
                 else {
                     ResponseException cause = new ResponseException(entity);
@@ -142,8 +142,13 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 
             // Handle error
             if (error != null) {
-                result = CallResult.<To>failure(error);
+                result = onFailure(error);
             }
+        }
+        else {
+
+            // Handle request cancellation
+            onCancel();
         }
 
         // Done
@@ -188,9 +193,9 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     protected @NonNull RequestEntity<HttpBody> newRequestEntity(@NonNull HttpRoute route) {
         // Create HTTP request entity
         return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
-                        .uri(route.toURI())
-                        .headers(httpHeaders())
-                        .build();
+                .uri(route.toURI())
+                .headers(httpHeaders())
+                .build();
     }
 
     /**
@@ -210,7 +215,22 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected abstract CallResult<To> onResult(CallResult<byte[]> httpResult);
+    protected abstract CallResult<To> onSuccess(CallResult<byte[]> httpResult);
+
+    /**
+     * TODO
+     */
+    protected CallResult<To> onFailure(@NonNull RestApiError error) {
+        requireNotNull(error, "error is null");
+        return CallResult.failure(error);
+    }
+
+    /**
+     * TODO
+     */
+    protected void onCancel() {
+        // Do nothing
+    }
 
     /**
      * TODO
@@ -245,10 +265,11 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     private void yield(CallResult<To> result, @NonNull Callback<Ti, To> callback) {
         requireNotNull(callback, "callback is null");
 
-        if (!isCancelled())
-        {
-            if (result != null)
-            {
+        if (isCancelled()) {
+            callback.onCancel(this);
+        }
+        else {
+            if (result != null) {
                 if (result.isSuccess()) {
                     callback.onSuccess(this, result.value());
                 }
@@ -259,9 +280,6 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             else {
                 throw new IllegalStateException("!isCancelled() && (result == null)");
             }
-        }
-        else {
-            callback.onCancel(this);
         }
     }
 
@@ -328,5 +346,4 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     private final RequestEntity<Ti> mRequestEntity;
 
     private final AtomicBoolean mCancelled = new AtomicBoolean(false);
-
 }
