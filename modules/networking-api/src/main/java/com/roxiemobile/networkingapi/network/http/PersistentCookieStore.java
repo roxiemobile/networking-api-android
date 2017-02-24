@@ -35,7 +35,7 @@ public final class PersistentCookieStore implements CookieStore
         this(context);
 
         // Add cookies to CookieStore
-        if (!CollectionUtils.isNullOrEmpty(cookies)) {
+        if (CollectionUtils.isNotEmpty(cookies)) {
             for (HttpCookie cookie : cookies) {
                 add(CookieUtils.cookiesUri(cookie), cookie);
             }

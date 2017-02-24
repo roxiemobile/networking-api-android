@@ -725,7 +725,7 @@ public abstract class CompatStringUtils {
      * @return the new array (never {@code null})
      */
     public static String[] addStringToArray(String[] array, String str) {
-        if (ArrayUtils.isNullOrEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return new String[] {str};
         }
         String[] newArr = new String[array.length + 1];
@@ -743,10 +743,10 @@ public abstract class CompatStringUtils {
      * @return the new array ({@code null} if both given arrays were {@code null})
      */
     public static String[] concatenateStringArrays(String[] array1, String[] array2) {
-        if (ArrayUtils.isNullOrEmpty(array1)) {
+        if (ArrayUtils.isEmpty(array1)) {
             return array2;
         }
-        if (ArrayUtils.isNullOrEmpty(array2)) {
+        if (ArrayUtils.isEmpty(array2)) {
             return array1;
         }
         String[] newArr = new String[array1.length + array2.length];
@@ -766,10 +766,10 @@ public abstract class CompatStringUtils {
      * @return the new array ({@code null} if both given arrays were {@code null})
      */
     public static String[] mergeStringArrays(String[] array1, String[] array2) {
-        if (ArrayUtils.isNullOrEmpty(array1)) {
+        if (ArrayUtils.isEmpty(array1)) {
             return array2;
         }
-        if (ArrayUtils.isNullOrEmpty(array2)) {
+        if (ArrayUtils.isEmpty(array2)) {
             return array1;
         }
         List<String> result = new ArrayList<>();
@@ -788,7 +788,7 @@ public abstract class CompatStringUtils {
      * @return the sorted array (never {@code null})
      */
     public static String[] sortStringArray(String[] array) {
-        if (ArrayUtils.isNullOrEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return new String[0];
         }
         Arrays.sort(array);
@@ -831,7 +831,7 @@ public abstract class CompatStringUtils {
      * @return the resulting array (of the same size) with trimmed elements
      */
     public static String[] trimArrayElements(String[] array) {
-        if (ArrayUtils.isNullOrEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return new String[0];
         }
         String[] result = new String[array.length];
@@ -849,7 +849,7 @@ public abstract class CompatStringUtils {
      * @return an array without duplicates, in natural sort order
      */
     public static String[] removeDuplicateStrings(String[] array) {
-        if (ArrayUtils.isNullOrEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return array;
         }
         Set<String> set = new TreeSet<>();
@@ -911,7 +911,7 @@ public abstract class CompatStringUtils {
     public static Properties splitArrayElementsIntoProperties(
             String[] array, String delimiter, String charsToDelete) {
 
-        if (ArrayUtils.isNullOrEmpty(array)) {
+        if (ArrayUtils.isEmpty(array)) {
             return null;
         }
         Properties result = new Properties();
@@ -1074,7 +1074,7 @@ public abstract class CompatStringUtils {
      * @return the delimited String
      */
     public static String collectionToDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
-        if (CollectionUtils.isNullOrEmpty(coll)) {
+        if (CollectionUtils.isEmpty(coll)) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -1117,7 +1117,7 @@ public abstract class CompatStringUtils {
      * @return the delimited String
      */
     public static String arrayToDelimitedString(Object[] arr, String delim) {
-        if (ArrayUtils.isNullOrEmpty(arr)) {
+        if (ArrayUtils.isEmpty(arr)) {
             return "";
         }
         if (arr.length == 1) {

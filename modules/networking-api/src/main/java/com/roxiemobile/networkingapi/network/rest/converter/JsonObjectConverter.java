@@ -30,12 +30,12 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to JSON object
-            if (!ArrayUtils.isNullOrEmpty(body)) {
+            if (ArrayUtils.isNotEmpty(body)) {
 
                 String charsetName = entity.mediaType().getCharset(DefaultCharset.UTF_8).name();
                 String json = new String(entity.body(), charsetName).trim();
 
-                if (!StringUtils.isNullOrEmpty(json)) {
+                if (StringUtils.isNotEmpty(json)) {
                     newBody = new JsonParser().parse(json).getAsJsonObject();
                 }
             }

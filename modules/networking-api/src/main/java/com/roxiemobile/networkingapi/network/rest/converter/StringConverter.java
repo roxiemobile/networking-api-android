@@ -25,7 +25,7 @@ public class StringConverter extends AbstractCallResultConverter<String>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to string
-            if (!ArrayUtils.isNullOrEmpty(body)) {
+            if (ArrayUtils.isNotEmpty(body)) {
                 String charsetName = entity.mediaType().getCharset(DefaultCharset.UTF_8).name();
                 newBody = new String(body, charsetName);
             }

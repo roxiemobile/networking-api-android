@@ -354,7 +354,7 @@ public class MediaType implements Comparable<MediaType> {
         checkToken(subtype);
         this.type = type.toLowerCase(Locale.ENGLISH);
         this.subtype = subtype.toLowerCase(Locale.ENGLISH);
-        if (!CollectionUtils.isNullOrEmpty(parameters)) {
+        if (CollectionUtils.isNotEmpty(parameters)) {
             Map<String, String> m = new LinkedCaseInsensitiveMap<String>(parameters.size(), Locale.ENGLISH);
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String attribute = entry.getKey();
@@ -773,7 +773,7 @@ public class MediaType implements Comparable<MediaType> {
      * @throws IllegalArgumentException if the string cannot be parsed
      */
     public static List<MediaType> parseMediaTypes(String mediaTypes) {
-        if (StringUtils.isNullOrEmpty(mediaTypes)) {
+        if (StringUtils.isEmpty(mediaTypes)) {
             return Collections.emptyList();
         }
         String[] tokens = mediaTypes.split(",\\s*");

@@ -35,7 +35,7 @@ public abstract class AbstractSerializableModelConverter<T extends SerializableO
             byte[] body = entity.body();
 
             // Try to convert HTTP response to POJO
-            if (!ArrayUtils.isNullOrEmpty(body)) {
+            if (ArrayUtils.isNotEmpty(body)) {
                 ByteArrayInputStream stream = new ByteArrayInputStream(body);
                 newBody = DataMapper.fromJson(new InputStreamReader(stream), mClassOfType);
             }

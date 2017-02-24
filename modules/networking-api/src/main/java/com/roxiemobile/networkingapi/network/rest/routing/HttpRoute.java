@@ -111,7 +111,7 @@ public final class HttpRoute
     private static List<String> buildQueryStringComponents(String key, List<String> values, String charsetName)
             throws UnsupportedEncodingException {
 
-        if (key == null || CollectionUtils.isNullOrEmpty(values) || charsetName == null) {
+        if (key == null || CollectionUtils.isEmpty(values) || charsetName == null) {
             throw new IllegalArgumentException();
         }
 

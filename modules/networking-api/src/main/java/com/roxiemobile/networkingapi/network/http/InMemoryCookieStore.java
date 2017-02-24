@@ -27,7 +27,7 @@ public final class InMemoryCookieStore implements CookieStore
 
     public InMemoryCookieStore(List<HttpCookie> cookies) {
         // Add cookies to CookieStore
-        if (!CollectionUtils.isNullOrEmpty(cookies)) {
+        if (CollectionUtils.isNotEmpty(cookies)) {
             for (HttpCookie cookie : cookies) {
                 add(CookieUtils.cookiesUri(cookie), cookie);
             }

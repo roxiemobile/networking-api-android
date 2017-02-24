@@ -158,7 +158,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
         requireNotEmpty(type, "type is empty");
         checkToken(type);
         this.type = type.toLowerCase(Locale.ENGLISH);
-        if (!CollectionUtils.isNullOrEmpty(parameters)) {
+        if (CollectionUtils.isNotEmpty(parameters)) {
             Map<String, String> m = new LinkedCaseInsensitiveMap<>(parameters.size(), Locale.ENGLISH);
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String attribute = entry.getKey();
@@ -408,7 +408,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if the string cannot be parsed
      */
     public static List<ContentCodingType> parseCodingTypes(String codingTypes) {
-        if (StringUtils.isNullOrEmpty(codingTypes)) {
+        if (StringUtils.isEmpty(codingTypes)) {
             return Collections.emptyList();
         }
         String[] tokens = codingTypes.split(",");

@@ -24,7 +24,7 @@ public class ImageConverter extends AbstractCallResultConverter<Bitmap>
             byte[] body = entity.body();
 
             // Try to convert HTTP response to Bitmap
-            if (!ArrayUtils.isNullOrEmpty(body)) {
+            if (ArrayUtils.isNotEmpty(body)) {
                 newBody = BitmapFactory.decodeByteArray(body, 0, body.length);
             }
         }

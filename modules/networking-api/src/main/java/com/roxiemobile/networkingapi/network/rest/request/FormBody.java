@@ -53,7 +53,7 @@ public class FormBody implements HttpBody
             List<String> values = new ArrayList<>();
 
             Stream.of(mValues.entrySet())
-                    .filter(entry -> !StringUtils.isNullOrEmpty(entry.getKey()))
+                    .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
                     .forEach(entry -> {
                         try {
                             String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);

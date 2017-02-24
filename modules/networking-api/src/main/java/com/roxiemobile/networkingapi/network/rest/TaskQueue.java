@@ -62,7 +62,7 @@ public class TaskQueue
         }
 
         // Execute the FutureTask on the background thread
-        ParallelWorkerThreadExecutor.instance().execute(futureTask);
+        ParallelWorkerThreadExecutor.shared().execute(futureTask);
 
         // Done
         return futureTask;
@@ -150,7 +150,7 @@ public class TaskQueue
             super(callback);
 
             // Init instance variables
-            mExecutor = callbackOnUiThread ? MainThreadExecutor.instance() : InnerParallelWorkerThreadExecutor.instance();
+            mExecutor = callbackOnUiThread ? MainThreadExecutor.shared() : InnerParallelWorkerThreadExecutor.instance();
         }
 
         @Override

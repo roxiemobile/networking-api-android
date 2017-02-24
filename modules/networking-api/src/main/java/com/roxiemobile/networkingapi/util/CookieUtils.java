@@ -88,7 +88,7 @@ public final class CookieUtils
         if (cookieStore != null) {
             List<HttpCookie> cookieList = cookieStore.getCookies();
 
-            if (!CollectionUtils.isNullOrEmpty(cookieList)) {
+            if (CollectionUtils.isNotEmpty(cookieList)) {
                 cookies = cookieList.toArray(new HttpCookie[cookieList.size()]);
             }
         }

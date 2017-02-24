@@ -28,7 +28,9 @@ ext {
     targetSdkVersion = 25
 
     // Shared Dependencies
-    ANDROID_SUPPORT_VERSION = '25.1.0'
+    ANDROID_SUPPORT_VERSION = '25.2.0'
+    OKHTTP_VERSION = '3.6.0'
+    RXM_ANDROID_COMMONS_VERSION = '0.6.0'
 }
 
 task clean(type: Delete) {

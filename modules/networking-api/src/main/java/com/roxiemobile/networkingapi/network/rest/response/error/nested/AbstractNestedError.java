@@ -76,7 +76,7 @@ abstract class AbstractNestedError extends Exception
     public void printErrorDescription(@NonNull Consumer<String> consumer) {
         String message = getResponseBodyAsString();
 
-        if (!StringUtils.isNullOrEmpty(message)) {
+        if (StringUtils.isNotEmpty(message)) {
             consumer.accept(message);
         }
     }

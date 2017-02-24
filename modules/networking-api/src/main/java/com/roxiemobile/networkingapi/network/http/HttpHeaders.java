@@ -649,7 +649,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      */
     public MediaType getContentType() {
         String value = getFirst(CONTENT_TYPE);
-        return (!StringUtils.isNullOrEmpty(value) ? MediaType.parseMediaType(value) : null);
+        return (StringUtils.isNotEmpty(value) ? MediaType.parseMediaType(value) : null);
     }
 
     /**
@@ -1082,12 +1082,12 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
         HttpHeaders result = new HttpHeaders();
 
         // Put all Headers from first argument
-        if (!CollectionUtils.isNullOrEmpty(headers)) {
+        if (CollectionUtils.isNotEmpty(headers)) {
             result.putAll(headers);
         }
 
         // Merge Headers from second argument
-        if (!CollectionUtils.isNullOrEmpty(otherHeaders)) {
+        if (CollectionUtils.isNotEmpty(otherHeaders)) {
             for (String key : otherHeaders.keySet()) {
                 result.remove(key);
                 result.put(key, otherHeaders.get(key));
