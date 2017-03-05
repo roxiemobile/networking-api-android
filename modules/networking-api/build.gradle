@@ -38,8 +38,9 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp-urlconnection:$OKHTTP_VERSION"
     compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
 
-    // Test dependencies
-    testCompile 'junit:junit:4.12'
+    // JUnit
+    final JUNIT_VERSION = rootProject.ext.JUNIT_VERSION
+    testCompile "junit:junit:$JUNIT_VERSION"
 }
 
 // Deploy to Bintray

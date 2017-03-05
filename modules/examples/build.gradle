@@ -35,6 +35,7 @@ dependencies {
     // Internal dependencies
     compile project(':networking-api')
 
-    // Test dependencies
-    testCompile 'junit:junit:4.12'
+    // JUnit
+    final JUNIT_VERSION = rootProject.ext.JUNIT_VERSION
+    testCompile "junit:junit:$JUNIT_VERSION"
 }

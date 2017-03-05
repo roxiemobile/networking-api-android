@@ -4,8 +4,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'me.tatarka:gradle-retrolambda:3.5.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.0'
 
         // Deploy to Bintray
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
@@ -29,8 +29,9 @@ ext {
 
     // Shared Dependencies
     ANDROID_SUPPORT_VERSION = '25.2.0'
+    JUNIT_VERSION = '4.12'
     OKHTTP_VERSION = '3.6.0'
-    RXM_ANDROID_COMMONS_VERSION = '0.6.0'
+    RXM_ANDROID_COMMONS_VERSION = '0.7.0'
 }
 
 task clean(type: Delete) {
