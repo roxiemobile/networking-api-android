@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.mapper.DataMapper;
-import com.roxiemobile.androidcommons.data.model.SerializableObject;
+import com.roxiemobile.androidcommons.data.model.ValidatableModel;
 import com.roxiemobile.androidcommons.diagnostics.ExpectationException;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
@@ -16,12 +16,12 @@ import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
-public abstract class AbstractSerializableModelConverter<T extends SerializableObject>
+public abstract class AbstractValidatableModelConverter<T extends ValidatableModel>
         extends AbstractCallResultConverter<T>
 {
 // MARK: - Construction
 
-    protected AbstractSerializableModelConverter(@NonNull Class<T> classOfT) {
+    protected AbstractValidatableModelConverter(@NonNull Class<T> classOfT) {
         mClassOfType = classOfT;
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractSerializableModelConverter<T extends SerializableO
 
 // MARK: - Constants
 
-    public static final String TAG = AbstractSerializableModelConverter.class.getSimpleName();
+    public static final String TAG = AbstractValidatableModelConverter.class.getSimpleName();
 
 // MARK: - Variables
 
