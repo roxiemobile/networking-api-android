@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.annimon.stream.Stream;
+import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.StringUtils;
-import com.roxiemobile.networkingapi.network.HttpKeys.CharsetName;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
@@ -52,12 +52,13 @@ public class FormBody implements HttpBody
         private byte[] toByteArray() {
             List<String> values = new ArrayList<>();
 
+            final String charsetName = Charsets.UTF_8.name();
             Stream.of(mValues.entrySet())
                   .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
                   .forEach(entry -> {
                       try {
-                          String key = URLEncoder.encode(entry.getKey(), CharsetName.UTF_8);
-                          String value = URLEncoder.encode(entry.getValue(), CharsetName.UTF_8);
+                          String key = URLEncoder.encode(entry.getKey(), charsetName);
+                          String value = URLEncoder.encode(entry.getValue(), charsetName);
                           values.add(key + '=' + value);
                       }
                       catch (UnsupportedEncodingException e) {

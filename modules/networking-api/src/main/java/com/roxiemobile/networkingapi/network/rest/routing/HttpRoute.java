@@ -3,6 +3,7 @@ package com.roxiemobile.networkingapi.network.rest.routing;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
@@ -12,6 +13,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +55,7 @@ public final class HttpRoute
 
             // Append query params to URI
             if (params != null && params.size() > 0) {
-                uriString += "?" + buildQueryString(params, "UTF-8");
+                uriString += "?" + buildQueryString(params, Charsets.UTF_8);
             }
         }
 
@@ -87,13 +89,13 @@ public final class HttpRoute
 
 // MARK: - Private Methods
 
-    private static String buildQueryString(MultiValueMap<String, String> params, String charsetName) {
+    private static String buildQueryString(MultiValueMap<String, String> params, Charset charset) {
         List<String> components = new LinkedList<>();
 
         try {
             // Build query string components
             for (String key : params.keySet()) {
-                components.addAll(buildQueryStringComponents(key, params.get(key), charsetName));
+                components.addAll(buildQueryStringComponents(key, params.get(key), charset));
             }
         }
         catch (UnsupportedEncodingException e) {
@@ -108,14 +110,15 @@ public final class HttpRoute
     }
 
     @SuppressWarnings("UnusedAssignment")
-    private static List<String> buildQueryStringComponents(String key, List<String> values, String charsetName)
+    private static List<String> buildQueryStringComponents(String key, List<String> values, Charset charset)
             throws UnsupportedEncodingException {
 
-        if (key == null || CollectionUtils.isEmpty(values) || charsetName == null) {
+        if (key == null || CollectionUtils.isEmpty(values) || charset == null) {
             throw new IllegalArgumentException();
         }
 
         List<String> components = new LinkedList<>();
+        String charsetName = charset.name();
         String encodedValue = null;
 
         if (values.size() > 1) {

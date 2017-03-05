@@ -6,10 +6,10 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
-import com.roxiemobile.networkingapi.network.NetworkConfig.DefaultCharset;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
@@ -32,7 +32,7 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
             // Try to convert HTTP response to JSON object
             if (ArrayUtils.isNotEmpty(body)) {
 
-                String charsetName = entity.mediaType().getCharset(DefaultCharset.UTF_8).name();
+                String charsetName = entity.mediaType().getCharset(Charsets.UTF_8).name();
                 String json = new String(entity.body(), charsetName).trim();
 
                 if (StringUtils.isNotEmpty(json)) {
