@@ -30,5 +30,5 @@ ext {
 }
 
 // Deploy to Bintray
-apply from: '../gradle/install.gradle'
-apply from: '../gradle/bintray.gradle'
+apply from: 'tools/install.gradle'
+apply from: 'tools/bintray.gradle'

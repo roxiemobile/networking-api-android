@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.1'
         classpath 'me.tatarka:gradle-retrolambda:3.6.0'
 
         // Deploy to Bintray
@@ -23,15 +23,15 @@ allprojects {
 // @link http://tools.android.com/tech-docs/new-build-system/tips
 ext {
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.2'
+    buildToolsVersion = '25.0.3'
     minSdkVersion = 14
     targetSdkVersion = 25
 
     // Shared Dependencies
-    ANDROID_SUPPORT_VERSION = '25.2.0'
+    ANDROID_SUPPORT_VERSION = '25.3.1'
     JUNIT_VERSION = '4.12'
     OKHTTP_VERSION = '3.6.0'
-    RXM_ANDROID_COMMONS_VERSION = '0.7.0'
+    RXM_ANDROID_COMMONS_VERSION = '0.7.1'
 }
 
 task clean(type: Delete) {
