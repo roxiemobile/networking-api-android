@@ -15,21 +15,21 @@ import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
-public abstract class AbstractValidatableModelConverter<T extends ValidatableModel>
-        extends AbstractCallResultConverter<T>
+public abstract class AbstractValidatableModelArrayConverter<T extends ValidatableModel>
+        extends AbstractCallResultConverter<T[]>
 {
 // MARK: - Construction
 
-    protected AbstractValidatableModelConverter(@NonNull Class<T> classOfT) {
+    protected AbstractValidatableModelArrayConverter(@NonNull Class<T[]> classOfT) {
         mClassOfType = classOfT;
     }
 
 // MARK: - Methods
 
     @Override
-    public @NonNull ResponseEntity<T> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
-        ResponseEntity<T> newEntity;
-        T newBody = null;
+    public @NonNull ResponseEntity<T[]> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
+        ResponseEntity<T[]> newEntity;
+        T[] newBody = null;
 
         try {
             byte[] body = entity.body();
@@ -52,9 +52,9 @@ public abstract class AbstractValidatableModelConverter<T extends ValidatableMod
 
 // MARK: - Constants
 
-    public static final String TAG = AbstractValidatableModelConverter.class.getSimpleName();
+    public static final String TAG = AbstractValidatableModelArrayConverter.class.getSimpleName();
 
 // MARK: - Variables
 
-    private final Class<T> mClassOfType;
+    private final Class<T[]> mClassOfType;
 }
