@@ -1,3 +1,3 @@
 <resources>
-    <string name="app_name">Networking API Examples</string>
+    <string name="app_name" translatable="false">Networking API Examples</string>
 </resources>

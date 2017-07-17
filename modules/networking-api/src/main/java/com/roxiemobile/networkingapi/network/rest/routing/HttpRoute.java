@@ -63,7 +63,7 @@ public final class HttpRoute
         HttpRoute route = null;
         try {
             if (uriString != null) {
-                route = new HttpRoute(new URI(uriString));
+                route = new HttpRoute(new URI(uriString).normalize());
             }
         }
         catch (URISyntaxException e) {

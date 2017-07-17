@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -27,6 +28,9 @@ android {
 }
 
 dependencies {
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VERSION"
 
     // Android Support
     final ANDROID_SUPPORT_VERSION = rootProject.ext.ANDROID_SUPPORT_VERSION

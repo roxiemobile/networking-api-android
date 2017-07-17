@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -27,6 +28,9 @@ android {
 }
 
 dependencies {
+
+    // Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VERSION"
 
     // Android Commons (Roxie Mobile)
     final RXM_ANDROID_COMMONS_VERSION = rootProject.ext.RXM_ANDROID_COMMONS_VERSION
