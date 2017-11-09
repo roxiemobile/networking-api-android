@@ -383,7 +383,12 @@ public enum HttpStatus {
      * {@code 511 Network Authentication Required}.
      * @see <a href="http://tools.ietf.org/html/rfc6585#section-6">Additional HTTP Status Codes</a>
      */
-    NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required");
+    NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required"),
+    /**
+     * {@code 523 Origin is unreachable}.
+     * @see <a href="https://support.cloudflare.com/hc/en-us/articles/200171946-Error-523-Origin-is-unreachable">Cloudflare Support: Error Pages</a>
+     */
+    ORIGIN_IS_UNREACHABLE(523, "Origin is unreachable");
 
 
 
