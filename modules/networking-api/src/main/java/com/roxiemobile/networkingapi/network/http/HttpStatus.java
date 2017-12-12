@@ -323,6 +323,47 @@ public enum HttpStatus {
      */
     REQUEST_HEADER_FIELDS_TOO_LARGE(431, "Request Header Fields Too Large"),
 
+    /**
+     * {@code 440 Login Time-out}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Internet_Information_Services">Internet Information Services</a>
+     */
+    LOGIN_TIME_OUT(440, "Login Time-out"),
+    /**
+     * {@code 444 No Response}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#nginx">nginx</a>
+     */
+    NO_RESPONSE(444, "No Response"),
+    /**
+     * {@code 449 Retry With}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Internet_Information_Services">Internet Information Services</a>
+     */
+    RETRY_WITH(449, "Retry With"),
+    /**
+     * {@code 451 Redirect}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Internet_Information_Services">Internet Information Services</a>
+     */
+    REDIRECT(451, "Redirect"),
+    /**
+     * {@code 495 SSL Certificate Error}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#nginx">nginx</a>
+     */
+    SSL_CERTIFICATE_ERROR(495, "SSL Certificate Error"),
+    /**
+     * {@code 496 SSL Certificate Required}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#nginx">nginx</a>
+     */
+    SSL_CERTIFICATE_REQUIRED(496, "SSL Certificate Required"),
+    /**
+     * {@code 497 HTTP Request Sent to HTTPS Port}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#nginx">nginx</a>
+     */
+    HTTP_REQUEST_SENT_TO_HTTPS_PORT(497, "HTTP Request Sent to HTTPS Port"),
+    /**
+     * {@code 499 Client Closed Request}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#nginx">nginx</a>
+     */
+    CLIENT_CLOSED_REQUEST(499, "Client Closed Request"),
+
     // --- 5xx Server Error ---
 
     /**
@@ -384,11 +425,47 @@ public enum HttpStatus {
      * @see <a href="http://tools.ietf.org/html/rfc6585#section-6">Additional HTTP Status Codes</a>
      */
     NETWORK_AUTHENTICATION_REQUIRED(511, "Network Authentication Required"),
+
     /**
-     * {@code 523 Origin is unreachable}.
-     * @see <a href="https://support.cloudflare.com/hc/en-us/articles/200171946-Error-523-Origin-is-unreachable">Cloudflare Support: Error Pages</a>
+     * {@code 520 Unknown Error}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
      */
-    ORIGIN_IS_UNREACHABLE(523, "Origin is unreachable");
+    UNKNOWN_ERROR(520, "Unknown Error"),
+    /**
+     * {@code 521 Web Server Is Down}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    WEB_SERVER_IS_DOWN(521, "Web Server Is Down"),
+    /**
+     * {@code 522 Connection Timed Out}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    CONNECTION_TIMED_OUT(522, "Connection Timed Out"),
+    /**
+     * {@code 523 Origin Is Unreachable}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    ORIGIN_IS_UNREACHABLE(523, "Origin Is Unreachable"),
+    /**
+     * {@code 524 A Timeout Occurred}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    A_TIMEOUT_OCCURRED(524, "A Timeout Occurred"),
+    /**
+     * {@code 525 SSL Handshake Failed}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    SSL_HANDSHAKE_FAILED(525, "SSL Handshake Failed"),
+    /**
+     * {@code 526 Invalid SSL Certificate}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    INVALID_SSL_CERTIFICATE(526, "Invalid SSL Certificate"),
+    /**
+     * {@code 527 Railgun Error}.
+     * @see <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#Cloudflare">Cloudflare</a>
+     */
+    RAILGUN_ERROR(527, "Railgun Error");
 
 
 
@@ -397,7 +474,7 @@ public enum HttpStatus {
     private final String reasonPhrase;
 
 
-    private HttpStatus(int value, String reasonPhrase) {
+    HttpStatus(int value, String reasonPhrase) {
         this.value = value;
         this.reasonPhrase = reasonPhrase;
     }
@@ -418,7 +495,7 @@ public enum HttpStatus {
 
     /**
      * Whether this status code is in the HTTP series
-     * {@link org.springframework.http.HttpStatus.Series#INFORMATIONAL}.
+     * {@link com.roxiemobile.networkingapi.network.http.HttpStatus.Series#INFORMATIONAL}.
      * This is a shortcut for checking the value of {@link #series()}.
      */
     public boolean is1xxInformational() {
@@ -427,7 +504,7 @@ public enum HttpStatus {
 
     /**
      * Whether this status code is in the HTTP series
-     * {@link org.springframework.http.HttpStatus.Series#SUCCESSFUL}.
+     * {@link com.roxiemobile.networkingapi.network.http.HttpStatus.Series#SUCCESSFUL}.
      * This is a shortcut for checking the value of {@link #series()}.
      */
     public boolean is2xxSuccessful() {
@@ -436,7 +513,7 @@ public enum HttpStatus {
 
     /**
      * Whether this status code is in the HTTP series
-     * {@link org.springframework.http.HttpStatus.Series#REDIRECTION}.
+     * {@link com.roxiemobile.networkingapi.network.http.HttpStatus.Series#REDIRECTION}.
      * This is a shortcut for checking the value of {@link #series()}.
      */
     public boolean is3xxRedirection() {
@@ -446,7 +523,7 @@ public enum HttpStatus {
 
     /**
      * Whether this status code is in the HTTP series
-     * {@link org.springframework.http.HttpStatus.Series#CLIENT_ERROR}.
+     * {@link com.roxiemobile.networkingapi.network.http.HttpStatus.Series#CLIENT_ERROR}.
      * This is a shortcut for checking the value of {@link #series()}.
      */
     public boolean is4xxClientError() {
@@ -455,7 +532,7 @@ public enum HttpStatus {
 
     /**
      * Whether this status code is in the HTTP series
-     * {@link org.springframework.http.HttpStatus.Series#SERVER_ERROR}.
+     * {@link com.roxiemobile.networkingapi.network.http.HttpStatus.Series#SERVER_ERROR}.
      * This is a shortcut for checking the value of {@link #series()}.
      */
     public boolean is5xxServerError() {
@@ -499,7 +576,7 @@ public enum HttpStatus {
      * Java 5 enumeration of HTTP status series.
      * <p>Retrievable via {@link HttpStatus#series()}.
      */
-    public static enum Series {
+    public enum Series {
 
         INFORMATIONAL(1),
         SUCCESSFUL(2),
@@ -509,7 +586,7 @@ public enum HttpStatus {
 
         private final int value;
 
-        private Series(int value) {
+        Series(int value) {
             this.value = value;
         }
 
