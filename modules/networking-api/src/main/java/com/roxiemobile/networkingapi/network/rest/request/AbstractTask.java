@@ -1,6 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
@@ -208,7 +209,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected @NonNull HttpBody httpBody() {
+    protected @Nullable HttpBody httpBody() {
         return requestEntity().body();
     }
 
