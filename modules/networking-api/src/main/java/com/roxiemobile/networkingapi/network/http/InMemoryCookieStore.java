@@ -2,6 +2,7 @@ package com.roxiemobile.networkingapi.network.http;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.util.CookieUtils;
 
@@ -14,8 +15,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public final class InMemoryCookieStore implements CookieStore
 {
@@ -52,7 +51,7 @@ public final class InMemoryCookieStore implements CookieStore
 // MARK: - Methods
 
     public synchronized void add(URI uri, @NonNull HttpCookie cookie) {
-        requireNotNull(cookie, "cookie is null");
+        Guard.notNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
         List<HttpCookie> cookies = map.get(uri);
@@ -67,7 +66,7 @@ public final class InMemoryCookieStore implements CookieStore
     }
 
     public synchronized List<HttpCookie> get(@NonNull URI uri) {
-        requireNotNull(uri, "uri is null");
+        Guard.notNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
         final Date date = new Date();
@@ -136,7 +135,7 @@ public final class InMemoryCookieStore implements CookieStore
     }
 
     public synchronized boolean remove(URI uri, @NonNull HttpCookie cookie) {
-        requireNotNull(cookie, "cookie is null");
+        Guard.notNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = map.get(CookieUtils.cookiesUri(uri));
         return (cookies != null) && cookies.remove(cookie);

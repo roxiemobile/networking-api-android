@@ -16,6 +16,7 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
@@ -35,10 +36,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * Represents an Internet Media Type, as defined in the HTTP specification.
@@ -348,8 +345,8 @@ public class MediaType implements Comparable<MediaType> {
      * @throws IllegalArgumentException if any of the parameters contain illegal characters
      */
     public MediaType(String type, String subtype, Map<String, String> parameters) {
-        requireNotEmpty(type, "type is empty");
-        requireNotEmpty(subtype, "subtype is empty");
+        Guard.notEmpty(type, "type is empty");
+        Guard.notEmpty(subtype, "subtype is empty");
         checkToken(type);
         checkToken(subtype);
         this.type = type.toLowerCase(Locale.ENGLISH);
@@ -384,13 +381,13 @@ public class MediaType implements Comparable<MediaType> {
     }
 
     private void checkParameters(String attribute, String value) {
-        requireNotEmpty(attribute, "attribute is empty");
-        requireNotEmpty(value, "value is empty");
+        Guard.notEmpty(attribute, "attribute is empty");
+        Guard.notEmpty(value, "value is empty");
         checkToken(attribute);
         if (PARAM_QUALITY_FACTOR.equals(attribute)) {
             value = unquote(value);
             double d = Double.parseDouble(value);
-            requireTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
+            Guard.isTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
         }
         else if (PARAM_CHARSET.equals(attribute)) {
             value = unquote(value);
@@ -718,7 +715,7 @@ public class MediaType implements Comparable<MediaType> {
      * @throws InvalidMediaTypeException if the string cannot be parsed
      */
     public static MediaType parseMediaType(String mediaType) {
-        requireNotEmpty(mediaType, "mediaType is empty");
+        Guard.notEmpty(mediaType, "mediaType is empty");
         String[] parts = CompatStringUtils.tokenizeToStringArray(mediaType, ";");
 
         String fullType = parts[0].trim();
@@ -830,7 +827,7 @@ public class MediaType implements Comparable<MediaType> {
      * @see <a href="http://tools.ietf.org/html/rfc2616#section-14.1">HTTP 1.1, section 14.1</a>
      */
     public static void sortBySpecificity(List<MediaType> mediaTypes) {
-        requireNotNull(mediaTypes, "mediaTypes is null");
+        Guard.notNull(mediaTypes, "mediaTypes is null");
         if (mediaTypes.size() > 1) {
             Collections.sort(mediaTypes, SPECIFICITY_COMPARATOR);
         }
@@ -857,7 +854,7 @@ public class MediaType implements Comparable<MediaType> {
      * @see #getQualityValue()
      */
     public static void sortByQualityValue(List<MediaType> mediaTypes) {
-        requireNotNull(mediaTypes, "mediaTypes is null");
+        Guard.notNull(mediaTypes, "mediaTypes is null");
         if (mediaTypes.size() > 1) {
             Collections.sort(mediaTypes, QUALITY_VALUE_COMPARATOR);
         }
@@ -870,7 +867,7 @@ public class MediaType implements Comparable<MediaType> {
      * @see MediaType#sortByQualityValue(List)
      */
     public static void sortBySpecificityAndQuality(List<MediaType> mediaTypes) {
-        requireNotNull(mediaTypes, "mediaTypes is null");
+        Guard.notNull(mediaTypes, "mediaTypes is null");
         if (mediaTypes.size() > 1) {
             Collections.sort(mediaTypes, new CompoundComparator<MediaType>(
                     MediaType.SPECIFICITY_COMPARATOR, MediaType.QUALITY_VALUE_COMPARATOR));

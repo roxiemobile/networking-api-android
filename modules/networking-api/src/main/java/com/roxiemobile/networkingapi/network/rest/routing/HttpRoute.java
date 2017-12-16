@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.roxiemobile.androidcommons.data.Constants.Charsets;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
@@ -18,14 +19,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-
 public final class HttpRoute
 {
 // MARK: - Construction
 
     private HttpRoute(@NonNull URI uri) {
-        requireNotNull(uri, "uri is null");
+        Guard.notNull(uri, "uri is null");
 
         // Init instance variables
         mUri = uri;

@@ -2,7 +2,7 @@ package com.roxiemobile.networkingapi.network.http;
 
 import android.support.annotation.NonNull;
 
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 
 /**
  * Represents HTTP Bearer Authentication.
@@ -13,7 +13,7 @@ public class HttpBearerAuthentication extends HttpAuthentication
 // MARK: - Construction
 
     public HttpBearerAuthentication(@NonNull String token) {
-        requireNotEmpty(token, "token is empty");
+        Guard.notEmpty(token, "token is empty");
 
         // Init instance variables
         mToken = token;

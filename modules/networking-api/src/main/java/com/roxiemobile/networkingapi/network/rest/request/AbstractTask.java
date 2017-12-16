@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.rest.CallResult;
@@ -27,15 +28,12 @@ import com.roxiemobile.networkingapi.network.rest.routing.HttpRoute;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireFalse;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-
 public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, To>, Cancellable
 {
 // MARK: - Construction
 
     protected AbstractTask(@NonNull TaskBuilder<Ti, To> builder) {
-        requireNotNull(builder, "builder is null");
+        Guard.notNull(builder, "builder is null");
 
         // Init instance variables
         mTag = builder.tag();
@@ -103,7 +101,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * May return null if this call was canceled.
      */
     protected final CallResult<To> call() throws Exception {
-        requireFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
+        Guard.isFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
         CallResult<To> result = null;
 
         // Send request to the server
@@ -164,7 +162,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     protected final @NonNull RestApiClient newClient() {
         // Get HTTP client config
         HttpClientConfig config = httpClientConfig();
-        requireNotNull(config, "config is null");
+        Guard.notNull(config, "config is null");
 
         // Create/init HTTP client
         RestApiClient.Builder builder = new RestApiClient.Builder()
@@ -222,7 +220,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * TODO
      */
     protected CallResult<To> onFailure(@NonNull RestApiError error) {
-        requireNotNull(error, "error is null");
+        Guard.notNull(error, "error is null");
         return CallResult.failure(error);
     }
 
@@ -264,7 +262,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 // MARK: - Private Methods
 
     private void yield(CallResult<To> result, @NonNull Callback<Ti, To> callback) {
-        requireNotNull(callback, "callback is null");
+        Guard.notNull(callback, "callback is null");
 
         if (isCancelled()) {
             callback.onCancel(this);
@@ -325,8 +323,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
         }
 
         protected void checkInvalidState() {
-            requireNotNull(mRequestEntity, "requestEntity is null");
-            requireNotNull(mRequestEntity.uri(), "requestEntity.uri is null");
+            Guard.notNull(mRequestEntity, "requestEntity is null");
+            Guard.notNull(mRequestEntity.uri(), "requestEntity.uri is null");
         }
 
         protected abstract @NonNull Task<Ti, To> newTask();

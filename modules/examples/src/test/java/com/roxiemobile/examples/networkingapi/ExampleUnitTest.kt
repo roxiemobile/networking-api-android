@@ -3,11 +3,9 @@ package com.roxiemobile.examples.networkingapi
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class ExampleUnitTest
-{
+class ExampleUnitTest {
     @Test
-    @Throws(Exception::class)
     fun addition_isCorrect() {
-        assertEquals(4, (2 + 2).toLong())
+        assertEquals(4, 2 + 2)
     }
 }

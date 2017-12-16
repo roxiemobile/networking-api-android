@@ -2,6 +2,7 @@ package com.roxiemobile.networkingapi.network.rest.converter;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.CallResult;
 import com.roxiemobile.networkingapi.network.rest.CallResultConverter;
@@ -10,8 +11,6 @@ import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 import com.roxiemobile.networkingapi.network.rest.response.error.ApplicationLayerError;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.UnexpectedMediaTypeException;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T>
 {
@@ -54,7 +53,7 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
 // MARK: - Private Methods
 
     private void checkMediaType(@NonNull ResponseEntity<byte[]> entity) throws UnexpectedMediaTypeException {
-        requireNotNull(entity, "entity is null");
+        Guard.notNull(entity, "entity is null");
 
         MediaType mediaType = entity.mediaType();
         boolean found = false;

@@ -3,6 +3,7 @@ package com.roxiemobile.networkingapi.network.rest;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.Stream;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.HttpKeys.MethodName;
@@ -34,10 +35,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 public final class RestApiClient
 {
@@ -81,8 +78,8 @@ public final class RestApiClient
 // MARK: - Private Methods
 
     private HttpResult execute(@NonNull String method, @NonNull RequestEntity<HttpBody> entity) {
-        requireNotEmpty(method, "method is empty");
-        requireNotNull(entity, "entity is null");
+        Guard.notEmpty(method, "method is empty");
+        Guard.notNull(entity, "entity is null");
 
         // Execute HTTP request
         return execute(newRequest(method, entity), entity.cookieStore());
@@ -147,7 +144,7 @@ public final class RestApiClient
     }
 
     private @NonNull OkHttpClient newClient(@NonNull CookieStore cookieStore) {
-        requireNotNull(cookieStore, "cookieStore is null");
+        Guard.notNull(cookieStore, "cookieStore is null");
 
         CookieManager cookieManager = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
         CookieJar cookieJar = new CompatJavaNetCookieJar(cookieManager);
@@ -178,8 +175,8 @@ public final class RestApiClient
     }
 
     private @NonNull ResponseEntity<byte[]> newResponseEntity(@NonNull Response response, @NonNull CookieStore cookieStore) {
-        requireNotNull(response, "response is null");
-        requireNotNull(cookieStore, "cookieStore is null");
+        Guard.notNull(response, "response is null");
+        Guard.notNull(cookieStore, "cookieStore is null");
 
         // Handle HTTP response
         HttpStatus statusCode = HttpStatus.valueOf(response.code());
@@ -261,13 +258,13 @@ public final class RestApiClient
         }
 
         public Builder connectTimeout(int timeout) {
-            requireTrue(timeout >= 0, "timeout < 0");
+            Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mConnectionTimeout = timeout;
             return this;
         }
 
         public Builder readTimeout(int timeout) {
-            requireTrue(timeout >= 0, "timeout < 0");
+            Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
             return this;
         }

@@ -3,12 +3,11 @@ package com.roxiemobile.networkingapi.network.rest.response.error;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.function.Consumer;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 abstract class AbstractRestApiError implements RestApiError
 {
@@ -34,7 +33,7 @@ abstract class AbstractRestApiError implements RestApiError
      */
     @Override
     public void printErrorDescription(@NonNull Consumer<String> consumer) {
-        requireNotNull(consumer, "consumer is null");
+        Guard.notNull(consumer, "consumer is null");
 
         if (mCause != null) {
             StringWriter stringWriter = new StringWriter();

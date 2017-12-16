@@ -3,13 +3,12 @@ package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.function.Consumer;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.rest.CallResultConverter;
 import com.roxiemobile.networkingapi.network.rest.converter.StringConverter;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 abstract class AbstractNestedError extends Exception
         implements ResponseEntityHolder
@@ -28,7 +27,7 @@ abstract class AbstractNestedError extends Exception
      */
     public AbstractNestedError(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
         super(cause);
-        requireNotNull(entity, "entity is null");
+        Guard.notNull(entity, "entity is null");
 
         // Init instance variables
         mResponseEntity = entity;

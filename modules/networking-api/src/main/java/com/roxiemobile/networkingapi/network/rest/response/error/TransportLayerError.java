@@ -2,7 +2,7 @@ package com.roxiemobile.networkingapi.network.rest.response.error;
 
 import android.support.annotation.NonNull;
 
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 
 public class TransportLayerError extends AbstractRestApiError
 {
@@ -10,7 +10,7 @@ public class TransportLayerError extends AbstractRestApiError
 
     public TransportLayerError(@NonNull Throwable cause) {
         super(cause);
-        requireNotNull(cause, "cause is null");
+        Guard.notNull(cause, "cause is null");
     }
 
 // MARK: - Properties

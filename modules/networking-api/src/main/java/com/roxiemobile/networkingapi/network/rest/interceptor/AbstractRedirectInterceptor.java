@@ -2,6 +2,8 @@ package com.roxiemobile.networkingapi.network.rest.interceptor;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
+import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
 import java.io.IOException;
@@ -14,8 +16,6 @@ import okhttp3.ResponseBody;
 import okhttp3.internal.http.RealResponseBody;
 import okio.GzipSource;
 import okio.Okio;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public abstract class AbstractRedirectInterceptor implements Interceptor
 {
@@ -46,7 +46,7 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
      * Returns a new response that does gzip decompression on {@code response}.
      */
     protected Response decompressResponse(@NonNull Response response) throws IOException {
-        requireNotNull(response, "response is null");
+        Guard.notNull(response, "response is null");
 
         ResponseBody body = response.body();
         if (body != null && "gzip".equalsIgnoreCase(response.header(HttpHeaders.CONTENT_ENCODING))) {
@@ -59,7 +59,11 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
                                               .build();
 
             // Create new HTTP response
-            ResponseBody responseBody = new RealResponseBody(strippedHeaders, Okio.buffer(source));
+            ResponseBody responseBody = new RealResponseBody(
+                    strippedHeaders.get(HttpHeaders.CONTENT_TYPE),
+                    stringToLong(strippedHeaders.get(HttpHeaders.CONTENT_LENGTH)),
+                    Okio.buffer(source));
+
             response = response.newBuilder()
                                .headers(strippedHeaders)
                                .body(ResponseBody.create(responseBody.contentType(), responseBody.bytes()))
@@ -68,5 +72,21 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
 
         // Done
         return response;
+    }
+
+// MARK: - Private Methods
+
+    private static long stringToLong(String s) {
+        long value = -1L;
+
+        if (StringUtils.isNotBlank(s)) {
+            try {
+                value = Long.parseLong(s);
+            }
+            catch (NumberFormatException e) {
+                // Do nothing
+            }
+        }
+        return value;
     }
 }

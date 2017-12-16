@@ -2,6 +2,7 @@ package com.roxiemobile.networkingapi.network.rest.response;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
@@ -9,8 +10,6 @@ import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 
 import java.net.URI;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T>
 {
@@ -92,9 +91,9 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
         @Override
         public ResponseEntity<T> build() {
-            requireNotNull(uri(), "url is null");
-            requireNotNull(status(), "status is null");
-            requireNotNull(mediaType(), "mediaType is null");
+            Guard.notNull(uri(), "url is null");
+            Guard.notNull(status(), "status is null");
+            Guard.notNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);
         }
 

@@ -18,6 +18,7 @@ package com.roxiemobile.networkingapi.network.http;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
@@ -34,10 +35,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotEmpty;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * Represents a Compression Type, as defined in the HTTP specification.
@@ -155,7 +152,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if any of the parameters contain illegal characters
      */
     public ContentCodingType(String type, Map<String, String> parameters) {
-        requireNotEmpty(type, "type is empty");
+        Guard.notEmpty(type, "type is empty");
         checkToken(type);
         this.type = type.toLowerCase(Locale.ENGLISH);
         if (CollectionUtils.isNotEmpty(parameters)) {
@@ -187,13 +184,13 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
     }
 
     private void checkParameters(String attribute, String value) {
-        requireNotEmpty(attribute, "attribute is empty");
-        requireNotEmpty(value, "value is empty");
+        Guard.notEmpty(attribute, "attribute is empty");
+        Guard.notEmpty(value, "value is empty");
         checkToken(attribute);
         if (PARAM_QUALITY_FACTOR.equals(attribute)) {
             value = unquote(value);
             double d = Double.parseDouble(value);
-            requireTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
+            Guard.isTrue(d >= 0D && d <= 1D, "Invalid quality value \"" + value + "\": should be between 0.0 and 1.0");
         } else if (!isQuotedString(value)) {
             checkToken(value);
         }
@@ -377,7 +374,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @throws IllegalArgumentException if the string cannot be parsed
      */
     public static ContentCodingType parseCodingType(String codingType) {
-        requireNotEmpty(codingType, "codingType is empty");
+        Guard.notEmpty(codingType, "codingType is empty");
         String[] parts = CompatStringUtils.tokenizeToStringArray(codingType, ";");
         String type = parts[0].trim();
 
@@ -454,7 +451,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * @see #getQualityValue()
      */
     public static void sortByQualityValue(List<ContentCodingType> codingTypes) {
-        requireNotNull(codingTypes, "codingTypes is null");
+        Guard.notNull(codingTypes, "codingTypes is null");
         if (codingTypes.size() > 1) {
             Collections.sort(codingTypes, QUALITY_VALUE_COMPARATOR);
         }

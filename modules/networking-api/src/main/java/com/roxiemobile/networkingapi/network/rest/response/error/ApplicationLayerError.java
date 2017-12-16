@@ -3,10 +3,9 @@ package com.roxiemobile.networkingapi.network.rest.response.error;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.function.Consumer;
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseEntityHolder;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
 
 public class ApplicationLayerError extends AbstractRestApiError
 {
@@ -14,7 +13,7 @@ public class ApplicationLayerError extends AbstractRestApiError
 
     public ApplicationLayerError(@NonNull Throwable cause) {
         super(cause);
-        requireNotNull(cause, "cause is null");
+        Guard.notNull(cause, "cause is null");
     }
 
 // MARK: - Properties

@@ -18,6 +18,7 @@ package com.roxiemobile.networkingapi.network.http;
 
 import android.support.annotation.NonNull;
 
+import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
@@ -41,10 +42,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
-
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireFalse;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireNotNull;
-import static com.roxiemobile.androidcommons.diagnostics.Require.requireTrue;
 
 /**
  * Represents HTTP request and response headers, mapping string header names to list of string values.
@@ -353,7 +350,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * Private constructor that can create read-only {@code HttpHeader} instances.
      */
     private HttpHeaders(@NonNull Map<String, List<String>> headers, boolean readOnly) {
-        requireNotNull(headers, "headers is null");
+        Guard.notNull(headers, "headers is null");
         if (readOnly) {
             Map<String, List<String>> map = new LinkedCaseInsensitiveMap<>(headers.size(), Locale.ENGLISH);
             for (Entry<String, List<String>> entry : headers.entrySet()) {
@@ -573,7 +570,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * @param filename the filename (may be {@code null})
      */
     public void setContentDispositionFormData(String name, String filename) {
-        requireNotNull(name, "name is null");
+        Guard.notNull(name, "name is null");
         StringBuilder builder = new StringBuilder("form-data; name=\"");
         builder.append(name).append('\"');
         if (filename != null) {
@@ -637,8 +634,8 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * as specified by the {@code Content-Type} header.
      */
     public void setContentType(MediaType mediaType) {
-        requireFalse(mediaType.isWildcardType(), "'Content-Type' cannot contain wildcard type '*'");
-        requireFalse(mediaType.isWildcardSubtype(), "'Content-Type' cannot contain wildcard subtype '*'");
+        Guard.isFalse(mediaType.isWildcardType(), "'Content-Type' cannot contain wildcard type '*'");
+        Guard.isFalse(mediaType.isWildcardSubtype(), "'Content-Type' cannot contain wildcard subtype '*'");
         set(CONTENT_TYPE, mediaType.toString());
     }
 
@@ -678,8 +675,8 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      */
     public void setETag(String eTag) {
         if (eTag != null) {
-            requireTrue(eTag.startsWith("\"") || eTag.startsWith("W/"), "Invalid eTag, does not start with W/ or \"");
-            requireTrue(eTag.endsWith("\""), "Invalid eTag, does not end with \"");
+            Guard.isTrue(eTag.startsWith("\"") || eTag.startsWith("W/"), "Invalid eTag, does not start with W/ or \"");
+            Guard.isTrue(eTag.endsWith("\""), "Invalid eTag, does not end with \"");
         }
         set(ETAG, eTag);
     }
@@ -1027,7 +1024,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
 
     @Override
     public void putAll(@NonNull Map<? extends String, ? extends List<String>> map) {
-        requireNotNull(map, "map is null");
+        Guard.notNull(map, "map is null");
         this.headers.putAll(map);
     }
 
