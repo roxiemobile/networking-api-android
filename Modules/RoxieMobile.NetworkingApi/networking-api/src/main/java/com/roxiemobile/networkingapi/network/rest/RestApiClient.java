@@ -1,5 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 
 import com.annimon.stream.Stream;
@@ -20,6 +22,7 @@ import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+import com.roxiemobile.networkingapi.network.tls.TlsCompat;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -330,7 +333,16 @@ public final class RestApiClient
 
     private static final String TAG = RestApiClient.class.getSimpleName();
 
-    private static final OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
+    private static final OkHttpClient SHARED_HTTP_CLIENT;
+    static {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {
+            TlsCompat.enableTlsOnSockets(builder);
+        }
+
+        SHARED_HTTP_CLIENT = builder.build();
+    }
     private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
