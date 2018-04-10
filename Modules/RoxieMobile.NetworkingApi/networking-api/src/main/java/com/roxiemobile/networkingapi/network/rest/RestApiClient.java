@@ -22,7 +22,7 @@ import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
-import com.roxiemobile.networkingapi.network.tls.TlsCompat;
+import com.roxiemobile.networkingapi.network.security.TLSCompat;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -167,11 +167,11 @@ public final class RestApiClient
 
         // Set a application interceptors
         Stream.of(nullToEmpty(mOptions.mInterceptors))
-              .filter(obj -> obj != null).forEach(builder::addInterceptor);
+                .filter(obj -> obj != null).forEach(builder::addInterceptor);
 
         // Set a network interceptors
         Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
-              .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
+                .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
 
         // Done
         return builder.build();
@@ -243,6 +243,15 @@ public final class RestApiClient
         }
 
         // Done
+        return builder.build();
+    }
+
+    private static @NonNull OkHttpClient newSharedHttpClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {
+            TLSCompat.enableTlsOnSockets(builder);
+        }
         return builder.build();
     }
 
@@ -333,16 +342,7 @@ public final class RestApiClient
 
     private static final String TAG = RestApiClient.class.getSimpleName();
 
-    private static final OkHttpClient SHARED_HTTP_CLIENT;
-    static {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {
-            TlsCompat.enableTlsOnSockets(builder);
-        }
-
-        SHARED_HTTP_CLIENT = builder.build();
-    }
+    private static final OkHttpClient SHARED_HTTP_CLIENT = newSharedHttpClient();
     private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables

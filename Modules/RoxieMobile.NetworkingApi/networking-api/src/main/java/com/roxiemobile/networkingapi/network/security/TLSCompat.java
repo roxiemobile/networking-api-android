@@ -1,4 +1,4 @@
-package com.roxiemobile.networkingapi.network.tls;
+package com.roxiemobile.networkingapi.network.security;
 
 import android.support.annotation.NonNull;
 
@@ -16,55 +16,56 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 
-public final class TlsCompat
+public final class TLSCompat
 {
 // MARK: - Construction
 
-    private TlsCompat() {
+    private TLSCompat() {
+        // Do nothing
     }
 
-// MARK: - Public static functions
+// MARK: - Methods
 
-    // Based on code from OkHttpClient.Builder.sslSocketFactory javadoc
     public static void enableTlsOnSockets(@NonNull OkHttpClient.Builder builder) {
         try {
+            // Based on code from OkHttpClient.Builder.sslSocketFactory javadoc
+
             X509TrustManager trustManager = getDefaultTrustManager();
             SSLSocketFactory sslSocketFactory = getDefaultSocketFactory(trustManager);
-
-            TlsSocketFactoryProxy socketFactoryProxy = new TlsSocketFactoryProxy(sslSocketFactory);
+            TLSSocketFactoryProxy socketFactoryProxy = new TLSSocketFactoryProxy(sslSocketFactory);
 
             builder.sslSocketFactory(socketFactoryProxy, trustManager);
         }
         catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
-            throw new IllegalStateException("Failed to init compat ssl factory", e);
+            throw new IllegalStateException("Failed to init compat SSL factory.", e);
         }
     }
 
-// MARK: - Private static functions
+// MARK: - Private Methods
 
     private static @NonNull X509TrustManager getDefaultTrustManager()
             throws NoSuchAlgorithmException, KeyStoreException {
 
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-                TrustManagerFactory.getDefaultAlgorithm());
-
+        String algorithm = TrustManagerFactory.getDefaultAlgorithm();
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(algorithm);
         trustManagerFactory.init((KeyStore) null);
 
         TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
 
-        if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-            throw new IllegalStateException("Unexpected default trust managers:"
-                    + Arrays.toString(trustManagers));
+        if (trustManagers.length == 1 && (trustManagers[0] instanceof X509TrustManager)) {
+            return (X509TrustManager) trustManagers[0];
         }
-
-        return (X509TrustManager) trustManagers[0];
+        else {
+            throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
+        }
     }
 
     private static @NonNull SSLSocketFactory getDefaultSocketFactory(X509TrustManager trustManager)
             throws KeyManagementException, NoSuchAlgorithmException {
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, new TrustManager[] { trustManager }, null);
+        sslContext.init(null, new TrustManager[]{trustManager}, null);
+
         return sslContext.getSocketFactory();
     }
 }
