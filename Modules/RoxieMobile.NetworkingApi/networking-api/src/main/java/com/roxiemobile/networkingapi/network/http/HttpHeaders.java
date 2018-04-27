@@ -16,14 +16,14 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedCaseInsensitiveMap;
 import com.roxiemobile.networkingapi.network.http.util.MultiValueMap;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -349,7 +349,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     /**
      * Private constructor that can create read-only {@code HttpHeader} instances.
      */
-    private HttpHeaders(@NonNull Map<String, List<String>> headers, boolean readOnly) {
+    private HttpHeaders(@NotNull Map<String, List<String>> headers, boolean readOnly) {
         Guard.notNull(headers, "headers is null");
         if (readOnly) {
             Map<String, List<String>> map = new LinkedCaseInsensitiveMap<>(headers.size(), Locale.ENGLISH);
@@ -1023,7 +1023,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     }
 
     @Override
-    public void putAll(@NonNull Map<? extends String, ? extends List<String>> map) {
+    public void putAll(@NotNull Map<? extends String, ? extends List<String>> map) {
         Guard.notNull(map, "map is null");
         this.headers.putAll(map);
     }
@@ -1034,17 +1034,17 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     }
 
     @Override
-    public @NonNull Set<String> keySet() {
+    public @NotNull Set<String> keySet() {
         return this.headers.keySet();
     }
 
     @Override
-    public @NonNull Collection<List<String>> values() {
+    public @NotNull Collection<List<String>> values() {
         return this.headers.values();
     }
 
     @Override
-    public @NonNull Set<Entry<String, List<String>>> entrySet() {
+    public @NotNull Set<Entry<String, List<String>>> entrySet() {
         return this.headers.entrySet();
     }
 
@@ -1075,7 +1075,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     /**
      * TODO
      */
-    public static @NonNull HttpHeaders mergeHttpHeaders(HttpHeaders headers, HttpHeaders otherHeaders) {
+    public static @NotNull HttpHeaders mergeHttpHeaders(HttpHeaders headers, HttpHeaders otherHeaders) {
         HttpHeaders result = new HttpHeaders();
 
         // Put all Headers from first argument
@@ -1098,14 +1098,14 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     /**
      * Return a {@code HttpHeaders} object that can only be read, not written to.
      */
-    public static @NonNull HttpHeaders readOnlyHttpHeaders(HttpHeaders headers) {
+    public static @NotNull HttpHeaders readOnlyHttpHeaders(HttpHeaders headers) {
         return new HttpHeaders(headers != null ? headers : newMap(), true);
     }
 
     /**
      * TODO
      */
-    private static @NonNull Map<String, List<String>> newMap() {
+    private static @NotNull Map<String, List<String>> newMap() {
         return new LinkedCaseInsensitiveMap<>(8, Locale.ENGLISH);
     }
 

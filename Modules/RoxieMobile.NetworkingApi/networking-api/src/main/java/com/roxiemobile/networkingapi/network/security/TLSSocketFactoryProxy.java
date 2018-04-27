@@ -1,10 +1,10 @@
 package com.roxiemobile.networkingapi.network.security;
 
-import android.support.annotation.Nullable;
-
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.logging.Logger;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.InetAddress;

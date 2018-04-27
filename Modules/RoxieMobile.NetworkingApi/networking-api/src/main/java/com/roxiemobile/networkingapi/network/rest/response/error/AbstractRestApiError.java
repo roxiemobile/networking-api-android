@@ -1,10 +1,10 @@
 package com.roxiemobile.networkingapi.network.rest.response.error;
 
-import android.support.annotation.NonNull;
-
 import com.annimon.stream.function.Consumer;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -32,7 +32,7 @@ abstract class AbstractRestApiError implements RestApiError
      * to the consumer.
      */
     @Override
-    public void printErrorDescription(@NonNull Consumer<String> consumer) {
+    public void printErrorDescription(@NotNull Consumer<String> consumer) {
         Guard.notNull(consumer, "consumer is null");
 
         if (mCause != null) {

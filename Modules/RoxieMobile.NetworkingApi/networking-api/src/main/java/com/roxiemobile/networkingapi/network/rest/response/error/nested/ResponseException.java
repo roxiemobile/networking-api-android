@@ -1,8 +1,8 @@
 package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ResponseException extends AbstractNestedError
 {
@@ -11,14 +11,14 @@ public class ResponseException extends AbstractNestedError
     /**
      * Construct a new instance of {@code HttpResponseException} based on a {@link ResponseEntity}.
      */
-    public ResponseException(@NonNull ResponseEntity<byte[]> entity) {
+    public ResponseException(@NotNull ResponseEntity<byte[]> entity) {
         super(entity);
     }
 
     /**
      * Construct a new instance of {@code HttpResponseException} based on a {@link ResponseEntity} and cause.
      */
-    public ResponseException(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
+    public ResponseException(@NotNull ResponseEntity<byte[]> entity, Throwable cause) {
         super(entity, cause);
     }
 

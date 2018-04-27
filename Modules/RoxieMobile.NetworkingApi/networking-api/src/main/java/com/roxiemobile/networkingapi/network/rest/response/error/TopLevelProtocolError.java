@@ -1,15 +1,15 @@
 package com.roxiemobile.networkingapi.network.rest.response.error;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+
+import org.jetbrains.annotations.NotNull;
 
 public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
 {
 // MARK: - Construction
 
-    public TopLevelProtocolError(@NonNull ResponseEntity<T> entity) {
+    public TopLevelProtocolError(@NotNull ResponseEntity<T> entity) {
         super(null);
         Guard.notNull(entity, "entity is null");
 
@@ -30,7 +30,7 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
     /**
      * Returns the response entity.
      */
-    public @NonNull ResponseEntity<T> getResponseEntity() {
+    public @NotNull ResponseEntity<T> getResponseEntity() {
         return mResponseEntity;
     }
 

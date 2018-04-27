@@ -1,14 +1,14 @@
 package com.roxiemobile.networkingapi.network.rest.response.error;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
+
+import org.jetbrains.annotations.NotNull;
 
 public class TransportLayerError extends AbstractRestApiError
 {
 // MARK: - Construction
 
-    public TransportLayerError(@NonNull Throwable cause) {
+    public TransportLayerError(@NotNull Throwable cause) {
         super(cause);
         Guard.notNull(cause, "cause is null");
     }

@@ -1,7 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.converter;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
@@ -10,6 +8,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 
 public class StringConverter extends AbstractCallResultConverter<String>
@@ -17,7 +17,7 @@ public class StringConverter extends AbstractCallResultConverter<String>
 // MARK: - Methods
 
     @Override
-    public @NonNull ResponseEntity<String> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<String> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
         ResponseEntity<String> newEntity;
         String newBody = null;
 
@@ -41,7 +41,7 @@ public class StringConverter extends AbstractCallResultConverter<String>
     }
 
     @Override
-    protected @NonNull MediaType[] supportedMediaTypes() {
+    protected @NotNull MediaType[] supportedMediaTypes() {
         return SUPPORTED_MEDIA_TYPES;
     }
 

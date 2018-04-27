@@ -2,7 +2,6 @@ package com.roxiemobile.networkingapi.network.rest.converter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
@@ -11,12 +10,14 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ImageConverter extends AbstractCallResultConverter<Bitmap>
 {
 // MARK: - Methods
 
     @Override
-    public @NonNull ResponseEntity<Bitmap> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<Bitmap> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
         ResponseEntity<Bitmap> newEntity;
         Bitmap newBody = null;
 
@@ -39,7 +40,7 @@ public class ImageConverter extends AbstractCallResultConverter<Bitmap>
     }
 
     @Override
-    protected @NonNull MediaType[] supportedMediaTypes() {
+    protected @NotNull MediaType[] supportedMediaTypes() {
         return SUPPORTED_MEDIA_TYPES;
     }
 

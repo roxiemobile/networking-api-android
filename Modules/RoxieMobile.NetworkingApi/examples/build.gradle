@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -30,16 +29,16 @@ android {
 dependencies {
 
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VERSION"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
 
     // Android Support
     final ANDROID_SUPPORT_VERSION = rootProject.ext.ANDROID_SUPPORT_VERSION
-    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
+    implementation "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
 
     // Internal dependencies
-    compile project(':networking-api')
+    implementation project(':networking-api')
 
     // JUnit
     final JUNIT_VERSION = rootProject.ext.JUNIT_VERSION
-    testCompile "junit:junit:$JUNIT_VERSION"
+    testImplementation "junit:junit:$JUNIT_VERSION"
 }

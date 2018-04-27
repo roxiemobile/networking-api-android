@@ -1,44 +1,44 @@
 buildscript {
-    ext.KOTLIN_VERSION = '1.2.10'
+    ext.KOTLIN_VERSION = '1.2.30'
 
     repositories {
         jcenter()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
 
         // Kotlin
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$KOTLIN_VERSION"
 
         // Deploy to Bintray
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
     }
 }
 
 allprojects {
     repositories {
-        maven { url "https://maven.google.com" }
         jcenter()
+        google()
     }
 }
 
 // Controlling Android properties of all your modules from the main project
 // @link http://tools.android.com/tech-docs/new-build-system/tips
 ext {
-    compileSdkVersion = 26
-    buildToolsVersion = '26.0.3'
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
 
     minSdkVersion = 16
-    targetSdkVersion = 26
+    targetSdkVersion = 27
 
     // Shared Dependencies
-    ANDROID_SUPPORT_VERSION = '27.0.2'
+    ANDROID_SUPPORT_VERSION = '27.1.1'
     JUNIT_VERSION = '4.12'
-    OKHTTP_VERSION = '3.9.1'
-    RXM_ANDROID_COMMONS_VERSION = '0.8.1'
+    OKHTTP_VERSION = '3.10.0'
+    RXM_ANDROID_COMMONS_VERSION = '0.8.4'
 }
 
 task clean(type: Delete) {

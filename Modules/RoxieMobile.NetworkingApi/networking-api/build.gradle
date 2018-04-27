@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -33,21 +32,21 @@ android {
 dependencies {
 
     // Kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$KOTLIN_VERSION"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION"
 
     // Android Commons (Roxie Mobile)
     final RXM_ANDROID_COMMONS_VERSION = rootProject.ext.RXM_ANDROID_COMMONS_VERSION
-    compile "com.roxiemobile.android:android-commons:$RXM_ANDROID_COMMONS_VERSION"
+    api "com.roxiemobile.android:android-commons:$RXM_ANDROID_COMMONS_VERSION"
 
     // OkHttp
     final OKHTTP_VERSION = rootProject.ext.OKHTTP_VERSION
-    compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:$OKHTTP_VERSION"
-    compile "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
+    api "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
+    api "com.squareup.okhttp3:okhttp-urlconnection:$OKHTTP_VERSION"
+    api "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
 
     // JUnit
     final JUNIT_VERSION = rootProject.ext.JUNIT_VERSION
-    testCompile "junit:junit:$JUNIT_VERSION"
+    testImplementation "junit:junit:$JUNIT_VERSION"
 }
 
 // Deploy to Bintray

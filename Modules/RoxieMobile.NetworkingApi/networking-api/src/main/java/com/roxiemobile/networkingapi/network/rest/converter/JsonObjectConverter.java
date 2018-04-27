@@ -1,7 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.converter;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,6 +13,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.UnsupportedEncodingException;
 
 public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
@@ -22,7 +22,7 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
 // MARK: - Methods
 
     @Override
-    public @NonNull ResponseEntity<JsonObject> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<JsonObject> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
         ResponseEntity<JsonObject> newEntity;
         JsonObject newBody = null;
 
@@ -51,7 +51,7 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
     }
 
     @Override
-    protected @NonNull MediaType[] supportedMediaTypes() {
+    protected @NotNull MediaType[] supportedMediaTypes() {
         return SUPPORTED_MEDIA_TYPES;
     }
 

@@ -16,10 +16,11 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
-import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.roxiemobile.androidcommons.diagnostics.Guard;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents HTTP Basic Authentication.
@@ -29,7 +30,7 @@ public class HttpBasicAuthentication extends HttpAuthentication
 {
 // MARK: - Construction
 
-    public HttpBasicAuthentication(@NonNull String username, @NonNull String password) {
+    public HttpBasicAuthentication(@NotNull String username, @NotNull String password) {
         Guard.notEmpty(username, "username is empty");
         Guard.notEmpty(password, "password is empty");
 

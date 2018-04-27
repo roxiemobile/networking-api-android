@@ -1,13 +1,13 @@
 package com.roxiemobile.networkingapi.util;
 
-import android.support.annotation.NonNull;
-
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpCookie;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,11 +25,11 @@ public final class CookieUtils
 
 // MARK: - Methods
 
-    public static HttpCookie getCookie(@NonNull HttpCookie[] cookies, @NonNull String cookieName) {
+    public static HttpCookie getCookie(@NotNull HttpCookie[] cookies, @NotNull String cookieName) {
         return getCookie(Arrays.asList(cookies), cookieName);
     }
 
-    public static HttpCookie getCookie(@NonNull List<HttpCookie> cookies, @NonNull String cookieName) {
+    public static HttpCookie getCookie(@NotNull List<HttpCookie> cookies, @NotNull String cookieName) {
         Guard.notNull(cookies, "cookies is null");
         Guard.notEmpty(cookieName, "cookieName is empty");
 
@@ -80,7 +80,7 @@ public final class CookieUtils
         return uri;
     }
 
-    public static @NonNull HttpCookie[] asArray(CookieStore cookieStore) {
+    public static @NotNull HttpCookie[] asArray(CookieStore cookieStore) {
         HttpCookie[] cookies = EMPTY_COOKIE_ARRAY;
 
         if (cookieStore != null) {

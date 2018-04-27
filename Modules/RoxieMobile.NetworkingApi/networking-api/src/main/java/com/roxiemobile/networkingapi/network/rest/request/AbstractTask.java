@@ -1,8 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
@@ -25,6 +22,9 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Connecti
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseException;
 import com.roxiemobile.networkingapi.network.rest.routing.HttpRoute;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -32,7 +32,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 {
 // MARK: - Construction
 
-    protected AbstractTask(@NonNull TaskBuilder<Ti, To> builder) {
+    protected AbstractTask(@NotNull TaskBuilder<Ti, To> builder) {
         Guard.notNull(builder, "builder is null");
 
         // Init instance variables
@@ -52,7 +52,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * The original request entity.
      */
-    public final @NonNull RequestEntity<Ti> requestEntity() {
+    public final @NotNull RequestEntity<Ti> requestEntity() {
         return mRequestEntity;
     }
 
@@ -159,7 +159,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected final @NonNull RestApiClient newClient() {
+    protected final @NotNull RestApiClient newClient() {
         // Get HTTP client config
         HttpClientConfig config = httpClientConfig();
         Guard.notNull(config, "config is null");
@@ -182,14 +182,14 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected @NonNull HttpClientConfig httpClientConfig() {
+    protected @NotNull HttpClientConfig httpClientConfig() {
         return DEFAULT_HTTP_CLIENT_CONFIG;
     }
 
     /**
      * TODO
      */
-    protected @NonNull RequestEntity<HttpBody> newRequestEntity(@NonNull HttpRoute route) {
+    protected @NotNull RequestEntity<HttpBody> newRequestEntity(@NotNull HttpRoute route) {
         // Create HTTP request entity
         return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
                 .uri(route.toURI())
@@ -200,7 +200,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected @NonNull HttpHeaders httpHeaders() {
+    protected @NotNull HttpHeaders httpHeaders() {
         return HttpHeaders.readOnlyHttpHeaders(requestEntity().headers());
     }
 
@@ -219,7 +219,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
     /**
      * TODO
      */
-    protected CallResult<To> onFailure(@NonNull RestApiError error) {
+    protected CallResult<To> onFailure(@NotNull RestApiError error) {
         Guard.notNull(error, "error is null");
         return CallResult.failure(error);
     }
@@ -261,7 +261,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 
 // MARK: - Private Methods
 
-    private void yield(CallResult<To> result, @NonNull Callback<Ti, To> callback) {
+    private void yield(CallResult<To> result, @NotNull Callback<Ti, To> callback) {
         Guard.notNull(callback, "callback is null");
 
         if (isCancelled()) {
@@ -291,7 +291,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             // Do nothing
         }
 
-        protected Builder(@NonNull Task<Ti, To> task) {
+        protected Builder(@NotNull Task<Ti, To> task) {
             // Init instance variables
             mTag = task.tag();
             mRequestEntity = task.requestEntity();
@@ -301,7 +301,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             return mTag;
         }
 
-        public @NonNull BuilderType tag(String tag) {
+        public @NotNull BuilderType tag(String tag) {
             mTag = tag;
             //noinspection unchecked
             return (BuilderType) this;
@@ -311,13 +311,13 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             return mRequestEntity;
         }
 
-        public @NonNull BuilderType requestEntity(RequestEntity<Ti> request) {
+        public @NotNull BuilderType requestEntity(RequestEntity<Ti> request) {
             mRequestEntity = request;
             //noinspection unchecked
             return (BuilderType) this;
         }
 
-        public @NonNull Task<Ti, To> build() {
+        public @NotNull Task<Ti, To> build() {
             checkInvalidState();
             return newTask();
         }
@@ -327,7 +327,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
             Guard.notNull(mRequestEntity.uri(), "requestEntity.uri is null");
         }
 
-        protected abstract @NonNull Task<Ti, To> newTask();
+        protected abstract @NotNull Task<Ti, To> newTask();
 
         private String mTag;
         private RequestEntity<Ti> mRequestEntity;

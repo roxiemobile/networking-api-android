@@ -1,17 +1,17 @@
 package com.roxiemobile.networkingapi.network.rest.response.error;
 
-import android.support.annotation.NonNull;
-
 import com.annimon.stream.function.Consumer;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseEntityHolder;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ApplicationLayerError extends AbstractRestApiError
 {
 // MARK: - Construction
 
-    public ApplicationLayerError(@NonNull Throwable cause) {
+    public ApplicationLayerError(@NotNull Throwable cause) {
         super(cause);
         Guard.notNull(cause, "cause is null");
     }
@@ -32,7 +32,7 @@ public class ApplicationLayerError extends AbstractRestApiError
      * to the consumer.
      */
     @Override
-    public void printErrorDescription(@NonNull Consumer<String> consumer) {
+    public void printErrorDescription(@NotNull Consumer<String> consumer) {
         Throwable cause = getCause();
 
         // Log nested error

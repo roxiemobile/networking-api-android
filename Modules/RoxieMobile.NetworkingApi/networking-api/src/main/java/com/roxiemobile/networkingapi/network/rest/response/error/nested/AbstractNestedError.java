@@ -1,7 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 
-import android.support.annotation.NonNull;
-
 import com.annimon.stream.function.Consumer;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
@@ -9,6 +7,8 @@ import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.rest.CallResultConverter;
 import com.roxiemobile.networkingapi.network.rest.converter.StringConverter;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+
+import org.jetbrains.annotations.NotNull;
 
 abstract class AbstractNestedError extends Exception
         implements ResponseEntityHolder
@@ -18,14 +18,14 @@ abstract class AbstractNestedError extends Exception
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity}.
      */
-    public AbstractNestedError(@NonNull ResponseEntity<byte[]> entity) {
+    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity) {
         this(entity, null);
     }
 
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity} and cause.
      */
-    public AbstractNestedError(@NonNull ResponseEntity<byte[]> entity, Throwable cause) {
+    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity, Throwable cause) {
         super(cause);
         Guard.notNull(entity, "entity is null");
 
@@ -72,7 +72,7 @@ abstract class AbstractNestedError extends Exception
      * to the consumer.
      */
     @Override
-    public void printErrorDescription(@NonNull Consumer<String> consumer) {
+    public void printErrorDescription(@NotNull Consumer<String> consumer) {
         String message = getResponseBodyAsString();
 
         if (StringUtils.isNotEmpty(message)) {

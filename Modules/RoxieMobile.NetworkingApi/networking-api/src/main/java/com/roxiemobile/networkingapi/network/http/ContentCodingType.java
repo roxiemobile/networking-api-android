@@ -16,13 +16,13 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.util.CompatStringUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedCaseInsensitiveMap;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -284,7 +284,7 @@ public class ContentCodingType implements Comparable<ContentCodingType> {
      * Compares this {@code ContentCodingType} to another alphabetically.
      * @param other content coding type to compare to
      */
-    public int compareTo(@NonNull ContentCodingType other) {
+    public int compareTo(@NotNull ContentCodingType other) {
         int comp = this.type.compareToIgnoreCase(other.type);
         if (comp != 0) {
             return comp;

@@ -1,16 +1,16 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ByteArrayBody implements HttpBody
 {
 // MARK: - Construction
 
-    public ByteArrayBody(@NonNull byte[] body, @NonNull MediaType mediaType) {
+    public ByteArrayBody(@NotNull byte[] body, @NotNull MediaType mediaType) {
         Guard.notNull(body, "body is null");
         Guard.notNull(mediaType, "mediaType is null");
 
@@ -19,7 +19,7 @@ public class ByteArrayBody implements HttpBody
         mMediaType = mediaType;
     }
 
-    public ByteArrayBody(@NonNull byte[] body) {
+    public ByteArrayBody(@NotNull byte[] body) {
         this(body, MediaType.APPLICATION_OCTET_STREAM);
     }
 

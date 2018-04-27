@@ -1,6 +1,6 @@
 package com.roxiemobile.networkingapi.network.security;
 
-import android.support.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -26,7 +26,7 @@ public final class TLSCompat
 
 // MARK: - Methods
 
-    public static void enableTlsOnSockets(@NonNull OkHttpClient.Builder builder) {
+    public static void enableTlsOnSockets(@NotNull OkHttpClient.Builder builder) {
         try {
             // Based on code from OkHttpClient.Builder.sslSocketFactory javadoc
 
@@ -43,7 +43,7 @@ public final class TLSCompat
 
 // MARK: - Private Methods
 
-    private static @NonNull X509TrustManager getDefaultTrustManager()
+    private static @NotNull X509TrustManager getDefaultTrustManager()
             throws NoSuchAlgorithmException, KeyStoreException {
 
         String algorithm = TrustManagerFactory.getDefaultAlgorithm();
@@ -60,7 +60,7 @@ public final class TLSCompat
         }
     }
 
-    private static @NonNull SSLSocketFactory getDefaultSocketFactory(X509TrustManager trustManager)
+    private static @NotNull SSLSocketFactory getDefaultSocketFactory(X509TrustManager trustManager)
             throws KeyManagementException, NoSuchAlgorithmException {
 
         SSLContext sslContext = SSLContext.getInstance("TLS");

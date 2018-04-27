@@ -2,7 +2,6 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.annotation.NonNull;
 
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
@@ -23,6 +22,8 @@ import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.security.TLSCompat;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -50,37 +51,37 @@ public final class RestApiClient
 
 // MARK: - Methods
 
-    public @NonNull HttpResult get(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult get(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.GET, entity);
     }
 
-    public @NonNull HttpResult post(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult post(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.POST, entity);
     }
 
-    public @NonNull HttpResult put(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult put(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.PUT, entity);
     }
 
-    public @NonNull HttpResult patch(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult patch(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.PATCH, entity);
     }
 
-    public @NonNull HttpResult delete(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult delete(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.DELETE, entity);
     }
 
-    public @NonNull HttpResult head(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult head(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.HEAD, entity);
     }
 
-    public @NonNull HttpResult options(@NonNull RequestEntity<HttpBody> entity) {
+    public @NotNull HttpResult options(@NotNull RequestEntity<HttpBody> entity) {
         return execute(MethodName.OPTIONS, entity);
     }
 
 // MARK: - Private Methods
 
-    private HttpResult execute(@NonNull String method, @NonNull RequestEntity<HttpBody> entity) {
+    private HttpResult execute(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
         Guard.notEmpty(method, "method is empty");
         Guard.notNull(entity, "entity is null");
 
@@ -114,7 +115,7 @@ public final class RestApiClient
         return result;
     }
 
-    private @NonNull Request newRequest(@NonNull String method, @NonNull RequestEntity<HttpBody> entity) {
+    private @NotNull Request newRequest(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
         Request.Builder instance = new Request.Builder();
 
         // Create request body
@@ -146,7 +147,7 @@ public final class RestApiClient
         return instance.build();
     }
 
-    private @NonNull OkHttpClient newClient(@NonNull CookieStore cookieStore) {
+    private @NotNull OkHttpClient newClient(@NotNull CookieStore cookieStore) {
         Guard.notNull(cookieStore, "cookieStore is null");
 
         CookieManager cookieManager = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
@@ -177,7 +178,7 @@ public final class RestApiClient
         return builder.build();
     }
 
-    private @NonNull ResponseEntity<byte[]> newResponseEntity(@NonNull Response response, @NonNull CookieStore cookieStore) {
+    private @NotNull ResponseEntity<byte[]> newResponseEntity(@NotNull Response response, @NotNull CookieStore cookieStore) {
         Guard.notNull(response, "response is null");
         Guard.notNull(cookieStore, "cookieStore is null");
 
@@ -214,7 +215,7 @@ public final class RestApiClient
     }
 
     @Deprecated
-    public @NonNull HttpHeaders mapping(Headers headers) {
+    public @NotNull HttpHeaders mapping(Headers headers) {
         HttpHeaders result = new HttpHeaders();
 
         // Map okhttp3.Headers to HttpHeaders
@@ -229,7 +230,7 @@ public final class RestApiClient
     }
 
     @Deprecated
-    public @NonNull Headers mapping(HttpHeaders headers) {
+    public @NotNull Headers mapping(HttpHeaders headers) {
         Headers.Builder builder = new Headers.Builder();
 
         // Map HttpHeaders to okhttp3.Headers
@@ -246,7 +247,7 @@ public final class RestApiClient
         return builder.build();
     }
 
-    private static @NonNull OkHttpClient newSharedHttpClient() {
+    private static @NotNull OkHttpClient newSharedHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {

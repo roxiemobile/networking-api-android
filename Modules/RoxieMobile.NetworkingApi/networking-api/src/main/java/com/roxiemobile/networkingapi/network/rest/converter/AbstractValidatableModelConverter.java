@@ -1,7 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.converter;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.mapper.DataMapper;
@@ -12,6 +10,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
@@ -20,14 +20,14 @@ public abstract class AbstractValidatableModelConverter<T extends ValidatableMod
 {
 // MARK: - Construction
 
-    protected AbstractValidatableModelConverter(@NonNull Class<T> classOfT) {
+    protected AbstractValidatableModelConverter(@NotNull Class<T> classOfT) {
         mClassOfType = classOfT;
     }
 
 // MARK: - Methods
 
     @Override
-    public @NonNull ResponseEntity<T> convert(@NonNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<T> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
         ResponseEntity<T> newEntity;
         T newBody = null;
 

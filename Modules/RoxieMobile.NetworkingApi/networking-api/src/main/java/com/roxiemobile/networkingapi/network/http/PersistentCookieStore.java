@@ -2,13 +2,14 @@ package com.roxiemobile.networkingapi.network.http;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.androidcommons.util.IOUtils;
 import com.roxiemobile.networkingapi.util.CookieUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,7 +63,7 @@ public final class PersistentCookieStore implements CookieStore
 
 // MARK: - Methods
 
-    public synchronized void add(URI uri, @NonNull HttpCookie cookie) {
+    public synchronized void add(URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
@@ -78,7 +79,7 @@ public final class PersistentCookieStore implements CookieStore
         saveToPersistence(uri, cookie);
     }
 
-    public synchronized List<HttpCookie> get(@NonNull URI uri) {
+    public synchronized List<HttpCookie> get(@NotNull URI uri) {
         Guard.notNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
@@ -159,7 +160,7 @@ public final class PersistentCookieStore implements CookieStore
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized boolean remove(URI uri, @NonNull HttpCookie cookie) {
+    public synchronized boolean remove(URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = mMap.get(CookieUtils.cookiesUri(uri));

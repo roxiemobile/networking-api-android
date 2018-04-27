@@ -1,10 +1,10 @@
 package com.roxiemobile.networkingapi.util;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class RequestEntityUtils
 {
@@ -16,7 +16,7 @@ public final class RequestEntityUtils
 
 // MARK: - Methods
 
-    public static <Ti, To> RequestEntity<To> copy(@NonNull RequestEntity<Ti> entity) {
+    public static <Ti, To> RequestEntity<To> copy(@NotNull RequestEntity<Ti> entity) {
         Guard.notNull(entity, "entity is null");
         //noinspection unchecked
         return copyWith(entity, (To) entity.body());

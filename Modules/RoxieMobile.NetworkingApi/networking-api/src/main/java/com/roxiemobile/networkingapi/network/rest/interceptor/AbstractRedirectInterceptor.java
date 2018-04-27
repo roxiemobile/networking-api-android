@@ -1,10 +1,10 @@
 package com.roxiemobile.networkingapi.network.rest.interceptor;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -40,12 +40,12 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
     /**
      * TODO
      */
-    public abstract Response onRedirect(@NonNull Response response) throws IOException;
+    public abstract Response onRedirect(@NotNull Response response) throws IOException;
 
     /**
      * Returns a new response that does gzip decompression on {@code response}.
      */
-    protected Response decompressResponse(@NonNull Response response) throws IOException {
+    protected Response decompressResponse(@NotNull Response response) throws IOException {
         Guard.notNull(response, "response is null");
 
         ResponseBody body = response.body();

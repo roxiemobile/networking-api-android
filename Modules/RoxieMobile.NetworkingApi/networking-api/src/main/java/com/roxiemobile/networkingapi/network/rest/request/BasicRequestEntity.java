@@ -1,10 +1,10 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 
@@ -50,7 +50,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
             // Do nothing
         }
 
-        public Builder(@NonNull RequestEntity<T> entity) {
+        public Builder(@NotNull RequestEntity<T> entity) {
             Guard.notNull(entity, "entity is null");
 
             // Init instance variables
@@ -60,7 +60,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
             mBody = entity.body();
         }
 
-        public <Ti> Builder(@NonNull RequestEntity<Ti> entity, T body) {
+        public <Ti> Builder(@NotNull RequestEntity<Ti> entity, T body) {
             Guard.notNull(entity, "entity is null");
 
             // Init instance variables
@@ -70,7 +70,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
             mBody = body;
         }
 
-        public Builder<T> uri(@NonNull URI uri) {
+        public Builder<T> uri(@NotNull URI uri) {
             mUri = uri;
             return this;
         }

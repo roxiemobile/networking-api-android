@@ -1,7 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.response;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
@@ -9,13 +7,15 @@ import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.net.URI;
 
 public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T>
 {
 // MARK: - Construction
 
-    private BasicResponseEntity(@NonNull Builder<T> builder) {
+    private BasicResponseEntity(@NotNull Builder<T> builder) {
         super(builder);
 
         // Init instance variables
@@ -26,12 +26,12 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 // MARK: - Properties
 
     @Override
-    public @NonNull HttpStatus status() {
+    public @NotNull HttpStatus status() {
         return mStatus;
     }
 
     @Override
-    public @NonNull MediaType mediaType() {
+    public @NotNull MediaType mediaType() {
         return mMediaType;
     }
 
@@ -43,7 +43,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             // Do nothing
         }
 
-        public Builder(@NonNull ResponseEntity<T> entity) {
+        public Builder(@NotNull ResponseEntity<T> entity) {
             super(entity);
 
             // Init instance variables
@@ -51,7 +51,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             mMediaType = entity.mediaType();
         }
 
-        public <Ti> Builder(@NonNull ResponseEntity<Ti> entity, T body) {
+        public <Ti> Builder(@NotNull ResponseEntity<Ti> entity, T body) {
             super(entity, body);
 
             // Init instance variables
@@ -60,7 +60,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         }
 
         @Override
-        public Builder<T> uri(@NonNull URI uri) {
+        public Builder<T> uri(@NotNull URI uri) {
             return (Builder<T>) super.uri(uri);
         }
 
@@ -111,7 +111,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
 // MARK: - Variables
 
-    private final @NonNull HttpStatus mStatus;
+    private final @NotNull HttpStatus mStatus;
 
-    private final @NonNull MediaType mMediaType;
+    private final @NotNull MediaType mMediaType;
 }

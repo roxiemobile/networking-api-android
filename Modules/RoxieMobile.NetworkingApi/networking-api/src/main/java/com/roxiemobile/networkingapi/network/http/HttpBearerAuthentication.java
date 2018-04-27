@@ -1,8 +1,8 @@
 package com.roxiemobile.networkingapi.network.http;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents HTTP Bearer Authentication.
@@ -12,7 +12,7 @@ public class HttpBearerAuthentication extends HttpAuthentication
 {
 // MARK: - Construction
 
-    public HttpBearerAuthentication(@NonNull String token) {
+    public HttpBearerAuthentication(@NotNull String token) {
         Guard.notEmpty(token, "token is empty");
 
         // Init instance variables
@@ -31,5 +31,4 @@ public class HttpBearerAuthentication extends HttpAuthentication
 // MARK: - Variables
 
     private final String mToken;
-
 }

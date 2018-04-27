@@ -1,9 +1,9 @@
 package com.roxiemobile.networkingapi.network.rest;
 
-import android.support.annotation.NonNull;
-
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+
+import org.jetbrains.annotations.NotNull;
 
 public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]>
 {
@@ -19,12 +19,12 @@ public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]
 
 // MARK: - Methods
 
-    public static HttpResult success(@NonNull ResponseEntity<byte[]> response) {
+    public static HttpResult success(@NotNull ResponseEntity<byte[]> response) {
         Guard.notNull(response, "response is null");
         return new HttpResult(response);
     }
 
-    public static HttpResult failure(@NonNull Throwable error) {
+    public static HttpResult failure(@NotNull Throwable error) {
         Guard.notNull(error, "error is null");
         return new HttpResult(error);
     }

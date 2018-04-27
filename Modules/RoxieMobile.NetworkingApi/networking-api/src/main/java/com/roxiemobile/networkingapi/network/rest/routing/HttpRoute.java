@@ -1,6 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.routing;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.roxiemobile.androidcommons.data.Constants.Charsets;
@@ -9,6 +8,8 @@ import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
 import com.roxiemobile.networkingapi.network.http.util.MultiValueMap;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -23,7 +24,7 @@ public final class HttpRoute
 {
 // MARK: - Construction
 
-    private HttpRoute(@NonNull URI uri) {
+    private HttpRoute(@NotNull URI uri) {
         Guard.notNull(uri, "uri is null");
 
         // Init instance variables
