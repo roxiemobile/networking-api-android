@@ -171,18 +171,14 @@ public class CookieManager extends CookieHandler {
                 cookie.setDomain(uri.getHost());
             }
 
-            // if the cookie doesn't have a path, set one. If it does, validate it.
+            // if the cookie doesn't have a path, set one.
             if (cookie.getPath() == null) {
                 cookie.setPath(pathToCookiePath(uri.getPath()));
-            } else if (!HttpCookie.pathMatches(cookie, uri)) {
-                continue;
             }
 
-            // if the cookie has the placeholder port list "", set the port. Otherwise validate it.
+            // if the cookie has the placeholder port list "", set the port.
             if ("".equals(cookie.getPortlist())) {
                 cookie.setPortlist(Integer.toString(URIUtils.getEffectivePort(uri)));
-            } else if (cookie.getPortlist() != null && !HttpCookie.portMatches(cookie, uri)) {
-                continue;
             }
 
             // if the cookie conforms to the policy, add it into the store
