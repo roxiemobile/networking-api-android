@@ -19,12 +19,12 @@ public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]
 
 // MARK: - Methods
 
-    public static HttpResult success(@NotNull ResponseEntity<byte[]> response) {
+    public static @NotNull HttpResult success(@NotNull ResponseEntity<byte[]> response) {
         Guard.notNull(response, "response is null");
         return new HttpResult(response);
     }
 
-    public static HttpResult failure(@NotNull Throwable error) {
+    public static @NotNull HttpResult failure(@NotNull Throwable error) {
         Guard.notNull(error, "error is null");
         return new HttpResult(error);
     }

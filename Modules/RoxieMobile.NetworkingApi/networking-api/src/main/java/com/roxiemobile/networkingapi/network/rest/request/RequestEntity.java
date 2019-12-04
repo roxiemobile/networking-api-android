@@ -3,6 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.request;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.net.URI;
 
 public interface RequestEntity<T>
@@ -25,5 +27,5 @@ public interface RequestEntity<T>
     /**
      * TODO
      */
-    T body();
+    @Nullable T body();
 }

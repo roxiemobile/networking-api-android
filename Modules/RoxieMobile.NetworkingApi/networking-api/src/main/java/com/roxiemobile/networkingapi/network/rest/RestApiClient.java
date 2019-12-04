@@ -95,15 +95,17 @@ public final class RestApiClient
         HttpResult result;
 
         try {
-            // Create and execute HTTP request
-            Response response = newClient(cookieStore).newCall(request).execute();
-            result = HttpResult.success(newResponseEntity(response, cookieStore));
-        }
-        catch (HttpResponseException ex) {
-            Logger.e(TAG, ex);
+            try {
+                // Create and execute HTTP request
+                Response response = newClient(cookieStore).newCall(request).execute();
+                result = HttpResult.success(newResponseEntity(response, cookieStore));
+            }
+            catch (HttpResponseException ex) {
+                Logger.e(TAG, ex);
 
-            // Handle interrupted HTTP requests
-            result = HttpResult.success(newResponseEntity(ex.getResponse(), cookieStore));
+                // Handle interrupted HTTP requests
+                result = HttpResult.success(newResponseEntity(ex.getResponse(), cookieStore));
+            }
         }
         catch (Exception ex) {
             Logger.e(TAG, ex);
@@ -183,7 +185,11 @@ public final class RestApiClient
         return builder.build();
     }
 
-    private @NotNull ResponseEntity<byte[]> newResponseEntity(@NotNull Response response, @NotNull CookieStore cookieStore) {
+    private @NotNull ResponseEntity<byte[]> newResponseEntity(
+            @NotNull Response response,
+            @NotNull CookieStore cookieStore
+    ) throws IOException {
+
         Guard.notNull(response, "response is null");
         Guard.notNull(cookieStore, "cookieStore is null");
 
@@ -206,13 +212,8 @@ public final class RestApiClient
                 entityBuilder.mediaType(MediaType.valueOf(contentType.toString()));
             }
 
-            try {
-                // Set response body
-                entityBuilder.body(ArrayUtils.emptyToNull(body.bytes()));
-            }
-            catch (Exception ex) {
-                Logger.w(TAG, ex);
-            }
+            // Set response body
+            entityBuilder.body(ArrayUtils.emptyToNull(body.bytes()));
         }
 
         // Done
