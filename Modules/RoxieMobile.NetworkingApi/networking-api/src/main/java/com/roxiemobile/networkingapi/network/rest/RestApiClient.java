@@ -3,6 +3,7 @@ package com.roxiemobile.networkingapi.network.rest;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 
+import com.annimon.stream.Objects;
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
@@ -45,7 +46,7 @@ public final class RestApiClient
 // MARK: - Construction
 
     private RestApiClient(Builder builder) {
-        // Init instance variables
+        // Init instance
         mOptions = builder.mOptions.clone();
     }
 
@@ -140,7 +141,11 @@ public final class RestApiClient
                 .headers(mapping(entityHeaders));
 
         if (requestBody != null) {
-            instance.header(HttpHeaders.CONTENT_TYPE, requestBody.contentType().toString());
+            okhttp3.MediaType contentType = requestBody.contentType();
+
+            if (contentType != null) {
+                instance.header(HttpHeaders.CONTENT_TYPE, contentType.toString());
+            }
         }
 
         // Done
@@ -168,11 +173,11 @@ public final class RestApiClient
 
         // Set a application interceptors
         Stream.of(nullToEmpty(mOptions.mInterceptors))
-                .filter(obj -> obj != null).forEach(builder::addInterceptor);
+                .filter(Objects::nonNull).forEach(builder::addInterceptor);
 
         // Set a network interceptors
         Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
-                .filter(obj -> obj != null).forEach(builder::addNetworkInterceptor);
+                .filter(Objects::nonNull).forEach(builder::addNetworkInterceptor);
 
         // Done
         return builder.build();
@@ -259,7 +264,7 @@ public final class RestApiClient
 // MARK: - Private Methods
 
     private <T> List<T> nullToEmpty(List<T> list) {
-        return (list != null) ? list : Collections.EMPTY_LIST;
+        return (list != null) ? list : Collections.emptyList();
     }
 
 // MARK: - Inner Types
