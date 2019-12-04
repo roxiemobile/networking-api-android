@@ -1,1 +1,5 @@
-include ':networking-api', ':examples'
+// Libraries
+include ':networking-api'
+
+// Applications
+include ':examples'
