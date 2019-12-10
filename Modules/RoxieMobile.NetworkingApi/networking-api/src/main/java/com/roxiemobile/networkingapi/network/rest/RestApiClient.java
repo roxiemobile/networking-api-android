@@ -21,6 +21,7 @@ import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -191,8 +192,14 @@ public final class RestApiClient {
             builder.hostnameVerifier(mOptions.mHostnameVerifier);
         }
 
-        if (mOptions.mSSLSocketFactory != null && mOptions.mTrustManager != null) {
-            builder.sslSocketFactory(mOptions.mSSLSocketFactory, mOptions.mTrustManager);
+        if (mOptions.mSSLSocketFactory != null) {
+            if (mOptions.mTrustManager != null) {
+                builder.sslSocketFactory(mOptions.mSSLSocketFactory, mOptions.mTrustManager);
+            }
+            else {
+                //noinspection deprecation
+                builder.sslSocketFactory(mOptions.mSSLSocketFactory);
+            }
         }
 
         // Done
@@ -305,22 +312,22 @@ public final class RestApiClient {
             return this;
         }
 
-        public @NotNull Builder certificatePinner(CertificatePinner certificatePinner) {
+        public @NotNull Builder certificatePinner(@Nullable CertificatePinner certificatePinner) {
             mOptions.mCertificatePinner = certificatePinner;
             return this;
         }
 
-        public @NotNull Builder hostnameVerifier(HostnameVerifier hostnameVerifier) {
+        public @NotNull Builder hostnameVerifier(@Nullable HostnameVerifier hostnameVerifier) {
             mOptions.mHostnameVerifier = hostnameVerifier;
             return this;
         }
 
-        public @NotNull Builder sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+        public @NotNull Builder sslSocketFactory(@Nullable SSLSocketFactory sslSocketFactory) {
             mOptions.mSSLSocketFactory = sslSocketFactory;
             return this;
         }
 
-        public @NotNull Builder trustManager(X509TrustManager trustManager) {
+        public @NotNull Builder trustManager(@Nullable X509TrustManager trustManager) {
             mOptions.mTrustManager = trustManager;
             return this;
         }

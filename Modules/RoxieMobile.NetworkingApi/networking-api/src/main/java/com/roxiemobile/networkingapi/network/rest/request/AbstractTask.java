@@ -28,8 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, To>, Cancellable
-{
+@SuppressWarnings("unused")
+public abstract class AbstractTask<Ti extends HttpBody, To>
+        implements Task<Ti, To>, Cancellable {
+
 // MARK: - Construction
 
     protected AbstractTask(@NotNull TaskBuilder<Ti, To> builder) {
@@ -160,6 +162,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      * TODO
      */
     protected final @NotNull RestApiClient newClient() {
+
         // Get HTTP client config
         HttpClientConfig config = httpClientConfig();
         Guard.notNull(config, "config is null");
@@ -173,7 +176,15 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
                 // Set an application interceptors
                 .interceptors(config.interceptors())
                 // Set an network interceptors
-                .networkInterceptors(config.networkInterceptors());
+                .networkInterceptors(config.networkInterceptors())
+                // Set the certificate pinner that constrains which certificates are trusted
+                .certificatePinner(config.certificatePinner())
+                // Set the verifier used to confirm that response certificates apply to requested hostnames for HTTPS connections
+                .hostnameVerifier(config.hostnameVerifier())
+                // Set the socket factory used to create connections
+                .sslSocketFactory(config.sslSocketFactory())
+                // Set the trust manager used to secure HTTPS connections
+                .trustManager(config.trustManager());
 
         // Done
         return builder.build();
@@ -236,7 +247,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
      */
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public final Task<Ti, To> clone() {
+    public final @NotNull Task<Ti, To> clone() {
         return newBuilder().build();
     }
 
@@ -285,8 +296,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To> implements Task<Ti, 
 // MARK: - Inner Types
 
     public abstract static class Builder<Ti, To, BuilderType extends TaskBuilder<Ti, To>>
-            implements TaskBuilder<Ti, To>
-    {
+            implements TaskBuilder<Ti, To> {
+
         public Builder() {
             // Do nothing
         }
