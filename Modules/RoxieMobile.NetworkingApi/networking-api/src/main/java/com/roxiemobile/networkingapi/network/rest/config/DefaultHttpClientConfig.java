@@ -6,14 +6,16 @@ import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.rest.interceptor.Interceptors;
 import com.roxiemobile.networkingapi.network.rest.interceptor.UserAgentRequestInterceptor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Interceptor;
 
-public class DefaultHttpClientConfig implements HttpClientConfig
-{
+public class DefaultHttpClientConfig implements HttpClientConfig {
+
 // MARK: - Methods
 
     @Override
@@ -27,21 +29,20 @@ public class DefaultHttpClientConfig implements HttpClientConfig
     }
 
     @Override
-    public List<Interceptor> interceptors() {
+    public @NotNull List<Interceptor> interceptors() {
         return INTERCEPTORS;
     }
 
     @Override
-    public List<Interceptor> networkInterceptors() {
+    public @NotNull List<Interceptor> networkInterceptors() {
         return NETWORK_INTERCEPTORS;
     }
 
 // MARK: - Private Methods
 
-    private static List<Interceptor> newNetworkInterceptors()
-    {
-        return Collections.unmodifiableList(new ArrayList<Interceptor>()
-        {{
+    private static List<Interceptor> newNetworkInterceptors() {
+        return Collections.unmodifiableList(new ArrayList<Interceptor>() {{
+
             // Interceptor which adds an OkHttp3 library's version to an User-Agent's header.
             add(new UserAgentRequestInterceptor());
 

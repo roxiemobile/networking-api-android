@@ -28,6 +28,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.CertificatePinner;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -177,6 +182,19 @@ public final class RestApiClient {
         Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
                 .filter(Objects::nonNull).forEach(builder::addNetworkInterceptor);
 
+        // Configure secure HTTPS connections
+        if (mOptions.mCertificatePinner != null) {
+            builder.certificatePinner(mOptions.mCertificatePinner);
+        }
+
+        if (mOptions.mHostnameVerifier != null) {
+            builder.hostnameVerifier(mOptions.mHostnameVerifier);
+        }
+
+        if (mOptions.mSSLSocketFactory != null && mOptions.mTrustManager != null) {
+            builder.sslSocketFactory(mOptions.mSSLSocketFactory, mOptions.mTrustManager);
+        }
+
         // Done
         return builder.build();
     }
@@ -263,29 +281,51 @@ public final class RestApiClient {
             mOptions = new Options();
         }
 
-        public Builder connectTimeout(int timeout) {
+        public @NotNull Builder connectTimeout(int timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mConnectionTimeout = timeout;
             return this;
         }
 
-        public Builder readTimeout(int timeout) {
+        public @NotNull Builder readTimeout(int timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
             return this;
         }
 
-        public Builder interceptors(List<Interceptor> interceptors) {
+        public @NotNull Builder interceptors(@NotNull List<Interceptor> interceptors) {
+            Guard.notNull(interceptors, "interceptors is null");
             mOptions.mInterceptors = interceptors;
             return this;
         }
 
-        public Builder networkInterceptors(List<Interceptor> interceptors) {
+        public @NotNull Builder networkInterceptors(@NotNull List<Interceptor> interceptors) {
+            Guard.notNull(interceptors, "interceptors is null");
             mOptions.mNetworkInterceptors = interceptors;
             return this;
         }
 
-        public RestApiClient build() {
+        public @NotNull Builder certificatePinner(CertificatePinner certificatePinner) {
+            mOptions.mCertificatePinner = certificatePinner;
+            return this;
+        }
+
+        public @NotNull Builder hostnameVerifier(HostnameVerifier hostnameVerifier) {
+            mOptions.mHostnameVerifier = hostnameVerifier;
+            return this;
+        }
+
+        public @NotNull Builder sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+            mOptions.mSSLSocketFactory = sslSocketFactory;
+            return this;
+        }
+
+        public @NotNull Builder trustManager(X509TrustManager trustManager) {
+            mOptions.mTrustManager = trustManager;
+            return this;
+        }
+
+        public @NotNull RestApiClient build() {
             return new RestApiClient(this);
         }
 
@@ -308,6 +348,10 @@ public final class RestApiClient {
             other.mReadTimeout = mReadTimeout;
             other.mInterceptors = mInterceptors;
             other.mNetworkInterceptors = mNetworkInterceptors;
+            other.mCertificatePinner = mCertificatePinner;
+            other.mHostnameVerifier = mHostnameVerifier;
+            other.mSSLSocketFactory = mSSLSocketFactory;
+            other.mTrustManager = mTrustManager;
 
             // Done
             return other;
@@ -317,6 +361,10 @@ public final class RestApiClient {
         private int mReadTimeout = NetworkConfig.Timeout.READ;
         private List<Interceptor> mInterceptors;
         private List<Interceptor> mNetworkInterceptors;
+        private CertificatePinner mCertificatePinner;
+        private HostnameVerifier mHostnameVerifier;
+        private SSLSocketFactory mSSLSocketFactory;
+        private X509TrustManager mTrustManager;
     }
 
     public static class HttpResponseException extends IOException {

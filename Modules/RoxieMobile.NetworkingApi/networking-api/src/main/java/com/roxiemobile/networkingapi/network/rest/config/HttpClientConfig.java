@@ -1,11 +1,19 @@
 package com.roxiemobile.networkingapi.network.rest.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.CertificatePinner;
 import okhttp3.Interceptor;
 
-public interface HttpClientConfig
-{
+public interface HttpClientConfig {
+
 // MARK: - Methods
 
     /**
@@ -21,10 +29,38 @@ public interface HttpClientConfig
     /**
      * TODO
      */
-    List<Interceptor> interceptors();
+    @NotNull List<Interceptor> interceptors();
 
     /**
      * TODO
      */
-    List<Interceptor> networkInterceptors();
+    @NotNull List<Interceptor> networkInterceptors();
+
+    /**
+     * TODO
+     */
+    default @Nullable CertificatePinner certificatePinner() {
+        return null;
+    }
+
+    /**
+     * TODO
+     */
+    default @Nullable HostnameVerifier hostnameVerifier() {
+        return null;
+    }
+
+    /**
+     * TODO
+     */
+    default @Nullable SSLSocketFactory sslSocketFactory() {
+        return null;
+    }
+
+    /**
+     * TODO
+     */
+    default @Nullable X509TrustManager trustManager() {
+        return null;
+    }
 }
