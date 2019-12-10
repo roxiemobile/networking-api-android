@@ -1,8 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest;
 
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
-
 import com.annimon.stream.Objects;
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
@@ -22,7 +19,6 @@ import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
-import com.roxiemobile.networkingapi.network.security.TLSCompat;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,8 +37,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public final class RestApiClient
-{
+public final class RestApiClient {
+
 // MARK: - Construction
 
     private RestApiClient(Builder builder) {
@@ -253,15 +249,6 @@ public final class RestApiClient
         return builder.build();
     }
 
-    private static @NotNull OkHttpClient newSharedHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {
-            TLSCompat.enableTlsOnSockets(builder);
-        }
-        return builder.build();
-    }
-
 // MARK: - Private Methods
 
     private <T> List<T> nullToEmpty(List<T> list) {
@@ -270,8 +257,8 @@ public final class RestApiClient
 
 // MARK: - Inner Types
 
-    public static final class Builder
-    {
+    public static final class Builder {
+
         public Builder() {
             mOptions = new Options();
         }
@@ -305,15 +292,15 @@ public final class RestApiClient
         private final Options mOptions;
     }
 
-    private static final class Options implements Cloneable
-    {
+    private static final class Options implements Cloneable {
+
         private Options() {
             // Do nothing
         }
 
         @SuppressWarnings("CloneDoesntCallSuperClone")
         @Override
-        protected Options clone() {
+        protected @NotNull Options clone() {
             Options other = new Options();
 
             // Copy object's state
@@ -332,8 +319,8 @@ public final class RestApiClient
         private List<Interceptor> mNetworkInterceptors;
     }
 
-    public static class HttpResponseException extends IOException
-    {
+    public static class HttpResponseException extends IOException {
+
         public HttpResponseException(Response response) {
             mResponse = response;
         }
@@ -349,7 +336,7 @@ public final class RestApiClient
 
     private static final String TAG = RestApiClient.class.getSimpleName();
 
-    private static final OkHttpClient SHARED_HTTP_CLIENT = newSharedHttpClient();
+    private static final OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
     private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
