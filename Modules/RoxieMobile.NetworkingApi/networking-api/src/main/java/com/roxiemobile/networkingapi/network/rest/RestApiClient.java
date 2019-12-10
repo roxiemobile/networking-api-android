@@ -1,8 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest;
 
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
-
 import com.annimon.stream.Objects;
 import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
@@ -22,7 +19,6 @@ import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
-import com.roxiemobile.networkingapi.network.security.TLSCompat;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +28,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.CertificatePinner;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -41,8 +42,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public final class RestApiClient
-{
+public final class RestApiClient {
+
 // MARK: - Construction
 
     private RestApiClient(Builder builder) {
@@ -181,6 +182,19 @@ public final class RestApiClient
         Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
                 .filter(Objects::nonNull).forEach(builder::addNetworkInterceptor);
 
+        // Configure secure HTTPS connections
+        if (mOptions.mCertificatePinner != null) {
+            builder.certificatePinner(mOptions.mCertificatePinner);
+        }
+
+        if (mOptions.mHostnameVerifier != null) {
+            builder.hostnameVerifier(mOptions.mHostnameVerifier);
+        }
+
+        if (mOptions.mSSLSocketFactory != null && mOptions.mTrustManager != null) {
+            builder.sslSocketFactory(mOptions.mSSLSocketFactory, mOptions.mTrustManager);
+        }
+
         // Done
         return builder.build();
     }
@@ -253,15 +267,6 @@ public final class RestApiClient
         return builder.build();
     }
 
-    private static @NotNull OkHttpClient newSharedHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        if (VERSION.SDK_INT < VERSION_CODES.LOLLIPOP) {
-            TLSCompat.enableTlsOnSockets(builder);
-        }
-        return builder.build();
-    }
-
 // MARK: - Private Methods
 
     private <T> List<T> nullToEmpty(List<T> list) {
@@ -270,50 +275,72 @@ public final class RestApiClient
 
 // MARK: - Inner Types
 
-    public static final class Builder
-    {
+    public static final class Builder {
+
         public Builder() {
             mOptions = new Options();
         }
 
-        public Builder connectTimeout(int timeout) {
+        public @NotNull Builder connectTimeout(int timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mConnectionTimeout = timeout;
             return this;
         }
 
-        public Builder readTimeout(int timeout) {
+        public @NotNull Builder readTimeout(int timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
             return this;
         }
 
-        public Builder interceptors(List<Interceptor> interceptors) {
+        public @NotNull Builder interceptors(@NotNull List<Interceptor> interceptors) {
+            Guard.notNull(interceptors, "interceptors is null");
             mOptions.mInterceptors = interceptors;
             return this;
         }
 
-        public Builder networkInterceptors(List<Interceptor> interceptors) {
+        public @NotNull Builder networkInterceptors(@NotNull List<Interceptor> interceptors) {
+            Guard.notNull(interceptors, "interceptors is null");
             mOptions.mNetworkInterceptors = interceptors;
             return this;
         }
 
-        public RestApiClient build() {
+        public @NotNull Builder certificatePinner(CertificatePinner certificatePinner) {
+            mOptions.mCertificatePinner = certificatePinner;
+            return this;
+        }
+
+        public @NotNull Builder hostnameVerifier(HostnameVerifier hostnameVerifier) {
+            mOptions.mHostnameVerifier = hostnameVerifier;
+            return this;
+        }
+
+        public @NotNull Builder sslSocketFactory(SSLSocketFactory sslSocketFactory) {
+            mOptions.mSSLSocketFactory = sslSocketFactory;
+            return this;
+        }
+
+        public @NotNull Builder trustManager(X509TrustManager trustManager) {
+            mOptions.mTrustManager = trustManager;
+            return this;
+        }
+
+        public @NotNull RestApiClient build() {
             return new RestApiClient(this);
         }
 
         private final Options mOptions;
     }
 
-    private static final class Options implements Cloneable
-    {
+    private static final class Options implements Cloneable {
+
         private Options() {
             // Do nothing
         }
 
         @SuppressWarnings("CloneDoesntCallSuperClone")
         @Override
-        protected Options clone() {
+        protected @NotNull Options clone() {
             Options other = new Options();
 
             // Copy object's state
@@ -321,6 +348,10 @@ public final class RestApiClient
             other.mReadTimeout = mReadTimeout;
             other.mInterceptors = mInterceptors;
             other.mNetworkInterceptors = mNetworkInterceptors;
+            other.mCertificatePinner = mCertificatePinner;
+            other.mHostnameVerifier = mHostnameVerifier;
+            other.mSSLSocketFactory = mSSLSocketFactory;
+            other.mTrustManager = mTrustManager;
 
             // Done
             return other;
@@ -330,10 +361,14 @@ public final class RestApiClient
         private int mReadTimeout = NetworkConfig.Timeout.READ;
         private List<Interceptor> mInterceptors;
         private List<Interceptor> mNetworkInterceptors;
+        private CertificatePinner mCertificatePinner;
+        private HostnameVerifier mHostnameVerifier;
+        private SSLSocketFactory mSSLSocketFactory;
+        private X509TrustManager mTrustManager;
     }
 
-    public static class HttpResponseException extends IOException
-    {
+    public static class HttpResponseException extends IOException {
+
         public HttpResponseException(Response response) {
             mResponse = response;
         }
@@ -349,7 +384,7 @@ public final class RestApiClient
 
     private static final String TAG = RestApiClient.class.getSimpleName();
 
-    private static final OkHttpClient SHARED_HTTP_CLIENT = newSharedHttpClient();
+    private static final OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
     private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
