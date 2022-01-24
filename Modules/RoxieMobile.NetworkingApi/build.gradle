@@ -18,12 +18,43 @@ buildscript {
     }
 }
 
+//plugins {
+//    id 'maven-publish'
+//}
+
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
     }
 }
+
+//afterEvaluate {
+//    publishing {
+//        publications {
+//            // Creates a Maven publication called "release".
+//            release(MavenPublication) {
+//                // Applies the component for the release build variant.
+//                from components.release
+//
+//                // You can then customize attributes of the publication as shown below.
+//                groupId = 'com.roxiemobile.android'
+//                artifactId = 'networking-api'
+//                version = '0.9.6'
+//            }
+//            // Creates a Maven publication called “debug”.
+//            debug(MavenPublication) {
+//                // Applies the component for the debug build variant.
+//                from components.debug
+//
+//                groupId = 'com.roxiemobile.android'
+//                artifactId = 'networking-api-debug'
+//                version = '0.9.6'
+//            }
+//        }
+//    }
+//}
 
 // Controlling Android properties of all your modules from the main project
 // @link http://tools.android.com/tech-docs/new-build-system/tips
@@ -34,8 +65,8 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 29
 
-    versionCode = 25
-    versionName = '0.9.5'
+    versionCode = 26
+    versionName = '0.9.6'
 
     // Shared Dependencies
     ANDROID_SUPPORT_VERSION = '28.0.0'
