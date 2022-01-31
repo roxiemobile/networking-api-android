@@ -1,0 +1,25 @@
+ext {
+    mPackageName = 'Networking API Library'
+    mPackageDesc = 'Networking API is an HTTP library that makes networking for Android apps easier.'
+
+    mGroupId     = 'com.roxiemobile.android'
+    mArtifactId  = 'networking-api'
+    mVersionName = android.defaultConfig.versionName
+    mPackageType = 'aar'
+
+    mCompanyUrl  = 'https://www.roxiemobile.com'
+    mWebsiteUrl  = 'https://github.com/roxiemobile/networking-api.android'
+    mIssuesUrl   = 'https://github.com/roxiemobile/networking-api.android/issues'
+    mGitRepoUrl  = 'scm:git:https://github.com/roxiemobile/networking-api.android.git'
+
+    mAuthorId    = 'roxiemobile'
+    mAuthorName  = 'Aleksandr Bragin'
+    mAuthorEmail = 'bragin-av@roxiemobile.com'
+
+    mLicenseName = 'The Apache Software License, Version 2.0'
+    mLicenseUrl  = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+    mAllLicenses = ['Apache-2.0']
+}
+
+// Publish to JitPack.io
+apply from: 'tools/jitpack.gradle'
