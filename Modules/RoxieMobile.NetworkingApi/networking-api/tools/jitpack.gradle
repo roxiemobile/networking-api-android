@@ -1,0 +1,82 @@
+apply plugin: 'maven-publish'
+
+// Create a library available on JitPack.io
+// @link https://devtut.github.io/android/creating-your-own-libraries-for-android-applications.html
+
+// Build a jar with source files
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+// Build a jar with javadoc
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// Maven Publish Plugin
+// @link https://docs.gradle.org/current/userguide/publishing_maven.html
+
+afterEvaluate {
+    publishing {
+        publications {
+
+            releaseAar(MavenPublication) {
+                from components.release
+
+                groupId = mGroupId
+                artifactId = mArtifactId
+                version = mVersionName
+
+                artifact sourcesJar
+                artifact javadocJar
+
+                // This generates POM.xml with proper parameters
+                pom {
+
+                    packaging = mPackageType
+                    groupId = mGroupId
+                    artifactId = mArtifactId
+
+                    name = mPackageName
+                    description = mPackageDesc
+                    url = mWebsiteUrl
+
+                    licenses {
+                        license {
+                            name = mLicenseName
+                            url = mLicenseUrl
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = mAuthorId
+                            name = mAuthorName
+                            email = mAuthorEmail
+                        }
+                    }
+
+                    scm {
+                        connection = mGitRepoUrl
+                        developerConnection = mGitRepoUrl
+                        url = mWebsiteUrl
+                    }
+                }
+            }
+        }
+    }
+}
