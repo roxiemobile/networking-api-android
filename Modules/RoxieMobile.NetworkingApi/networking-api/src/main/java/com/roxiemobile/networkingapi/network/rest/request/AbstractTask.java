@@ -245,7 +245,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public final @NotNull Task<Ti, To> clone() {
         return newBuilder().build();

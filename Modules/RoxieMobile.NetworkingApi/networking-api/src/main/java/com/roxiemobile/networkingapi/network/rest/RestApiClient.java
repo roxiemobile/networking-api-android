@@ -300,14 +300,12 @@ public final class RestApiClient {
             return this;
         }
 
-        public @NotNull Builder interceptors(@NotNull List<Interceptor> interceptors) {
-            Guard.notNull(interceptors, "interceptors is null");
+        public @NotNull Builder interceptors(@Nullable List<Interceptor> interceptors) {
             mOptions.mInterceptors = interceptors;
             return this;
         }
 
-        public @NotNull Builder networkInterceptors(@NotNull List<Interceptor> interceptors) {
-            Guard.notNull(interceptors, "interceptors is null");
+        public @NotNull Builder networkInterceptors(@Nullable List<Interceptor> interceptors) {
             mOptions.mNetworkInterceptors = interceptors;
             return this;
         }
@@ -366,8 +364,8 @@ public final class RestApiClient {
 
         private long mConnectionTimeout = NetworkConfig.Timeout.INSTANCE.getCONNECTION();
         private long mReadTimeout = NetworkConfig.Timeout.INSTANCE.getREAD();
-        private List<Interceptor> mInterceptors;
-        private List<Interceptor> mNetworkInterceptors;
+        private @Nullable List<Interceptor> mInterceptors;
+        private @Nullable List<Interceptor> mNetworkInterceptors;
         private CertificatePinner mCertificatePinner;
         private HostnameVerifier mHostnameVerifier;
         private SSLSocketFactory mSSLSocketFactory;

@@ -6,7 +6,6 @@ import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.rest.interceptor.Interceptors;
 import com.roxiemobile.networkingapi.network.rest.interceptor.UserAgentRequestInterceptor;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,12 +34,12 @@ public class DefaultHttpClientConfig implements HttpClientConfig {
     }
 
     @Override
-    public @NotNull List<Interceptor> interceptors() {
+    public @Nullable List<Interceptor> interceptors() {
         return INTERCEPTORS;
     }
 
     @Override
-    public @NotNull List<Interceptor> networkInterceptors() {
+    public @Nullable List<Interceptor> networkInterceptors() {
         return NETWORK_INTERCEPTORS;
     }
 
@@ -49,8 +48,8 @@ public class DefaultHttpClientConfig implements HttpClientConfig {
         return null;
     }
 
-    @Nullable
-    public @Override HostnameVerifier hostnameVerifier() {
+    @Override
+    public @Nullable HostnameVerifier hostnameVerifier() {
         return null;
     }
 
