@@ -364,8 +364,8 @@ public final class RestApiClient {
             return other;
         }
 
-        private long mConnectionTimeout = NetworkConfig.Timeout.CONNECTION;
-        private long mReadTimeout = NetworkConfig.Timeout.READ;
+        private long mConnectionTimeout = NetworkConfig.Timeout.INSTANCE.getCONNECTION();
+        private long mReadTimeout = NetworkConfig.Timeout.INSTANCE.getREAD();
         private List<Interceptor> mInterceptors;
         private List<Interceptor> mNetworkInterceptors;
         private CertificatePinner mCertificatePinner;

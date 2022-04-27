@@ -26,12 +26,12 @@ public class DefaultHttpClientConfig implements HttpClientConfig {
 
     @Override
     public long connectionTimeout() {
-        return NetworkConfig.Timeout.CONNECTION;
+        return NetworkConfig.Timeout.INSTANCE.getCONNECTION();
     }
 
     @Override
     public long readTimeout() {
-        return NetworkConfig.Timeout.READ;
+        return NetworkConfig.Timeout.INSTANCE.getREAD();
     }
 
     @Override
