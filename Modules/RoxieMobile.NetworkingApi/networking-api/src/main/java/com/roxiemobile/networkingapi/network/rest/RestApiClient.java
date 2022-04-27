@@ -15,6 +15,8 @@ import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore;
 import com.roxiemobile.networkingapi.network.http.MediaType;
+import com.roxiemobile.networkingapi.network.rest.config.DefaultHttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.config.HttpClientConfig;
 import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
@@ -48,6 +50,8 @@ public final class RestApiClient {
 // MARK: - Construction
 
     private RestApiClient(Builder builder) {
+        mHttpClientConfig = builder.mHttpClientConfig.clone();
+
         // Init instance
         mOptions = builder.mOptions.clone();
     }
@@ -330,11 +334,22 @@ public final class RestApiClient {
             return this;
         }
 
+        public @NotNull Builder httpClientConfig(@Nullable HttpClientConfig httpClientConfig) {
+            mHttpClientConfig = (httpClientConfig != null) ? httpClientConfig.clone() : DEFAULT_HTTP_CLIENT_CONFIG;
+            return this;
+        }
+
         public @NotNull RestApiClient build() {
             return new RestApiClient(this);
         }
 
+        private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
+                new DefaultHttpClientConfig();
+
         private final Options mOptions;
+
+        private HttpClientConfig mHttpClientConfig =
+                DEFAULT_HTTP_CLIENT_CONFIG;
     }
 
     private static final class Options implements Cloneable {
@@ -395,4 +410,6 @@ public final class RestApiClient {
 // MARK: - Variables
 
     private final Options mOptions;
+
+    private final HttpClientConfig mHttpClientConfig;
 }

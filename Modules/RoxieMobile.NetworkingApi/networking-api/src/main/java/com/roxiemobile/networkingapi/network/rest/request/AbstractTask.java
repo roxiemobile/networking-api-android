@@ -164,27 +164,28 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     protected final @NotNull RestApiClient newClient() {
 
         // Get HTTP client config
-        HttpClientConfig config = httpClientConfig();
-        Guard.notNull(config, "config is null");
+        HttpClientConfig httpClientConfig = httpClientConfig();
+        Guard.notNull(httpClientConfig, "httpClientConfig is null");
 
         // Create/init HTTP client
         RestApiClient.Builder builder = new RestApiClient.Builder()
+                .httpClientConfig(httpClientConfig)
                 // Set the timeout until a connection is established
-                .connectionTimeout(config.connectionTimeout())
+                .connectionTimeout(httpClientConfig.connectionTimeout())
                 // Set the default socket timeout which is the timeout for waiting for data
-                .readTimeout(config.readTimeout())
+                .readTimeout(httpClientConfig.readTimeout())
                 // Set an application interceptors
-                .interceptors(config.interceptors())
+                .interceptors(httpClientConfig.interceptors())
                 // Set an network interceptors
-                .networkInterceptors(config.networkInterceptors())
+                .networkInterceptors(httpClientConfig.networkInterceptors())
                 // Set the certificate pinner that constrains which certificates are trusted
-                .certificatePinner(config.certificatePinner())
+                .certificatePinner(httpClientConfig.certificatePinner())
                 // Set the verifier used to confirm that response certificates apply to requested hostnames for HTTPS connections
-                .hostnameVerifier(config.hostnameVerifier())
+                .hostnameVerifier(httpClientConfig.hostnameVerifier())
                 // Set the socket factory used to create connections
-                .sslSocketFactory(config.sslSocketFactory())
+                .sslSocketFactory(httpClientConfig.sslSocketFactory())
                 // Set the trust manager used to secure HTTPS connections
-                .trustManager(config.trustManager());
+                .trustManager(httpClientConfig.trustManager());
 
         // Done
         return builder.build();
