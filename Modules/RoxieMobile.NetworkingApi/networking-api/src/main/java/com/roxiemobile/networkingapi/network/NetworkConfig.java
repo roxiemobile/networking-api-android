@@ -7,7 +7,7 @@ public interface NetworkConfig
     interface Timeout
     {
         // In milliseconds
-        int CONNECTION = 60 * 1000;
-        int READ = 30 * 1000;
+        long CONNECTION = 60 * 1000;
+        long READ = 30 * 1000;
     }
 }
