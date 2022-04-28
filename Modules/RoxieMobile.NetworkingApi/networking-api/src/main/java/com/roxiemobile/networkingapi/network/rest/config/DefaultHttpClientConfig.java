@@ -6,12 +6,17 @@ import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.rest.interceptor.Interceptors;
 import com.roxiemobile.networkingapi.network.rest.interceptor.UserAgentRequestInterceptor;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.CertificatePinner;
 import okhttp3.Interceptor;
 
 public class DefaultHttpClientConfig implements HttpClientConfig {
@@ -19,23 +24,43 @@ public class DefaultHttpClientConfig implements HttpClientConfig {
 // MARK: - Methods
 
     @Override
-    public int connectTimeout() {
-        return NetworkConfig.Timeout.CONNECTION;
+    public long connectionTimeout() {
+        return NetworkConfig.Timeout.INSTANCE.getCONNECTION();
     }
 
     @Override
-    public int readTimeout() {
-        return NetworkConfig.Timeout.READ;
+    public long readTimeout() {
+        return NetworkConfig.Timeout.INSTANCE.getREAD();
     }
 
     @Override
-    public @NotNull List<Interceptor> interceptors() {
+    public @Nullable List<Interceptor> interceptors() {
         return INTERCEPTORS;
     }
 
     @Override
-    public @NotNull List<Interceptor> networkInterceptors() {
+    public @Nullable List<Interceptor> networkInterceptors() {
         return NETWORK_INTERCEPTORS;
+    }
+
+    @Override
+    public @Nullable CertificatePinner certificatePinner() {
+        return null;
+    }
+
+    @Override
+    public @Nullable HostnameVerifier hostnameVerifier() {
+        return null;
+    }
+
+    @Override
+    public @Nullable SSLSocketFactory sslSocketFactory() {
+        return null;
+    }
+
+    @Override
+    public @Nullable X509TrustManager trustManager() {
+        return null;
     }
 
 // MARK: - Private Methods

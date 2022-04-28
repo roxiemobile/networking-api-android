@@ -170,7 +170,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         // Create/init HTTP client
         RestApiClient.Builder builder = new RestApiClient.Builder()
                 // Set the timeout until a connection is established
-                .connectTimeout(config.connectTimeout())
+                .connectionTimeout(config.connectionTimeout())
                 // Set the default socket timeout which is the timeout for waiting for data
                 .readTimeout(config.readTimeout())
                 // Set an application interceptors
@@ -245,7 +245,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    @SuppressWarnings("CloneDoesntCallSuperClone")
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public final @NotNull Task<Ti, To> clone() {
         return newBuilder().build();

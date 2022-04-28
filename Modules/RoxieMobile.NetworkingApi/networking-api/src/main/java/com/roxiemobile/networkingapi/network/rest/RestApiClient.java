@@ -288,26 +288,24 @@ public final class RestApiClient {
             mOptions = new Options();
         }
 
-        public @NotNull Builder connectTimeout(int timeout) {
+        public @NotNull Builder connectionTimeout(long timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mConnectionTimeout = timeout;
             return this;
         }
 
-        public @NotNull Builder readTimeout(int timeout) {
+        public @NotNull Builder readTimeout(long timeout) {
             Guard.isTrue(timeout >= 0, "timeout < 0");
             mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
             return this;
         }
 
-        public @NotNull Builder interceptors(@NotNull List<Interceptor> interceptors) {
-            Guard.notNull(interceptors, "interceptors is null");
+        public @NotNull Builder interceptors(@Nullable List<Interceptor> interceptors) {
             mOptions.mInterceptors = interceptors;
             return this;
         }
 
-        public @NotNull Builder networkInterceptors(@NotNull List<Interceptor> interceptors) {
-            Guard.notNull(interceptors, "interceptors is null");
+        public @NotNull Builder networkInterceptors(@Nullable List<Interceptor> interceptors) {
             mOptions.mNetworkInterceptors = interceptors;
             return this;
         }
@@ -345,7 +343,7 @@ public final class RestApiClient {
             // Do nothing
         }
 
-        @SuppressWarnings("CloneDoesntCallSuperClone")
+        @SuppressWarnings("MethodDoesntCallSuperMethod")
         @Override
         protected @NotNull Options clone() {
             Options other = new Options();
@@ -364,10 +362,10 @@ public final class RestApiClient {
             return other;
         }
 
-        private int mConnectionTimeout = NetworkConfig.Timeout.CONNECTION;
-        private int mReadTimeout = NetworkConfig.Timeout.READ;
-        private List<Interceptor> mInterceptors;
-        private List<Interceptor> mNetworkInterceptors;
+        private long mConnectionTimeout = NetworkConfig.Timeout.INSTANCE.getCONNECTION();
+        private long mReadTimeout = NetworkConfig.Timeout.INSTANCE.getREAD();
+        private @Nullable List<Interceptor> mInterceptors;
+        private @Nullable List<Interceptor> mNetworkInterceptors;
         private CertificatePinner mCertificatePinner;
         private HostnameVerifier mHostnameVerifier;
         private SSLSocketFactory mSSLSocketFactory;
@@ -396,5 +394,5 @@ public final class RestApiClient {
 
 // MARK: - Variables
 
-    private Options mOptions;
+    private final Options mOptions;
 }
