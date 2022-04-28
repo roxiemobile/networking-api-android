@@ -1,5 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface Task<Ti, To> extends Call<Ti>, Cloneable
 {
     /**
@@ -15,5 +17,5 @@ public interface Task<Ti, To> extends Call<Ti>, Cloneable
     /**
      * TODO
      */
-    Task<Ti, To> clone();
+    @NotNull Task<Ti, To> clone();
 }

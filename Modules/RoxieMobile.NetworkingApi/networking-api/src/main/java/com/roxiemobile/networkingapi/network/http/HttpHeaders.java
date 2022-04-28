@@ -343,7 +343,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * Constructs a new, empty instance of the {@code HttpHeaders} object.
      */
     public HttpHeaders() {
-        this(newMap(), false);
+        this(createMap(), false);
     }
 
     /**
@@ -1099,13 +1099,13 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
      * Return a {@code HttpHeaders} object that can only be read, not written to.
      */
     public static @NotNull HttpHeaders readOnlyHttpHeaders(HttpHeaders headers) {
-        return new HttpHeaders(headers != null ? headers : newMap(), true);
+        return new HttpHeaders(headers != null ? headers : createMap(), true);
     }
 
     /**
      * TODO
      */
-    private static @NotNull Map<String, List<String>> newMap() {
+    private static @NotNull Map<String, List<String>> createMap() {
         return new LinkedCaseInsensitiveMap<>(8, Locale.ENGLISH);
     }
 

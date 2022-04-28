@@ -23,7 +23,7 @@ public class UserAgentRequestInterceptor implements Interceptor
         Request originalRequest = chain.request();
 
         Request updatedRequest = originalRequest.newBuilder()
-                .header(HttpHeaders.USER_AGENT, newUserAgent(originalRequest.headers()))
+                .header(HttpHeaders.USER_AGENT, createUserAgent(originalRequest.headers()))
                 .build();
 
         return chain.proceed(updatedRequest);
@@ -31,7 +31,7 @@ public class UserAgentRequestInterceptor implements Interceptor
 
 // MARK: - Private Methods
 
-    private String newUserAgent(Headers headers)
+    private String createUserAgent(Headers headers)
     {
         String value = Stream.of(headers.values(HttpHeaders.USER_AGENT))
                              .filterNot(s -> s.contains(OKHTTP_VERSION))

@@ -161,7 +161,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected final @NotNull RestApiClient newClient() {
+    protected final @NotNull RestApiClient createClient() {
 
         // Get HTTP client config
         HttpClientConfig httpClientConfig = httpClientConfig();
@@ -184,7 +184,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected @NotNull RequestEntity<HttpBody> newRequestEntity(@NotNull HttpRoute route) {
+    protected @NotNull RequestEntity<HttpBody> createRequestEntity(@NotNull HttpRoute route) {
         // Create HTTP request entity
         return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
                 .uri(route.toURI())
@@ -232,13 +232,13 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public final @NotNull Task<Ti, To> clone() {
-        return newBuilder().build();
+        return createBuilder().build();
     }
 
     /**
      * TODO
      */
-    protected abstract TaskBuilder<Ti, To> newBuilder();
+    protected abstract TaskBuilder<Ti, To> createBuilder();
 
     /**
      * TODO
@@ -314,7 +314,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
         public @NotNull Task<Ti, To> build() {
             checkInvalidState();
-            return newTask();
+            return createTask();
         }
 
         protected void checkInvalidState() {
@@ -322,7 +322,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             Guard.notNull(mRequestEntity.uri(), "requestEntity.uri is null");
         }
 
-        protected abstract @NotNull Task<Ti, To> newTask();
+        protected abstract @NotNull Task<Ti, To> createTask();
 
         private String mTag;
         private RequestEntity<Ti> mRequestEntity;
