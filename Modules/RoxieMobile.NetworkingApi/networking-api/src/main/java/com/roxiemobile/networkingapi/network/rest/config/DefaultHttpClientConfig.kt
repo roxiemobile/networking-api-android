@@ -6,52 +6,22 @@ import com.roxiemobile.networkingapi.network.NetworkConfig.Timeout
 import com.roxiemobile.networkingapi.network.rest.interceptor.Interceptors
 import com.roxiemobile.networkingapi.network.rest.interceptor.UserAgentRequestInterceptor
 import com.roxiemobile.networkingapi.network.ssl.TlsConfig
-import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import java.util.Collections
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 class DefaultHttpClientConfig: HttpClientConfig {
 
 // MARK: - Methods
 
-    override fun connectionTimeout(): Long {
-        return Timeout.CONNECTION
-    }
+    override val connectionTimeout: Long = Timeout.CONNECTION
 
-    override fun readTimeout(): Long {
-        return Timeout.READ
-    }
+    override val readTimeout: Long = Timeout.READ
 
-    override fun tlsConfig(): TlsConfig? {
-        return null
-    }
+    override val tlsConfig: TlsConfig? = null
 
-    override fun interceptors(): List<Interceptor>? {
-        return null
-    }
+    override val interceptors: List<Interceptor>? = null
 
-    override fun networkInterceptors(): List<Interceptor>? {
-        return NETWORK_INTERCEPTORS
-    }
-
-    override fun certificatePinner(): CertificatePinner? {
-        return null
-    }
-
-    override fun hostnameVerifier(): HostnameVerifier? {
-        return null
-    }
-
-    override fun sslSocketFactory(): SSLSocketFactory? {
-        return null
-    }
-
-    override fun trustManager(): X509TrustManager? {
-        return null
-    }
+    override val networkInterceptors: List<Interceptor>? = NETWORK_INTERCEPTORS
 
 // MARK: - Methods
 
