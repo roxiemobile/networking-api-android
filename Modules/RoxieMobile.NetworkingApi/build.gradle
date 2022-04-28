@@ -31,8 +31,8 @@ ext {
     minSdkVersion = 21
     targetSdkVersion = 29
 
-    versionCode = 26
-    versionName = '0.9.6'
+    versionCode = 27
+    versionName = '0.10.0'
 
     // Shared Dependencies
     ANDROID_SUPPORT_VERSION = '28.0.0'
