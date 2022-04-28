@@ -1,12 +1,13 @@
 package com.roxiemobile.networkingapi.network.rest.config
 
+import com.roxiemobile.networkingapi.network.ssl.TlsConfig
 import okhttp3.CertificatePinner
 import okhttp3.Interceptor
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 
-interface HttpClientConfig {
+interface HttpClientConfig: Cloneable {
 
 // MARK: - Properties
 
@@ -19,6 +20,11 @@ interface HttpClientConfig {
      * TODO
      */
     fun readTimeout(): Long
+
+    /**
+     * TODO
+     */
+    fun tlsConfig(): TlsConfig?
 
     /**
      * TODO
@@ -49,4 +55,11 @@ interface HttpClientConfig {
      * TODO
      */
     fun trustManager(): X509TrustManager?
+
+// MARK: - Methods
+
+    /**
+     * TODO
+     */
+    public override fun clone(): HttpClientConfig
 }
