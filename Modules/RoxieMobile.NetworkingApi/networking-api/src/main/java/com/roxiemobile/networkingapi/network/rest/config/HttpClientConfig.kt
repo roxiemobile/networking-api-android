@@ -1,11 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest.config
 
 import com.roxiemobile.networkingapi.network.ssl.TlsConfig
-import okhttp3.CertificatePinner
 import okhttp3.Interceptor
-import javax.net.ssl.HostnameVerifier
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.X509TrustManager
 
 interface HttpClientConfig: Cloneable {
 
@@ -14,47 +10,27 @@ interface HttpClientConfig: Cloneable {
     /**
      * TODO
      */
-    fun connectionTimeout(): Long
+    val connectionTimeout: Long
 
     /**
      * TODO
      */
-    fun readTimeout(): Long
+    val readTimeout: Long
 
     /**
      * TODO
      */
-    fun tlsConfig(): TlsConfig?
+    val tlsConfig: TlsConfig?
 
     /**
      * TODO
      */
-    fun interceptors(): List<Interceptor>?
+    val interceptors: List<Interceptor>?
 
     /**
      * TODO
      */
-    fun networkInterceptors(): List<Interceptor>?
-
-    /**
-     * TODO
-     */
-    fun certificatePinner(): CertificatePinner?
-
-    /**
-     * TODO
-     */
-    fun hostnameVerifier(): HostnameVerifier?
-
-    /**
-     * TODO
-     */
-    fun sslSocketFactory(): SSLSocketFactory?
-
-    /**
-     * TODO
-     */
-    fun trustManager(): X509TrustManager?
+    val networkInterceptors: List<Interceptor>?
 
 // MARK: - Methods
 

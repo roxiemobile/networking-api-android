@@ -165,27 +165,10 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
         // Get HTTP client config
         HttpClientConfig httpClientConfig = httpClientConfig();
-        Guard.notNull(httpClientConfig, "httpClientConfig is null");
 
         // Create/init HTTP client
         RestApiClient.Builder builder = new RestApiClient.Builder()
-                .httpClientConfig(httpClientConfig)
-                // Set the timeout until a connection is established
-                .connectionTimeout(httpClientConfig.connectionTimeout())
-                // Set the default socket timeout which is the timeout for waiting for data
-                .readTimeout(httpClientConfig.readTimeout())
-                // Set an application interceptors
-                .interceptors(httpClientConfig.interceptors())
-                // Set an network interceptors
-                .networkInterceptors(httpClientConfig.networkInterceptors())
-                // Set the certificate pinner that constrains which certificates are trusted
-                .certificatePinner(httpClientConfig.certificatePinner())
-                // Set the verifier used to confirm that response certificates apply to requested hostnames for HTTPS connections
-                .hostnameVerifier(httpClientConfig.hostnameVerifier())
-                // Set the socket factory used to create connections
-                .sslSocketFactory(httpClientConfig.sslSocketFactory())
-                // Set the trust manager used to secure HTTPS connections
-                .trustManager(httpClientConfig.trustManager());
+                .httpClientConfig(httpClientConfig);
 
         // Done
         return builder.build();

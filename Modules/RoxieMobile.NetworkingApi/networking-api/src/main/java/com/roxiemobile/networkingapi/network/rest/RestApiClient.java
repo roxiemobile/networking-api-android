@@ -6,7 +6,6 @@ import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.HttpKeys.MethodName;
-import com.roxiemobile.networkingapi.network.NetworkConfig;
 import com.roxiemobile.networkingapi.network.http.CompatJavaNetCookieJar;
 import com.roxiemobile.networkingapi.network.http.CookieManager;
 import com.roxiemobile.networkingapi.network.http.CookiePolicy;
@@ -21,6 +20,7 @@ import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
+import com.roxiemobile.networkingapi.network.ssl.TlsConfig;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,22 +38,19 @@ import javax.net.ssl.X509TrustManager;
 import okhttp3.CertificatePinner;
 import okhttp3.CookieJar;
 import okhttp3.Headers;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+@SuppressWarnings("unused")
 public final class RestApiClient {
 
 // MARK: - Construction
 
     private RestApiClient(Builder builder) {
         mHttpClientConfig = builder.mHttpClientConfig.clone();
-
-        // Init instance
-        mOptions = builder.mOptions.clone();
     }
 
 // MARK: - Methods
@@ -173,36 +170,45 @@ public final class RestApiClient {
 
         OkHttpClient.Builder builder = SHARED_HTTP_CLIENT.newBuilder()
                 // Set the timeout until a connection is established
-                .connectTimeout(mOptions.mConnectionTimeout, TimeUnit.MILLISECONDS)
+                .connectTimeout(mHttpClientConfig.getConnectionTimeout(), TimeUnit.MILLISECONDS)
                 // Set the default socket timeout which is the timeout for waiting for data
-                .readTimeout(mOptions.mReadTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(mHttpClientConfig.getReadTimeout(), TimeUnit.MILLISECONDS)
                 // Set the handler that can accept cookies from incoming HTTP responses and provides cookies to outgoing HTTP requests
                 .cookieJar(cookieJar);
 
         // Set a application interceptors
-        Stream.of(nullToEmpty(mOptions.mInterceptors))
+        Stream.of(nullToEmpty(mHttpClientConfig.getInterceptors()))
                 .filter(Objects::nonNull).forEach(builder::addInterceptor);
 
         // Set a network interceptors
-        Stream.of(nullToEmpty(mOptions.mNetworkInterceptors))
+        Stream.of(nullToEmpty(mHttpClientConfig.getNetworkInterceptors()))
                 .filter(Objects::nonNull).forEach(builder::addNetworkInterceptor);
 
         // Configure secure HTTPS connections
-        if (mOptions.mCertificatePinner != null) {
-            builder.certificatePinner(mOptions.mCertificatePinner);
-        }
+        TlsConfig tlsConfig = mHttpClientConfig.getTlsConfig();
+        if (tlsConfig != null) {
 
-        if (mOptions.mHostnameVerifier != null) {
-            builder.hostnameVerifier(mOptions.mHostnameVerifier);
-        }
-
-        if (mOptions.mSSLSocketFactory != null) {
-            if (mOptions.mTrustManager != null) {
-                builder.sslSocketFactory(mOptions.mSSLSocketFactory, mOptions.mTrustManager);
+            CertificatePinner certificatePinner = tlsConfig.getCertificatePinner();
+            if (certificatePinner != null) {
+                builder.certificatePinner(certificatePinner);
             }
-            else {
-                //noinspection deprecation
-                builder.sslSocketFactory(mOptions.mSSLSocketFactory);
+
+            HostnameVerifier hostnameVerifier = tlsConfig.getHostnameVerifier();
+            if (hostnameVerifier != null) {
+                builder.hostnameVerifier(hostnameVerifier);
+            }
+
+            SSLSocketFactory sslSocketFactory = tlsConfig.getSslSocketFactory();
+            if (sslSocketFactory != null) {
+
+                X509TrustManager trustManager = tlsConfig.getTrustManager();
+                if (trustManager != null) {
+                    builder.sslSocketFactory(sslSocketFactory, trustManager);
+                }
+                else {
+                    //noinspection deprecation
+                    builder.sslSocketFactory(sslSocketFactory);
+                }
             }
         }
 
@@ -289,49 +295,7 @@ public final class RestApiClient {
     public static final class Builder {
 
         public Builder() {
-            mOptions = new Options();
-        }
-
-        public @NotNull Builder connectionTimeout(long timeout) {
-            Guard.isTrue(timeout >= 0, "timeout < 0");
-            mOptions.mConnectionTimeout = timeout;
-            return this;
-        }
-
-        public @NotNull Builder readTimeout(long timeout) {
-            Guard.isTrue(timeout >= 0, "timeout < 0");
-            mOptions.mReadTimeout = (timeout >= 0) ? timeout : 0;
-            return this;
-        }
-
-        public @NotNull Builder interceptors(@Nullable List<Interceptor> interceptors) {
-            mOptions.mInterceptors = interceptors;
-            return this;
-        }
-
-        public @NotNull Builder networkInterceptors(@Nullable List<Interceptor> interceptors) {
-            mOptions.mNetworkInterceptors = interceptors;
-            return this;
-        }
-
-        public @NotNull Builder certificatePinner(@Nullable CertificatePinner certificatePinner) {
-            mOptions.mCertificatePinner = certificatePinner;
-            return this;
-        }
-
-        public @NotNull Builder hostnameVerifier(@Nullable HostnameVerifier hostnameVerifier) {
-            mOptions.mHostnameVerifier = hostnameVerifier;
-            return this;
-        }
-
-        public @NotNull Builder sslSocketFactory(@Nullable SSLSocketFactory sslSocketFactory) {
-            mOptions.mSSLSocketFactory = sslSocketFactory;
-            return this;
-        }
-
-        public @NotNull Builder trustManager(@Nullable X509TrustManager trustManager) {
-            mOptions.mTrustManager = trustManager;
-            return this;
+            mHttpClientConfig = DEFAULT_HTTP_CLIENT_CONFIG;
         }
 
         public @NotNull Builder httpClientConfig(@Nullable HttpClientConfig httpClientConfig) {
@@ -343,48 +307,9 @@ public final class RestApiClient {
             return new RestApiClient(this);
         }
 
-        private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
-                new DefaultHttpClientConfig();
+        private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG = new DefaultHttpClientConfig();
 
-        private final Options mOptions;
-
-        private HttpClientConfig mHttpClientConfig =
-                DEFAULT_HTTP_CLIENT_CONFIG;
-    }
-
-    private static final class Options implements Cloneable {
-
-        private Options() {
-            // Do nothing
-        }
-
-        @SuppressWarnings("MethodDoesntCallSuperMethod")
-        @Override
-        protected @NotNull Options clone() {
-            Options other = new Options();
-
-            // Copy object's state
-            other.mConnectionTimeout = mConnectionTimeout;
-            other.mReadTimeout = mReadTimeout;
-            other.mInterceptors = mInterceptors;
-            other.mNetworkInterceptors = mNetworkInterceptors;
-            other.mCertificatePinner = mCertificatePinner;
-            other.mHostnameVerifier = mHostnameVerifier;
-            other.mSSLSocketFactory = mSSLSocketFactory;
-            other.mTrustManager = mTrustManager;
-
-            // Done
-            return other;
-        }
-
-        private long mConnectionTimeout = NetworkConfig.Timeout.INSTANCE.getCONNECTION();
-        private long mReadTimeout = NetworkConfig.Timeout.INSTANCE.getREAD();
-        private @Nullable List<Interceptor> mInterceptors;
-        private @Nullable List<Interceptor> mNetworkInterceptors;
-        private CertificatePinner mCertificatePinner;
-        private HostnameVerifier mHostnameVerifier;
-        private SSLSocketFactory mSSLSocketFactory;
-        private X509TrustManager mTrustManager;
+        private HttpClientConfig mHttpClientConfig;
     }
 
     public static class HttpResponseException extends IOException {
@@ -408,8 +333,6 @@ public final class RestApiClient {
     private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
-
-    private final Options mOptions;
 
     private final HttpClientConfig mHttpClientConfig;
 }
