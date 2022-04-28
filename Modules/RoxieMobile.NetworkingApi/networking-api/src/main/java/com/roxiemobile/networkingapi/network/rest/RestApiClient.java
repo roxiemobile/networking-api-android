@@ -90,7 +90,7 @@ public final class RestApiClient {
         Guard.notNull(entity, "entity is null");
 
         // Execute HTTP request
-        return execute(newRequest(method, entity), entity.cookieStore());
+        return execute(createRequest(method, entity), entity.cookieStore());
     }
 
     private HttpResult execute(Request request, CookieStore cookieStore) {
@@ -100,14 +100,14 @@ public final class RestApiClient {
         try {
             try {
                 // Create and execute HTTP request
-                Response response = newClient(cookieStore).newCall(request).execute();
-                result = HttpResult.success(newResponseEntity(response, cookieStore));
+                Response response = createClient(cookieStore).newCall(request).execute();
+                result = HttpResult.success(createResponseEntity(response, cookieStore));
             }
             catch (HttpResponseException ex) {
                 Logger.e(TAG, ex);
 
                 // Handle interrupted HTTP requests
-                result = HttpResult.success(newResponseEntity(ex.getResponse(), cookieStore));
+                result = HttpResult.success(createResponseEntity(ex.getResponse(), cookieStore));
             }
         }
         catch (Exception ex) {
@@ -121,7 +121,7 @@ public final class RestApiClient {
         return result;
     }
 
-    private @NotNull Request newRequest(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
+    private @NotNull Request createRequest(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
         Request.Builder instance = new Request.Builder();
 
         // Create request body
@@ -157,7 +157,7 @@ public final class RestApiClient {
         return instance.build();
     }
 
-    private @NotNull OkHttpClient newClient(@NotNull CookieStore cookieStore) {
+    private @NotNull OkHttpClient createClient(@NotNull CookieStore cookieStore) {
         Guard.notNull(cookieStore, "cookieStore is null");
 
         CookieManager cookieManager = new CookieManager(cookieStore, CookiePolicy.ACCEPT_ALL);
@@ -216,7 +216,7 @@ public final class RestApiClient {
         return builder.build();
     }
 
-    private @NotNull ResponseEntity<byte[]> newResponseEntity(
+    private @NotNull ResponseEntity<byte[]> createResponseEntity(
             @NotNull Response response,
             @NotNull CookieStore cookieStore
     ) throws IOException {
