@@ -1,0 +1,27 @@
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+// @link https://github.com/arturbosch/detekt/issues/2047#issuecomment-545681072
+buildscript {
+
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath PLG.detekt
+    }
+}
+
+detekt {
+    toolVersion = PLG_VER.detekt
+    ignoreFailures = true
+
+    config = files("${rootDir}/../modules/gradle-buildsystem/plugins/config/detekt/roxiemobile.yml")
+    input = files("${rootDir}/../modules")
+}
+
+// @link https://searchfox.org/mozilla-mobile/source/android-components/build.gradle
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    exclude "**/build/**"
+    exclude "**/resources/**"
+}
