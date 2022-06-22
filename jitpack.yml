@@ -1,5 +1,5 @@
 # Configuration file for building snapshots and releases with JitPack.io
 jdk:
-  - openjdk8
+  - openjdk11
 before_install:
-  - cd ./Modules/RoxieMobile.NetworkingApi
+  - cd ./sources/xproj-networking-api

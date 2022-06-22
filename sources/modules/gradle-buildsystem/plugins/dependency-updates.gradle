@@ -1,0 +1,16 @@
+apply plugin: 'com.github.ben-manes.versions'
+
+final isNonStable = { version ->
+    final stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
+    final regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
+
+dependencyUpdates {
+    checkForGradleUpdate = false
+
+    // Disallow release candidates as upgradable versions from stable versions
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
+}

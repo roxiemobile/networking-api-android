@@ -1,0 +1,29 @@
+# Eclipse
+.apt_generated/
+bin/
+gen/
+obj/
+
+# IntelliJ IDEA
+.idea/
+classes/
+out/
+*.iml
+*.ipr
+*.iws
+
+# Gradle
+.gradle/
+build/
+captures/
+local.properties
+
+*.keystore.properties
+keystore.*.properties
+keystore.properties
+!**/keystore/*.properties
+
+# Other
+.DS_Store
+tmp/
+*.log

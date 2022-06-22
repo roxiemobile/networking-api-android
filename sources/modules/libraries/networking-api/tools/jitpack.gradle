@@ -1,0 +1,67 @@
+apply plugin: 'maven-publish'
+
+// Android Studio > Configure publication variants
+// @link https://developer.android.com/studio/publish-library/configure-pub-variants
+
+android {
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+// Android Studio > Upload your library
+// @link https://developer.android.com/studio/publish-library/upload-library
+
+// Maven Publish Plugin
+// @link https://docs.gradle.org/current/userguide/publishing_maven.html
+
+publishing {
+    publications {
+        releaseAar(MavenPublication) {
+
+            groupId = mGroupId
+            artifactId = mArtifactId
+            version = mVersionName
+
+            afterEvaluate {
+                from components.release
+            }
+
+            // This generates POM.xml with proper parameters
+            pom {
+
+                packaging = mPackageType
+                groupId = mGroupId
+                artifactId = mArtifactId
+
+                name = mPackageName
+                description = mPackageDesc
+                url = mWebsiteUrl
+
+                licenses {
+                    license {
+                        name = mLicenseName
+                        url = mLicenseUrl
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = mAuthorId
+                        name = mAuthorName
+                        email = mAuthorEmail
+                    }
+                }
+
+                scm {
+                    connection = mGitRepoUrl
+                    developerConnection = mGitRepoUrl
+                    url = mWebsiteUrl
+                }
+            }
+        }
+    }
+}

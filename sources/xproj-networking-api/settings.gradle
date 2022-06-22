@@ -1,0 +1,13 @@
+rootProject.name = 'xproj-networking-api'
+
+// MARK: - Build System
+
+include ':gradle-buildsystem'
+project(':gradle-buildsystem').projectDir =
+        new File(settingsDir, '../modules/gradle-buildsystem')
+
+// MARK: - Libraries
+
+include ':networking-api'
+project(':networking-api').projectDir =
+        new File(settingsDir, '../modules/libraries/networking-api')

@@ -1,0 +1,56 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+
+        testInstrumentationRunner DEP.androidx.junitRunner
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
+        }
+    }
+}
+
+kotlin {
+    explicitApi()
+}
+
+dependencies {
+
+    implementation DEP.kotlin.stdlibJdk8
+    implementation DEP.roxiemobile.androidCommons
+    implementation DEP.square.okhttp3.loggingInterceptor
+    implementation DEP.square.okhttp3.okhttp
+    implementation DEP.square.okhttp3.urlConnection
+
+    androidTestImplementation DEP.androidx.espresso.core
+    androidTestImplementation DEP.androidx.junit
+
+    testImplementation DEP.junit
+}
+
+// Publish an AAR library to a Maven repository
+apply from: 'tools/publish.gradle'
