@@ -6,8 +6,8 @@ import com.roxiemobile.androidcommons.data.mapper.DataMapper;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
-public class JsonBody implements HttpBody
-{
+public class JsonBody implements HttpBody {
+
 // MARK: - Construction
 
     public JsonBody(JsonElement body) {

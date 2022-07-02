@@ -18,8 +18,8 @@ import okio.Okio;
 /**
  * This interceptor compresses the HTTP request body.
  */
-public final class GzipRequestInterceptor implements Interceptor
-{
+public final class GzipRequestInterceptor implements Interceptor {
+
 // MARK: - Methods
 
     @Override
@@ -40,10 +40,8 @@ public final class GzipRequestInterceptor implements Interceptor
 
 // MARK: - Private Methods
 
-    private RequestBody gzip(final RequestBody body)
-    {
-        return new RequestBody()
-        {
+    private RequestBody gzip(final RequestBody body) {
+        return new RequestBody() {
             @Override
             public MediaType contentType() {
                 return body.contentType();
@@ -67,13 +65,12 @@ public final class GzipRequestInterceptor implements Interceptor
     // Add GZip Request Compression
     // @link https://github.com/square/okhttp/issues/350#issuecomment-123105641
 
-    private RequestBody requestBodyWithContentLength(final RequestBody requestBody) throws IOException
-    {
+    private RequestBody requestBodyWithContentLength(final RequestBody requestBody) throws IOException {
+
         final Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
 
-        return new RequestBody()
-        {
+        return new RequestBody() {
             @Override
             public MediaType contentType() {
                 return requestBody.contentType();

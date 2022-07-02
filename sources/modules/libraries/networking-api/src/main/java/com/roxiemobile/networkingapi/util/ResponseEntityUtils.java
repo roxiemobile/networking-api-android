@@ -6,8 +6,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class ResponseEntityUtils
-{
+public final class ResponseEntityUtils {
+
 // MARK: - Construction
 
     private ResponseEntityUtils() {

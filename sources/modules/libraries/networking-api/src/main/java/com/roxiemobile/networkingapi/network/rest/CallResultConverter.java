@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
 
-public interface CallResultConverter<Ti, To>
-{
+public interface CallResultConverter<Ti, To> {
+
     /**
      * Converts result from one format to another.
      */

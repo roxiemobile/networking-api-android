@@ -5,8 +5,8 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-class Result<S extends ResponseEntity<BodyType>, F, BodyType>
-{
+class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
+
 // MARK: - Construction
 
     Result(S success) {

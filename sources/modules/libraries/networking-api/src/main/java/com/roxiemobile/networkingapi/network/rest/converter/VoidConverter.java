@@ -7,8 +7,8 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 
 import org.jetbrains.annotations.NotNull;
 
-public class VoidConverter extends AbstractCallResultConverter<Void>
-{
+public class VoidConverter extends AbstractCallResultConverter<Void> {
+
 // MARK: - Methods
 
     @Override

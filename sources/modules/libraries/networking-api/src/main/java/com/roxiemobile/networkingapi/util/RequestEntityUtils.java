@@ -6,8 +6,8 @@ import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class RequestEntityUtils
-{
+public final class RequestEntityUtils {
+
 // MARK: - Construction
 
     private RequestEntityUtils() {

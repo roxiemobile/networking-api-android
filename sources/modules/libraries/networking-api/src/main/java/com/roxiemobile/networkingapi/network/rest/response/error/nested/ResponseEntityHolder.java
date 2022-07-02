@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 import com.annimon.stream.function.Consumer;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
-public interface ResponseEntityHolder
-{
+public interface ResponseEntityHolder {
+
     /**
      * Returns the HTTP response entity.
      */

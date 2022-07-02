@@ -16,8 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 
 public abstract class AbstractValidatableModelArrayConverter<T extends ValidatableModel>
-        extends AbstractCallResultConverter<T[]>
-{
+        extends AbstractCallResultConverter<T[]> {
+
 // MARK: - Construction
 
     protected AbstractValidatableModelArrayConverter(@NotNull Class<T[]> classOfT) {

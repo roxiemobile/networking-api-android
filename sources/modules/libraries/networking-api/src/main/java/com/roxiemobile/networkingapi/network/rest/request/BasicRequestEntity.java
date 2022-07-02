@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 
-public class BasicRequestEntity<T> implements RequestEntity<T>
-{
+public class BasicRequestEntity<T> implements RequestEntity<T> {
+
 // MARK: - Construction
 
     protected BasicRequestEntity(Builder<T> builder) {
@@ -44,8 +44,8 @@ public class BasicRequestEntity<T> implements RequestEntity<T>
 
 // MARK: - Inner Types
 
-    public static class Builder<T>
-    {
+    public static class Builder<T> {
+
         public Builder() {
             // Do nothing
         }

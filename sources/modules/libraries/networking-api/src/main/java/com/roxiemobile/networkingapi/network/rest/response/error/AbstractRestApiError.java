@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-abstract class AbstractRestApiError implements RestApiError
-{
+abstract class AbstractRestApiError implements RestApiError {
+
 // MARK: - Construction
 
     AbstractRestApiError(Throwable cause) {

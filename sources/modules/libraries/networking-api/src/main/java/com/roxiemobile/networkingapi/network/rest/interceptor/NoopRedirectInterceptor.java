@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-public class NoopRedirectInterceptor extends AbstractRedirectInterceptor
-{
+public class NoopRedirectInterceptor extends AbstractRedirectInterceptor {
+
 // MARK: - Methods
 
     /**

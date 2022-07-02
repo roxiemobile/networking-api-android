@@ -12,8 +12,8 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Unexpect
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T>
-{
+public abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T> {
+
 // MARK: - Methods
 
     public @NotNull CallResult<T> convert(@NotNull CallResult<byte[]> result) {

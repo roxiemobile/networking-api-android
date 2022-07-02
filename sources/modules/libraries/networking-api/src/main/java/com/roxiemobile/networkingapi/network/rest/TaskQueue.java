@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TaskQueue
-{
+public class TaskQueue {
+
 // MARK: - Construction
 
     private TaskQueue() {
@@ -85,8 +85,8 @@ public class TaskQueue
 
 // MARK: - Inner Types
 
-    private static final class InnerFutureTask<Ti, To> extends FutureTask<Void> implements Cancellable
-    {
+    private static final class InnerFutureTask<Ti, To> extends FutureTask<Void> implements Cancellable {
+
         public InnerFutureTask(@NotNull InnerRunnableTask<Ti, To> runnableTask) {
             super(runnableTask, null);
 
@@ -122,8 +122,8 @@ public class TaskQueue
         private final InnerRunnableTask<Ti, To> mRunnableTask;
     }
 
-    private static final class InnerRunnableTask<Ti, To> implements Runnable, Cancellable
-    {
+    private static final class InnerRunnableTask<Ti, To> implements Runnable, Cancellable {
+
         public InnerRunnableTask(@NotNull Task<Ti, To> task, Callback<Ti, To> callback, boolean callbackOnUiThread) {
             // Init instance variables
             mTask = task.clone();
@@ -144,8 +144,8 @@ public class TaskQueue
         private final InnerCallback<Ti, To> mCallback;
     }
 
-    private static final class InnerCallback<Ti, To> extends CallbackDecorator<Ti, To>
-    {
+    private static final class InnerCallback<Ti, To> extends CallbackDecorator<Ti, To> {
+
         private InnerCallback(@NotNull Callback<Ti, To> callback, boolean callbackOnUiThread) {
             super(callback);
 
@@ -211,8 +211,8 @@ public class TaskQueue
         private final AtomicBoolean mDone = new AtomicBoolean(false);
     }
 
-    private static final class InnerParallelWorkerThreadExecutor extends AbstractExecutorService
-    {
+    private static final class InnerParallelWorkerThreadExecutor extends AbstractExecutorService {
+
         public static class SingletonHolder {
             public static final InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
         }

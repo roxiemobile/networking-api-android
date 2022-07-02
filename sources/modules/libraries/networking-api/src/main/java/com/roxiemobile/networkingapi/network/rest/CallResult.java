@@ -6,8 +6,8 @@ import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CallResult<T> extends Result<ResponseEntity<T>, RestApiError, T>
-{
+public class CallResult<T> extends Result<ResponseEntity<T>, RestApiError, T> {
+
 // MARK: - Construction
 
     private CallResult(ResponseEntity<T> success) {

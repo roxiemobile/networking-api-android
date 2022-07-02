@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public final class CookieUtils
-{
+public final class CookieUtils {
+
 // MARK: - Construction
 
     private CookieUtils() {
@@ -34,9 +34,9 @@ public final class CookieUtils
         Guard.notEmpty(cookieName, "cookieName is empty");
 
         return Stream.of(cookies)
-                     .filter(cookie -> cookie.getName().equals(cookieName))
-                     .findFirst()
-                     .orElse(null);
+                .filter(cookie -> cookie.getName().equals(cookieName))
+                .findFirst()
+                .orElse(null);
     }
 
     public static boolean isExpiredOrNull(HttpCookie cookie) {

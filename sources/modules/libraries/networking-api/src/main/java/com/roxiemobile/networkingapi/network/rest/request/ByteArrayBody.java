@@ -6,8 +6,8 @@ import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ByteArrayBody implements HttpBody
-{
+public class ByteArrayBody implements HttpBody {
+
 // MARK: - Construction
 
     public ByteArrayBody(@NotNull byte[] body, @NotNull MediaType mediaType) {

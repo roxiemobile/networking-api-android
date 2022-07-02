@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 
-public class StringConverter extends AbstractCallResultConverter<String>
-{
+public class StringConverter extends AbstractCallResultConverter<String> {
+
 // MARK: - Methods
 
     @Override

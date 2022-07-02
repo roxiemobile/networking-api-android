@@ -5,8 +5,8 @@ import com.roxiemobile.androidcommons.logging.Logger;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public final class URIUtils
-{
+public final class URIUtils {
+
 // MARK: - Construction
 
     private URIUtils() {

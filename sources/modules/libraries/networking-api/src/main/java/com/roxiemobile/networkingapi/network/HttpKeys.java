@@ -1,11 +1,10 @@
 package com.roxiemobile.networkingapi.network;
 
-public interface HttpKeys
-{
+public interface HttpKeys {
+
 // MARK: - Constants
 
-    interface MethodName
-    {
+    interface MethodName {
         // Values
         String GET = "GET";
         String POST = "POST";

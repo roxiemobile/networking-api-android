@@ -6,10 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents HTTP Bearer Authentication.
+ *
  * @see <a href="http://www.ietf.org/rfc/rfc6750.txt">RFC6750</a>
  */
-public class HttpBearerAuthentication extends HttpAuthentication
-{
+public class HttpBearerAuthentication extends HttpAuthentication {
+
 // MARK: - Construction
 
     public HttpBearerAuthentication(@NotNull String token) {

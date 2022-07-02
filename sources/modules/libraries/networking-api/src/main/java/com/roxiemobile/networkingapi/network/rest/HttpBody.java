@@ -2,8 +2,8 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.http.MediaType;
 
-public interface HttpBody
-{
+public interface HttpBody {
+
     /**
      * TODO
      */
