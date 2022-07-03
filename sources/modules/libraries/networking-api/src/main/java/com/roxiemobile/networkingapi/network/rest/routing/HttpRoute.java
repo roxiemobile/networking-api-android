@@ -139,7 +139,7 @@ public final class HttpRoute {
 
 // MARK: - Inner Types
 
-    public static class QueryParams extends LinkedMultiValueMap<String, String> {
+    public static final class QueryParams extends LinkedMultiValueMap<String, String> {
 
         public QueryParams() {
             super();
@@ -156,9 +156,9 @@ public final class HttpRoute {
 
 // MARK: - Constants
 
-    private static @NotNull String TAG = HttpRoute.class.getSimpleName();
+    private static final @NotNull String TAG = HttpRoute.class.getSimpleName();
 
 // MARK: - Variables
 
-    private @NotNull URI mUri;
+    private final @NotNull URI mUri;
 }

@@ -250,7 +250,7 @@ public final class PersistentCookieStore implements CookieStore {
 
 // MARK: - Variables
 
-    private @NotNull SharedPreferences mSharedPreferences;
+    private final @NotNull SharedPreferences mSharedPreferences;
 
     // This map may have null keys!
     private @NotNull Map<URI, List<HttpCookie>> mMap = new HashMap<>();

@@ -42,7 +42,7 @@ import java.util.TreeSet;
  * @author Roy Clarkson
  * @since 1.0
  */
-public class ContentCodingType implements Comparable<ContentCodingType> {
+public final class ContentCodingType implements Comparable<ContentCodingType> {
 
     /**
      * Public constant encoding type for {@code *}.

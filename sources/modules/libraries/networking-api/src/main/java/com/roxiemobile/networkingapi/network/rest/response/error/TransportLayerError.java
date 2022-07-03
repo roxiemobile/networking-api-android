@@ -4,7 +4,7 @@ import com.roxiemobile.androidcommons.diagnostics.Guard;
 
 import org.jetbrains.annotations.NotNull;
 
-public class TransportLayerError extends AbstractRestApiError {
+public final class TransportLayerError extends AbstractRestApiError {
 
 // MARK: - Construction
 

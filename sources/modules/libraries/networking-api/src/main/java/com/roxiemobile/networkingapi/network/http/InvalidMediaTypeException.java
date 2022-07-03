@@ -25,9 +25,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Juergen Hoeller
  * @since 2.0
  */
-public class InvalidMediaTypeException extends IllegalArgumentException {
+public final class InvalidMediaTypeException extends IllegalArgumentException {
 
-    private @NotNull String mediaType;
+    private final @NotNull String mediaType;
 
     /**
      * Create a new InvalidMediaTypeException for the given media type.

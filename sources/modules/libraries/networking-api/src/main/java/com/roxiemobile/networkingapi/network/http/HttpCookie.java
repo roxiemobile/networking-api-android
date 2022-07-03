@@ -226,7 +226,7 @@ public final class HttpCookie extends ParcelableObject
         return new CookieParser(header).parse();
     }
 
-    static class CookieParser {
+    static final class CookieParser {
         private static final String ATTRIBUTE_NAME_TERMINATORS = ",;= \t";
         private static final String WHITESPACE = " \t";
         private final String input;

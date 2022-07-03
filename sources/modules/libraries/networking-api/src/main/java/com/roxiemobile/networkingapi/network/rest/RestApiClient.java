@@ -311,7 +311,7 @@ public final class RestApiClient {
         private @NotNull HttpClientConfig mHttpClientConfig;
     }
 
-    public static class HttpResponseException extends IOException {
+    public static final class HttpResponseException extends IOException {
 
         public HttpResponseException(@NotNull Response response) {
             mResponse = response;

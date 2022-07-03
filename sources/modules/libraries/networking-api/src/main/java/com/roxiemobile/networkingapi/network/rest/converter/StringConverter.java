@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 
-public class StringConverter extends AbstractCallResultConverter<String> {
+public final class StringConverter extends AbstractCallResultConverter<String> {
 
 // MARK: - Methods
 

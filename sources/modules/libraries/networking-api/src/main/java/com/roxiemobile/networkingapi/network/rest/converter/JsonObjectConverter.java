@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 
-public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject> {
+public final class JsonObjectConverter extends AbstractCallResultConverter<JsonObject> {
 
 // MARK: - Methods
 

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see <a href="http://www.ietf.org/rfc/rfc6750.txt">RFC6750</a>
  */
-public class HttpBearerAuthentication extends HttpAuthentication {
+public final class HttpBearerAuthentication extends HttpAuthentication {
 
 // MARK: - Construction
 

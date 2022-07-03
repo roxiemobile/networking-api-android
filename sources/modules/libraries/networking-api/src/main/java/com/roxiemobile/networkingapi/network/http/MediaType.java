@@ -51,7 +51,7 @@ import java.util.TreeSet;
  * @since 1.0
  * @see <a href="http://tools.ietf.org/html/rfc2616#section-3.7">HTTP 1.1, section 3.7</a>
  */
-public class MediaType implements Comparable<MediaType> {
+public final class MediaType implements Comparable<MediaType> {
 
     /**
      * Public constant media type that includes all media ranges (i.e. {@code &#42;/&#42;}).

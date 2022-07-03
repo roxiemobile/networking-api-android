@@ -6,7 +6,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 
 import org.jetbrains.annotations.NotNull;
 
-public class PassThroughConverter extends AbstractCallResultConverter<byte[]> {
+public final class PassThroughConverter extends AbstractCallResultConverter<byte[]> {
 
 // MARK: - Methods
 

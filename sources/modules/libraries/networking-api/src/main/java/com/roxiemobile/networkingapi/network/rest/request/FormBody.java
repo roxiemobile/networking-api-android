@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FormBody implements HttpBody {
+public final class FormBody implements HttpBody {
 
 // MARK: - Construction
 
@@ -70,7 +70,7 @@ public class FormBody implements HttpBody {
             return TextUtils.join("&", values).getBytes();
         }
 
-        private @NotNull HashMap<String, String> mValues = new HashMap<>();
+        private final @NotNull HashMap<String, String> mValues = new HashMap<>();
     }
 
 // MARK: - Constants
@@ -79,5 +79,5 @@ public class FormBody implements HttpBody {
 
 // MARK: - Variables
 
-    private @NotNull byte[] mBody;
+    private final @NotNull byte[] mBody;
 }

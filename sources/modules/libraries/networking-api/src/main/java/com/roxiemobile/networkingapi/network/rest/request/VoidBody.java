@@ -5,7 +5,7 @@ import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
 import org.jetbrains.annotations.NotNull;
 
-public class VoidBody implements HttpBody {
+public final class VoidBody implements HttpBody {
 
 // MARK: - Construction
 

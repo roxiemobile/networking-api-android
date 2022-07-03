@@ -52,5 +52,5 @@ abstract class AbstractRestApiError implements RestApiError {
 
 // MARK: - Variables
 
-    private @Nullable Throwable mCause;
+    private final @Nullable Throwable mCause;
 }
