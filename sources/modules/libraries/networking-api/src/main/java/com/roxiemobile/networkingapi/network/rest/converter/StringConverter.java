@@ -9,6 +9,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.UnsupportedEncodingException;
 
@@ -17,26 +18,26 @@ public final class StringConverter extends AbstractCallResultConverter<String> {
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<String> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<String> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
         ResponseEntity<String> newEntity;
         String newBody = null;
 
         try {
-            byte[] body = entity.body();
+            @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to string
-            if (ArrayUtils.isNotEmpty(body)) {
-                String charsetName = entity.mediaType().getCharset(Charsets.UTF_8).name();
-                newBody = new String(body, charsetName);
+            if (ArrayUtils.isNotEmpty(responseBody)) {
+                String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
+                newBody = new String(responseBody, charsetName);
             }
         }
         catch (UnsupportedEncodingException ex) {
             Logger.e(TAG, ex);
-            throw new ConversionException(entity, ex);
+            throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(entity, newBody);
+        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
         return newEntity;
     }
 
@@ -50,6 +51,6 @@ public final class StringConverter extends AbstractCallResultConverter<String> {
     public static final @NotNull String TAG = StringConverter.class.getSimpleName();
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
-            MediaType.ALL
+            MediaType.ALL,
     };
 }

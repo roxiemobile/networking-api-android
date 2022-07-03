@@ -25,59 +25,59 @@ public final class HttpRoute {
 
 // MARK: - Construction
 
-    private HttpRoute(@NotNull URI uri) {
-        Guard.notNull(uri, "uri is null");
+    private HttpRoute(@NotNull URI link) {
+        Guard.notNull(link, "link is null");
 
         // Init instance variables
-        mUri = uri;
+        mUri = link;
     }
 
 // MARK: - Methods
 
-    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri) {
-        return buildRoute(baseUri, null);
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseLink) {
+        return buildRoute(baseLink, null);
     }
 
-    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri, @Nullable String path) {
-        return buildRoute(baseUri, path, null);
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseLink, @Nullable String path) {
+        return buildRoute(baseLink, path, null);
     }
 
-    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri, @Nullable String path, @Nullable MultiValueMap<String, String> params) {
-        String uriString = null;
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseLink, @Nullable String path, @Nullable QueryParameters parameters) {
+        @Nullable String linkText = null;
 
         // Build new URI
-        if (baseUri != null) {
-            uriString = baseUri.toString();
+        if (baseLink != null) {
+            linkText = baseLink.toString();
 
             // Append path to URI
             if (path != null) {
-                uriString += path.trim();
+                linkText += path.trim();
             }
 
-            // Append query params to URI
-            if (params != null && params.size() > 0) {
-                uriString += "?" + buildQueryString(params, Charsets.UTF_8);
+            // Append query parameters to URI
+            if (parameters != null && parameters.size() > 0) {
+                linkText += "?" + buildQueryString(parameters, Charsets.UTF_8);
             }
         }
 
         // Build new HTTP route
-        HttpRoute route = null;
+        @Nullable HttpRoute httpRoute = null;
         try {
-            if (uriString != null) {
-                route = new HttpRoute(new URI(uriString).normalize());
+            if (linkText != null) {
+                httpRoute = new HttpRoute(new URI(linkText).normalize());
             }
         }
-        catch (URISyntaxException e) {
-            Logger.e(TAG, e);
+        catch (URISyntaxException ex) {
+            Logger.e(TAG, ex);
         }
 
         // Validate result
-        if (route == null) {
+        if (httpRoute == null) {
             throw new IllegalStateException("Could not create HTTP route for path ‘" + path + "’.");
         }
 
         // Done
-        return route;
+        return httpRoute;
     }
 
     public @NotNull URI toURI() {
@@ -91,20 +91,20 @@ public final class HttpRoute {
 // MARK: - Private Methods
 
     @SuppressWarnings("SameParameterValue")
-    private static @NotNull String buildQueryString(@NotNull MultiValueMap<String, String> params, @NotNull Charset charset) {
-        List<String> components = new LinkedList<>();
+    private static @NotNull String buildQueryString(@NotNull QueryParameters parameters, @NotNull Charset charset) {
+        @NotNull List<String> components = new LinkedList<>();
 
         try {
             // Build query string components
-            for (String key : params.keySet()) {
-                components.addAll(buildQueryStringComponents(key, params.get(key), charset));
+            for (String key : parameters.keySet()) {
+                components.addAll(buildQueryStringComponents(key, parameters.get(key), charset));
             }
         }
-        catch (UnsupportedEncodingException e) {
-            Logger.e(TAG, e);
+        catch (UnsupportedEncodingException ex) {
+            Logger.e(TAG, ex);
 
             // Re-throw internal error
-            throw new IllegalStateException("Could not build query string.", e);
+            throw new IllegalStateException("Could not build query string.", ex);
         }
 
         // Done
@@ -120,7 +120,7 @@ public final class HttpRoute {
 
         List<String> components = new LinkedList<>();
         String charsetName = charset.name();
-        String encodedValue = null;
+        String encodedValue;
 
         if (values.size() > 1) {
             for (String value : values) {
@@ -133,24 +133,23 @@ public final class HttpRoute {
             components.add(encodedValue);
         }
 
-        // Done
         return components;
     }
 
 // MARK: - Inner Types
 
-    public static final class QueryParams extends LinkedMultiValueMap<String, String> {
+    public static final class QueryParameters extends LinkedMultiValueMap<String, String> {
 
-        public QueryParams() {
+        public QueryParameters() {
             super();
         }
 
-        public QueryParams(int initialCapacity) {
+        public QueryParameters(int initialCapacity) {
             super(initialCapacity);
         }
 
-        public QueryParams(@Nullable MultiValueMap<String, String> otherMap) {
-            super(otherMap == null ? Collections.emptyMap() : otherMap);
+        public QueryParameters(@Nullable MultiValueMap<String, String> otherParameters) {
+            super(otherParameters == null ? Collections.emptyMap() : otherParameters);
         }
     }
 

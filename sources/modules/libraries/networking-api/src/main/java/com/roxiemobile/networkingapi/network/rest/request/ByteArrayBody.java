@@ -14,7 +14,6 @@ public final class ByteArrayBody implements HttpBody {
         Guard.notNull(body, "body is null");
         Guard.notNull(mediaType, "mediaType is null");
 
-        // Init instance variables
         mBody = body;
         mMediaType = mediaType;
     }

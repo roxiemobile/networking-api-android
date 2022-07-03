@@ -11,6 +11,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
@@ -20,33 +21,33 @@ public abstract class AbstractValidatableModelConverter<T extends ValidatableMod
 
 // MARK: - Construction
 
-    protected AbstractValidatableModelConverter(@NotNull Class<T> classOfT) {
-        mClassOfType = classOfT;
+    protected AbstractValidatableModelConverter(@NotNull Class<T> classOfType) {
+        mClassOfType = classOfType;
     }
 
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<T> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<T> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
         ResponseEntity<T> newEntity;
         T newBody = null;
 
         try {
-            byte[] body = entity.body();
+            @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to POJO
-            if (ArrayUtils.isNotEmpty(body)) {
-                ByteArrayInputStream stream = new ByteArrayInputStream(body);
+            if (ArrayUtils.isNotEmpty(responseBody)) {
+                ByteArrayInputStream stream = new ByteArrayInputStream(responseBody);
                 newBody = DataMapper.fromJson(new InputStreamReader(stream), mClassOfType);
             }
         }
         catch (JsonSyntaxException | JsonIOException ex) {
             Logger.e(TAG, ex);
-            throw new ConversionException(entity, ex);
+            throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(entity, newBody);
+        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
         return newEntity;
     }
 

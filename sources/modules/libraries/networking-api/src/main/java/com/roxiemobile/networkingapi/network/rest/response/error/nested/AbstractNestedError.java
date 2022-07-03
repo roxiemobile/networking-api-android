@@ -19,19 +19,18 @@ abstract class AbstractNestedError extends Exception
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity}.
      */
-    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity) {
-        this(entity, null);
+    public AbstractNestedError(@NotNull ResponseEntity<byte[]> responseEntity) {
+        this(responseEntity, null);
     }
 
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity} and cause.
      */
-    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
+    public AbstractNestedError(@NotNull ResponseEntity<byte[]> responseEntity, @Nullable Throwable cause) {
         super(cause);
-        Guard.notNull(entity, "entity is null");
+        Guard.notNull(responseEntity, "responseEntity is null");
 
-        // Init instance variables
-        mResponseEntity = entity;
+        mResponseEntity = responseEntity;
     }
 
 // MARK: - Properties

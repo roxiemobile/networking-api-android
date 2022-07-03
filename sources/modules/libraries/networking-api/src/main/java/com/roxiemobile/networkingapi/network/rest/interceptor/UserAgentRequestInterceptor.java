@@ -22,25 +22,25 @@ public final class UserAgentRequestInterceptor implements Interceptor {
 
     @Override
     public @NotNull Response intercept(@NotNull Chain chain) throws IOException {
-        Request originalRequest = chain.request();
+        Request request = chain.request();
 
-        Request updatedRequest = originalRequest.newBuilder()
-                .header(HttpHeaders.USER_AGENT, createUserAgent(originalRequest.headers()))
+        Request newRequest = request.newBuilder()
+                .header(HttpHeaders.USER_AGENT, createUserAgent(request.headers()))
                 .build();
 
-        return chain.proceed(updatedRequest);
+        return chain.proceed(newRequest);
     }
 
 // MARK: - Private Methods
 
     private @NotNull String createUserAgent(@NotNull Headers headers) {
 
-        String value = Stream.of(headers.values(HttpHeaders.USER_AGENT))
+        String userAgentText = Stream.of(headers.values(HttpHeaders.USER_AGENT))
                 .filterNot(s -> s.contains(OKHTTP_VERSION))
                 .map(s -> s + " " + OKHTTP_VERSION)
                 .single();
 
-        return (value == null) ? OKHTTP_VERSION : value;
+        return (userAgentText == null) ? OKHTTP_VERSION : userAgentText;
     }
 
 // MARK: - Constants

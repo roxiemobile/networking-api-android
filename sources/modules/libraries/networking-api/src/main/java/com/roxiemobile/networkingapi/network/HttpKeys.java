@@ -5,7 +5,6 @@ public interface HttpKeys {
 // MARK: - Constants
 
     interface MethodName {
-        // Values
         String GET = "GET";
         String POST = "POST";
         String PUT = "PUT";

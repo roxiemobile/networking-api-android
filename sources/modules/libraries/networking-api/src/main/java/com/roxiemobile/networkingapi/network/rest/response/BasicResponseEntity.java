@@ -20,7 +20,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         super(builder);
 
         // Init instance variables
-        mStatus = builder.status();
+        mHttpStatus = builder.status();
         mMediaType = builder.mediaType();
     }
 
@@ -28,7 +28,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
     @Override
     public @NotNull HttpStatus status() {
-        return mStatus;
+        return mHttpStatus;
     }
 
     @Override
@@ -44,30 +44,30 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             // Do nothing
         }
 
-        public Builder(@NotNull ResponseEntity<T> entity) {
-            super(entity);
+        public Builder(@NotNull ResponseEntity<T> responseEntity) {
+            super(responseEntity);
 
             // Init instance variables
-            mStatus = entity.status();
-            mMediaType = entity.mediaType();
+            mHttpStatus = responseEntity.status();
+            mMediaType = responseEntity.mediaType();
         }
 
-        public <Ti> Builder(@NotNull ResponseEntity<Ti> entity, @Nullable T body) {
-            super(entity, body);
+        public <Ti> Builder(@NotNull ResponseEntity<Ti> responseEntity, @Nullable T body) {
+            super(responseEntity, body);
 
             // Init instance variables
-            mStatus = entity.status();
-            mMediaType = entity.mediaType();
+            mHttpStatus = responseEntity.status();
+            mMediaType = responseEntity.mediaType();
         }
 
         @Override
-        public @NotNull Builder<T> uri(@NotNull URI uri) {
-            return (Builder<T>) super.uri(uri);
+        public @NotNull Builder<T> uri(@NotNull URI link) {
+            return (Builder<T>) super.uri(link);
         }
 
         @Override
-        public @NotNull Builder<T> headers(@Nullable HttpHeaders headers) {
-            return (Builder<T>) super.headers(headers);
+        public @NotNull Builder<T> headers(@Nullable HttpHeaders httpHeaders) {
+            return (Builder<T>) super.headers(httpHeaders);
         }
 
         @Override
@@ -80,8 +80,8 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             return (Builder<T>) super.body(body);
         }
 
-        public @NotNull Builder<T> status(@NotNull HttpStatus status) {
-            mStatus = status;
+        public @NotNull Builder<T> status(@NotNull HttpStatus httpStatus) {
+            mHttpStatus = httpStatus;
             return this;
         }
 
@@ -93,26 +93,26 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         @Override
         public @NotNull ResponseEntity<T> build() {
             Guard.notNull(uri(), "url is null");
-            Guard.notNull(status(), "status is null");
+            Guard.notNull(status(), "httpStatus is null");
             Guard.notNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);
         }
 
         protected @Nullable HttpStatus status() {
-            return mStatus;
+            return mHttpStatus;
         }
 
         protected @Nullable MediaType mediaType() {
             return mMediaType;
         }
 
-        private @Nullable HttpStatus mStatus;
+        private @Nullable HttpStatus mHttpStatus;
         private @Nullable MediaType mMediaType;
     }
 
 // MARK: - Variables
 
-    private final @NotNull HttpStatus mStatus;
+    private final @NotNull HttpStatus mHttpStatus;
 
     private final @NotNull MediaType mMediaType;
 }

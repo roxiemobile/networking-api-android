@@ -12,15 +12,15 @@ public final class ConversionException extends AbstractNestedError {
     /**
      * Construct a new instance of {@code ConversionException} based on a {@link ResponseEntity}.
      */
-    public ConversionException(@NotNull ResponseEntity<byte[]> entity) {
-        super(entity);
+    public ConversionException(@NotNull ResponseEntity<byte[]> responseEntity) {
+        super(responseEntity);
     }
 
     /**
      * Construct a new instance of {@code ConversionException} based on a {@link ResponseEntity} and cause.
      */
-    public ConversionException(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
-        super(entity, cause);
+    public ConversionException(@NotNull ResponseEntity<byte[]> responseEntity, @Nullable Throwable cause) {
+        super(responseEntity, cause);
     }
 
 // MARK: - Constants

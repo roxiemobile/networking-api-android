@@ -1,4 +1,4 @@
-package com.roxiemobile.networkingapi.network.rest.config
+package com.roxiemobile.networkingapi.network.rest.configuration
 
 import com.roxiemobile.networkingapi.network.ssl.TlsConfig
 import okhttp3.Interceptor

@@ -12,15 +12,15 @@ public final class ResponseException extends AbstractNestedError {
     /**
      * Construct a new instance of {@code HttpResponseException} based on a {@link ResponseEntity}.
      */
-    public ResponseException(@NotNull ResponseEntity<byte[]> entity) {
-        super(entity);
+    public ResponseException(@NotNull ResponseEntity<byte[]> responseEntity) {
+        super(responseEntity);
     }
 
     /**
      * Construct a new instance of {@code HttpResponseException} based on a {@link ResponseEntity} and cause.
      */
-    public ResponseException(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
-        super(entity, cause);
+    public ResponseException(@NotNull ResponseEntity<byte[]> responseEntity, @Nullable Throwable cause) {
+        super(responseEntity, cause);
     }
 
 // MARK: - Constants

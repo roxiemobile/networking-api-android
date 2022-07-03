@@ -49,25 +49,25 @@ public abstract class AbstractRedirectInterceptor implements Interceptor {
     protected @NotNull Response decompressResponse(@NotNull Response response) throws IOException {
         Guard.notNull(response, "response is null");
 
-        ResponseBody body = response.body();
-        if (body != null && "gzip".equalsIgnoreCase(response.header(HttpHeaders.CONTENT_ENCODING))) {
+        ResponseBody responseBody = response.body();
+        if (responseBody != null && "gzip".equalsIgnoreCase(response.header(HttpHeaders.CONTENT_ENCODING))) {
 
             // Uncompress a response body
-            GzipSource source = new GzipSource(body.source());
+            GzipSource gzipSource = new GzipSource(responseBody.source());
             Headers strippedHeaders = response.headers().newBuilder()
                     .removeAll(HttpHeaders.CONTENT_ENCODING)
                     .removeAll(HttpHeaders.CONTENT_LENGTH)
                     .build();
 
             // Create new HTTP response
-            ResponseBody responseBody = new RealResponseBody(
+            ResponseBody newResponseBody = new RealResponseBody(
                     strippedHeaders.get(HttpHeaders.CONTENT_TYPE),
                     stringToLong(strippedHeaders.get(HttpHeaders.CONTENT_LENGTH)),
-                    Okio.buffer(source));
+                    Okio.buffer(gzipSource));
 
             response = response.newBuilder()
                     .headers(strippedHeaders)
-                    .body(ResponseBody.create(responseBody.contentType(), responseBody.bytes()))
+                    .body(ResponseBody.create(newResponseBody.contentType(), newResponseBody.bytes()))
                     .build();
         }
 
@@ -77,14 +77,14 @@ public abstract class AbstractRedirectInterceptor implements Interceptor {
 
 // MARK: - Private Methods
 
-    private static long stringToLong(@Nullable String s) {
+    private static long stringToLong(@Nullable String str) {
         long value = -1L;
 
-        if (StringUtils.isNotBlank(s)) {
+        if (StringUtils.isNotBlank(str)) {
             try {
-                value = Long.parseLong(s);
+                value = Long.parseLong(str);
             }
-            catch (NumberFormatException e) {
+            catch (NumberFormatException ex) {
                 // Do nothing
             }
         }

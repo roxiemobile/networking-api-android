@@ -10,10 +10,10 @@ public interface CallResultConverter<Ti, To> {
     /**
      * Converts result from one format to another.
      */
-    @NotNull CallResult<To> convert(@NotNull CallResult<Ti> result);
+    @NotNull CallResult<To> convert(@NotNull CallResult<Ti> callResult);
 
     /**
      * Converts response entity from one format to another.
      */
-    @NotNull ResponseEntity<To> convert(@NotNull ResponseEntity<Ti> entity) throws ConversionException;
+    @NotNull ResponseEntity<To> convert(@NotNull ResponseEntity<Ti> responseEntity) throws ConversionException;
 }

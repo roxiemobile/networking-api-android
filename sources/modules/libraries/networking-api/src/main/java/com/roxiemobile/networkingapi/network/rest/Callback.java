@@ -15,7 +15,7 @@ public interface Callback<Ti, To> {
     /**
      * TODO
      */
-    void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> entity);
+    void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> responseEntity);
 
     /**
      * TODO

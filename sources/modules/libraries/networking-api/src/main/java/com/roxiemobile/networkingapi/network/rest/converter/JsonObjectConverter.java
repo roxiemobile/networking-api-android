@@ -14,6 +14,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.UnsupportedEncodingException;
 
@@ -22,31 +23,31 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<JsonObject> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<JsonObject> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
         ResponseEntity<JsonObject> newEntity;
         JsonObject newBody = null;
 
         try {
-            byte[] body = entity.body();
+            @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to JSON object
-            if (ArrayUtils.isNotEmpty(body)) {
+            if (ArrayUtils.isNotEmpty(responseBody)) {
 
-                String charsetName = entity.mediaType().getCharset(Charsets.UTF_8).name();
-                String json = new String(entity.body(), charsetName).trim();
+                String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
+                String jsonString = new String(responseEntity.body(), charsetName).trim();
 
-                if (StringUtils.isNotEmpty(json)) {
-                    newBody = new JsonParser().parse(json).getAsJsonObject();
+                if (StringUtils.isNotEmpty(jsonString)) {
+                    newBody = new JsonParser().parse(jsonString).getAsJsonObject();
                 }
             }
         }
         catch (UnsupportedEncodingException | JsonSyntaxException | JsonIOException | IllegalStateException ex) {
             Logger.e(TAG, ex);
-            throw new ConversionException(entity, ex);
+            throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(entity, newBody);
+        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
         return newEntity;
     }
 

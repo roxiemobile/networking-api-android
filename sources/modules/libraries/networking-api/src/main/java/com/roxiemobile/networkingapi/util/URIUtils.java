@@ -28,8 +28,8 @@ public final class URIUtils {
                 result = new URI(spec);
             }
         }
-        catch (URISyntaxException e) {
-            Logger.w(TAG, e);
+        catch (URISyntaxException ex) {
+            Logger.w(TAG, ex);
         }
         return result;
     }

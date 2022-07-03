@@ -12,8 +12,8 @@ import com.roxiemobile.networkingapi.network.rest.HttpResult;
 import com.roxiemobile.networkingapi.network.rest.RestApiClient;
 import com.roxiemobile.networkingapi.network.rest.Task;
 import com.roxiemobile.networkingapi.network.rest.TaskQueue;
-import com.roxiemobile.networkingapi.network.rest.config.DefaultHttpClientConfig;
-import com.roxiemobile.networkingapi.network.rest.config.HttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.configuration.DefaultHttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.configuration.HttpClientConfig;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 import com.roxiemobile.networkingapi.network.rest.response.error.ApplicationLayerError;
@@ -36,7 +36,6 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     protected AbstractTask(@NotNull TaskBuilder<Ti, To> builder) {
         Guard.notNull(builder, "builder is null");
 
-        // Init instance variables
         mTag = builder.tag();
         mRequestEntity = builder.requestEntity();
     }
@@ -66,7 +65,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     public final void execute(@Nullable Callback<Ti, To> callback) {
         boolean shouldExecute = true;
 
-        CallResult<To> result = null;
+        CallResult<To> callResult = null;
         try {
 
             // Check if task must be executed
@@ -76,16 +75,16 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
             // Execute task if needed
             if (shouldExecute) {
-                result = call();
+                callResult = call();
             }
         }
         catch (Throwable ex) {
-            result = CallResult.failure(new ApplicationLayerError(ex));
+            callResult = CallResult.failure(new ApplicationLayerError(ex));
         }
 
         // Yielding result to listener
         if (callback != null && shouldExecute) {
-            yield(result, callback);
+            yield(callResult, callback);
         }
     }
 
@@ -103,7 +102,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      */
     protected final @Nullable CallResult<To> call() throws Exception {
         Guard.isFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
-        CallResult<To> result = null;
+        CallResult<To> callResult = null;
 
         // Send request to the server
         HttpResult httpResult = callExecute();
@@ -115,15 +114,15 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             // Handle HTTP response
             if (httpResult.isSuccess()) {
 
-                ResponseEntity<byte[]> entity = httpResult.value();
-                HttpStatus status = entity.status();
+                ResponseEntity<byte[]> responseEntity = httpResult.value();
+                HttpStatus httpStatus = responseEntity.status();
 
                 // Create a new call result
-                if (status.is2xxSuccessful()) {
-                    result = onSuccess(CallResult.success(entity));
+                if (httpStatus.is2xxSuccessful()) {
+                    callResult = onSuccess(CallResult.success(responseEntity));
                 }
                 else {
-                    ResponseException cause = new ResponseException(entity);
+                    ResponseException cause = new ResponseException(responseEntity);
                     // Build application layer error
                     error = new ApplicationLayerError(cause);
                 }
@@ -142,7 +141,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
             // Handle error
             if (error != null) {
-                result = onFailure(error);
+                callResult = onFailure(error);
             }
         }
         else {
@@ -152,7 +151,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         }
 
         // Done
-        return result;
+        return callResult;
     }
 
     protected abstract @NotNull HttpResult callExecute();
@@ -183,10 +182,10 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected @NotNull RequestEntity<HttpBody> createRequestEntity(@NotNull HttpRoute route) {
+    protected @NotNull RequestEntity<HttpBody> createRequestEntity(@NotNull HttpRoute httpRoute) {
         // Create HTTP request entity
         return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
-                .uri(route.toURI())
+                .uri(httpRoute.toURI())
                 .headers(httpHeaders())
                 .build();
     }
@@ -208,7 +207,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected abstract @NotNull CallResult<To> onSuccess(@NotNull CallResult<byte[]> httpResult);
+    protected abstract @NotNull CallResult<To> onSuccess(@NotNull CallResult<byte[]> callResult);
 
     /**
      * TODO
@@ -254,23 +253,23 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
 // MARK: - Private Methods
 
-    private void yield(@Nullable CallResult<To> result, @NotNull Callback<Ti, To> callback) {
+    private void yield(@Nullable CallResult<To> callResult, @NotNull Callback<Ti, To> callback) {
         Guard.notNull(callback, "callback is null");
 
         if (isCancelled()) {
             callback.onCancel(this);
         }
         else {
-            if (result != null) {
-                if (result.isSuccess()) {
-                    callback.onSuccess(this, result.value());
+            if (callResult != null) {
+                if (callResult.isSuccess()) {
+                    callback.onSuccess(this, callResult.value());
                 }
                 else {
-                    callback.onFailure(this, result.error());
+                    callback.onFailure(this, callResult.error());
                 }
             }
             else {
-                throw new IllegalStateException("!isCancelled() && (result == null)");
+                throw new IllegalStateException("!isCancelled() && (callResult == null)");
             }
         }
     }
@@ -285,7 +284,6 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         }
 
         protected Builder(@NotNull Task<Ti, To> task) {
-            // Init instance variables
             mTag = task.tag();
             mRequestEntity = task.requestEntity();
         }
@@ -304,8 +302,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             return mRequestEntity;
         }
 
-        public @NotNull BuilderType requestEntity(@NotNull RequestEntity<Ti> request) {
-            mRequestEntity = request;
+        public @NotNull BuilderType requestEntity(@NotNull RequestEntity<Ti> requestEntity) {
+            mRequestEntity = requestEntity;
             //noinspection unchecked
             return (BuilderType) this;
         }

@@ -26,9 +26,9 @@ public class CallbackDecorator<Ti, To> implements Callback<Ti, To> {
     }
 
     @Override
-    public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> entity) {
+    public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> responseEntity) {
         if (mCallback != null) {
-            mCallback.onSuccess(call, entity);
+            mCallback.onSuccess(call, responseEntity);
         }
     }
 
