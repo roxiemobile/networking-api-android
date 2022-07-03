@@ -11,7 +11,7 @@ public final class StringBody implements HttpBody {
 // MARK: - Construction
 
     public StringBody(@NotNull String body) {
-        mBody = body;
+        _body = body;
     }
 
 // MARK: - Methods
@@ -23,7 +23,7 @@ public final class StringBody implements HttpBody {
 
     @Override
     public @NotNull byte[] getBody() {
-        return (mBody != null) ? mBody.getBytes(Charsets.UTF_8) : null;
+        return _body.getBytes(Charsets.UTF_8);
     }
 
 // MARK: - Constants
@@ -33,5 +33,5 @@ public final class StringBody implements HttpBody {
 
 // MARK: - Variables
 
-    private final @NotNull String mBody;
+    private final @NotNull String _body;
 }

@@ -22,7 +22,7 @@ public final class FormBody implements HttpBody {
 // MARK: - Construction
 
     private FormBody(@NotNull Builder builder) {
-        mBody = builder.toByteArray();
+        _body = builder.toByteArray();
     }
 
 // MARK: - Methods
@@ -34,7 +34,7 @@ public final class FormBody implements HttpBody {
 
     @Override
     public @NotNull byte[] getBody() {
-        return mBody;
+        return _body;
     }
 
 // MARK: - Inner types
@@ -42,7 +42,7 @@ public final class FormBody implements HttpBody {
     public static final class Builder {
 
         public Builder put(@NotNull String name, @NotNull String value) {
-            mValues.put(name.trim(), value.trim());
+            _values.put(name.trim(), value.trim());
             return this;
         }
 
@@ -51,33 +51,31 @@ public final class FormBody implements HttpBody {
         }
 
         private @NotNull byte[] toByteArray() {
-            List<String> values = new ArrayList<>();
+            @NotNull List<String> values = new ArrayList<>();
 
-            final String charsetName = Charsets.UTF_8.name();
-            Stream.of(mValues.entrySet())
+            @NotNull String charsetName = Charsets.UTF_8.name();
+            Stream.of(_values.entrySet())
                     .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
                     .forEach(entry -> {
                         try {
-                            String key = URLEncoder.encode(entry.getKey(), charsetName);
-                            String value = URLEncoder.encode(entry.getValue(), charsetName);
+                            @NotNull String key = URLEncoder.encode(entry.getKey(), charsetName);
+                            @NotNull String value = URLEncoder.encode(entry.getValue(), charsetName);
                             values.add(key + '=' + value);
                         }
                         catch (UnsupportedEncodingException ex) {
-                            Logger.e(TAG, ex);
+                            Logger.w(TAG, ex);
                         }
                     });
 
             return TextUtils.join("&", values).getBytes();
         }
 
-        private final @NotNull HashMap<String, String> mValues = new HashMap<>();
+        public static final @NotNull String TAG = Builder.class.getSimpleName();
+
+        private final @NotNull HashMap<String, String> _values = new HashMap<>();
     }
-
-// MARK: - Constants
-
-    public static final @NotNull String TAG = FormBody.class.getSimpleName();
 
 // MARK: - Variables
 
-    private final @NotNull byte[] mBody;
+    private final @NotNull byte[] _body;
 }

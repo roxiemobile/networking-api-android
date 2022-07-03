@@ -10,18 +10,18 @@ public final class VoidBody implements HttpBody {
 // MARK: - Construction
 
     private VoidBody() {
-        // Do nothing
+        throw new UnsupportedOperationException();
     }
 
 // MARK: - Methods
 
     @Override
     public @NotNull MediaType getMediaType() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public @NotNull byte[] getBody() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
