@@ -24,6 +24,7 @@ import com.roxiemobile.networkingapi.network.http.util.LinkedCaseInsensitiveMap;
 import com.roxiemobile.networkingapi.network.http.util.MultiValueMap;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -1075,7 +1076,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     /**
      * TODO
      */
-    public static @NotNull HttpHeaders mergeHttpHeaders(HttpHeaders headers, HttpHeaders otherHeaders) {
+    public static @NotNull HttpHeaders mergeHttpHeaders(@Nullable HttpHeaders headers, @Nullable HttpHeaders otherHeaders) {
         HttpHeaders result = new HttpHeaders();
 
         // Put all Headers from first argument
@@ -1098,7 +1099,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
     /**
      * Return a {@code HttpHeaders} object that can only be read, not written to.
      */
-    public static @NotNull HttpHeaders readOnlyHttpHeaders(HttpHeaders headers) {
+    public static @NotNull HttpHeaders readOnlyHttpHeaders(@Nullable HttpHeaders headers) {
         return new HttpHeaders(headers != null ? headers : createMap(), true);
     }
 

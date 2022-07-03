@@ -15,7 +15,7 @@ public class ShortCircuitRedirectInterceptor extends AbstractRedirectInterceptor
     /**
      * TODO
      */
-    public Response onRedirect(@NotNull Response response) throws IOException {
+    public @NotNull Response onRedirect(@NotNull Response response) throws IOException {
         // Throw an exception on redirects
         throw new HttpResponseException(decompressResponse(response));
     }

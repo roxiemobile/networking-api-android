@@ -2,15 +2,18 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface Call<T> {
 
     /**
      * TODO
      */
-    String tag();
+    @Nullable String tag();
 
     /**
      * The original request entity.
      */
-    RequestEntity<T> requestEntity();
+    @NotNull RequestEntity<T> requestEntity();
 }

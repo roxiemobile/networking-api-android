@@ -52,9 +52,9 @@ public abstract class AbstractValidatableModelArrayConverter<T extends Validatab
 
 // MARK: - Constants
 
-    public static final String TAG = AbstractValidatableModelArrayConverter.class.getSimpleName();
+    public static final @NotNull String TAG = AbstractValidatableModelArrayConverter.class.getSimpleName();
 
 // MARK: - Variables
 
-    private final Class<T[]> mClassOfType;
+    private final @NotNull Class<T[]> mClassOfType;
 }

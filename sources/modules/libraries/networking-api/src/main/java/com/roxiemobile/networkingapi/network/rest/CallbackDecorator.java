@@ -3,11 +3,14 @@ package com.roxiemobile.networkingapi.network.rest;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class CallbackDecorator<Ti, To> implements Callback<Ti, To> {
 
 // MARK: - Construction
 
-    public CallbackDecorator(Callback<Ti, To> callback) {
+    public CallbackDecorator(@Nullable Callback<Ti, To> callback) {
         mCallback = callback;
     }
 
@@ -18,26 +21,26 @@ public class CallbackDecorator<Ti, To> implements Callback<Ti, To> {
 // MARK: - Methods
 
     @Override
-    public boolean onShouldExecute(Call<Ti> call) {
+    public boolean onShouldExecute(@NotNull Call<Ti> call) {
         return (mCallback == null) || mCallback.onShouldExecute(call);
     }
 
     @Override
-    public void onSuccess(Call<Ti> call, ResponseEntity<To> entity) {
+    public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> entity) {
         if (mCallback != null) {
             mCallback.onSuccess(call, entity);
         }
     }
 
     @Override
-    public void onFailure(Call<Ti> call, RestApiError error) {
+    public void onFailure(@NotNull Call<Ti> call, @NotNull RestApiError error) {
         if (mCallback != null) {
             mCallback.onFailure(call, error);
         }
     }
 
     @Override
-    public void onCancel(Call<Ti> call) {
+    public void onCancel(@NotNull Call<Ti> call) {
         if (mCallback != null) {
             mCallback.onCancel(call);
         }
@@ -45,5 +48,5 @@ public class CallbackDecorator<Ti, To> implements Callback<Ti, To> {
 
 // MARK: - Variables
 
-    private final Callback<Ti, To> mCallback;
+    private final @Nullable Callback<Ti, To> mCallback;
 }

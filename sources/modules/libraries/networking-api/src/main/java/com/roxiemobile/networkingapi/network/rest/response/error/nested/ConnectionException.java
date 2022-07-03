@@ -1,5 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 
+import org.jetbrains.annotations.Nullable;
+
 public class ConnectionException extends Exception {
 
 // MARK: - Construction
@@ -7,7 +9,7 @@ public class ConnectionException extends Exception {
     /**
      * Construct a new instance of {@code ConnectionException}.
      */
-    public ConnectionException(Throwable cause) {
+    public ConnectionException(@Nullable Throwable cause) {
         super(cause);
     }
 

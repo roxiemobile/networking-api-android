@@ -52,9 +52,9 @@ public abstract class AbstractValidatableModelConverter<T extends ValidatableMod
 
 // MARK: - Constants
 
-    public static final String TAG = AbstractValidatableModelConverter.class.getSimpleName();
+    public static final @NotNull String TAG = AbstractValidatableModelConverter.class.getSimpleName();
 
 // MARK: - Variables
 
-    private final Class<T> mClassOfType;
+    private final @NotNull Class<T> mClassOfType;
 }

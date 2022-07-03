@@ -21,14 +21,14 @@ public class FormBody implements HttpBody {
 
 // MARK: - Construction
 
-    private FormBody(Builder builder) {
+    private FormBody(@NotNull Builder builder) {
         mBody = builder.toByteArray();
     }
 
 // MARK: - Methods
 
     @Override
-    public MediaType mediaType() {
+    public @NotNull MediaType mediaType() {
         return MediaType.APPLICATION_FORM_URLENCODED;
     }
 
@@ -50,7 +50,7 @@ public class FormBody implements HttpBody {
             return new FormBody(this);
         }
 
-        private byte[] toByteArray() {
+        private @NotNull byte[] toByteArray() {
             List<String> values = new ArrayList<>();
 
             final String charsetName = Charsets.UTF_8.name();
@@ -70,14 +70,14 @@ public class FormBody implements HttpBody {
             return TextUtils.join("&", values).getBytes();
         }
 
-        private HashMap<String, String> mValues = new HashMap<>();
+        private @NotNull HashMap<String, String> mValues = new HashMap<>();
     }
 
 // MARK: - Constants
 
-    public static final String TAG = FormBody.class.getSimpleName();
+    public static final @NotNull String TAG = FormBody.class.getSimpleName();
 
 // MARK: - Variables
 
-    private byte[] mBody;
+    private @NotNull byte[] mBody;
 }

@@ -18,7 +18,7 @@ public class TransportLayerError extends AbstractRestApiError {
     /**
      * Returns the type of an error.
      */
-    public RestApiErrorType getType() {
+    public @NotNull RestApiErrorType getType() {
         return RestApiErrorType.TRANSPORT_LAYER;
     }
 }

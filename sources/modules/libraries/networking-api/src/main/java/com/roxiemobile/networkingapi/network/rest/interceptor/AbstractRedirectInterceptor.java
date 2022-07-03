@@ -5,6 +5,7 @@ import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -22,7 +23,7 @@ public abstract class AbstractRedirectInterceptor implements Interceptor {
 // MARK: - Methods
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public @NotNull Response intercept(@NotNull Chain chain) throws IOException {
         Request request = chain.request();
 
         // Execute HTTP request
@@ -40,12 +41,12 @@ public abstract class AbstractRedirectInterceptor implements Interceptor {
     /**
      * TODO
      */
-    public abstract Response onRedirect(@NotNull Response response) throws IOException;
+    public abstract @NotNull Response onRedirect(@NotNull Response response) throws IOException;
 
     /**
      * Returns a new response that does gzip decompression on {@code response}.
      */
-    protected Response decompressResponse(@NotNull Response response) throws IOException {
+    protected @NotNull Response decompressResponse(@NotNull Response response) throws IOException {
         Guard.notNull(response, "response is null");
 
         ResponseBody body = response.body();
@@ -76,7 +77,7 @@ public abstract class AbstractRedirectInterceptor implements Interceptor {
 
 // MARK: - Private Methods
 
-    private static long stringToLong(String s) {
+    private static long stringToLong(@Nullable String s) {
         long value = -1L;
 
         if (StringUtils.isNotBlank(s)) {

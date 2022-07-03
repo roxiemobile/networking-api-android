@@ -5,6 +5,7 @@ import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
@@ -12,7 +13,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 
 // MARK: - Construction
 
-    protected BasicRequestEntity(Builder<T> builder) {
+    protected BasicRequestEntity(@NotNull Builder<T> builder) {
         // Init instance variables
         mUri = builder.mUri;
         mHeaders = builder.mHeaders;
@@ -23,22 +24,22 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 // MARK: - Properties
 
     @Override
-    public URI uri() {
+    public @NotNull URI uri() {
         return mUri;
     }
 
     @Override
-    public HttpHeaders headers() {
+    public @Nullable HttpHeaders headers() {
         return mHeaders;
     }
 
     @Override
-    public CookieStore cookieStore() {
+    public @Nullable CookieStore cookieStore() {
         return mCookieStore;
     }
 
     @Override
-    public T body() {
+    public @Nullable T body() {
         return mBody;
     }
 
@@ -60,7 +61,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
             mBody = entity.body();
         }
 
-        public <Ti> Builder(@NotNull RequestEntity<Ti> entity, T body) {
+        public <Ti> Builder(@NotNull RequestEntity<Ti> entity, @Nullable T body) {
             Guard.notNull(entity, "entity is null");
 
             // Init instance variables
@@ -70,48 +71,48 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
             mBody = body;
         }
 
-        public Builder<T> uri(@NotNull URI uri) {
+        public @NotNull Builder<T> uri(@NotNull URI uri) {
             mUri = uri;
             return this;
         }
 
-        public Builder<T> headers(HttpHeaders headers) {
+        public @NotNull Builder<T> headers(@Nullable HttpHeaders headers) {
             mHeaders = headers;
             return this;
         }
 
-        public Builder<T> cookieStore(CookieStore cookieStore) {
+        public @NotNull Builder<T> cookieStore(@Nullable CookieStore cookieStore) {
             mCookieStore = cookieStore;
             return this;
         }
 
-        public Builder<T> body(T body) {
+        public @NotNull Builder<T> body(@Nullable T body) {
             mBody = body;
             return this;
         }
 
-        public RequestEntity<T> build() {
+        public @NotNull RequestEntity<T> build() {
             Guard.notNull(uri(), "url is null");
             return new BasicRequestEntity<>(this);
         }
 
-        protected URI uri() {
+        protected @Nullable URI uri() {
             return mUri;
         }
 
-        private URI mUri;
-        private HttpHeaders mHeaders;
-        private CookieStore mCookieStore;
-        private T mBody;
+        private @Nullable URI mUri;
+        private @Nullable HttpHeaders mHeaders;
+        private @Nullable CookieStore mCookieStore;
+        private @Nullable T mBody;
     }
 
 // MARK: - Variables
 
-    private final URI mUri;
+    private final @NotNull URI mUri;
 
-    private final HttpHeaders mHeaders;
+    private final @Nullable HttpHeaders mHeaders;
 
-    private final CookieStore mCookieStore;
+    private final @Nullable CookieStore mCookieStore;
 
-    private final T mBody;
+    private final @Nullable T mBody;
 }

@@ -25,11 +25,11 @@ public class HttpBearerAuthentication extends HttpAuthentication {
     /**
      * Returns the value for the 'Authorization' HTTP header.
      */
-    public String getHeaderValue() {
+    public @NotNull String getHeaderValue() {
         return "Bearer " + mToken;
     }
 
 // MARK: - Variables
 
-    private final String mToken;
+    private final @NotNull String mToken;
 }

@@ -47,9 +47,9 @@ public class StringConverter extends AbstractCallResultConverter<String> {
 
 // MARK: - Constants
 
-    public static final String TAG = StringConverter.class.getSimpleName();
+    public static final @NotNull String TAG = StringConverter.class.getSimpleName();
 
-    private static final MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
+    private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.ALL
     };
 }

@@ -10,6 +10,7 @@ import com.roxiemobile.androidcommons.util.IOUtils;
 import com.roxiemobile.networkingapi.util.CookieUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,11 +28,11 @@ public final class PersistentCookieStore implements CookieStore {
 
 // MARK: - Construction
 
-    public PersistentCookieStore(Context context, HttpCookie[] cookies) {
+    public PersistentCookieStore(@NotNull Context context, @Nullable HttpCookie[] cookies) {
         this(context, (cookies != null) ? Arrays.asList(cookies) : null);
     }
 
-    public PersistentCookieStore(Context context, List<HttpCookie> cookies) {
+    public PersistentCookieStore(@NotNull Context context, @Nullable List<HttpCookie> cookies) {
         this(context);
 
         // Add cookies to CookieStore
@@ -42,7 +43,7 @@ public final class PersistentCookieStore implements CookieStore {
         }
     }
 
-    public PersistentCookieStore(Context context, CookieStore otherCookieStore) {
+    public PersistentCookieStore(@NotNull Context context, @Nullable CookieStore otherCookieStore) {
         this(context);
 
         // Copy cookies from other CookieStore
@@ -55,7 +56,7 @@ public final class PersistentCookieStore implements CookieStore {
         }
     }
 
-    public PersistentCookieStore(Context context) {
+    public PersistentCookieStore(@NotNull Context context) {
         // Init instance variables
         mSharedPreferences = context.getSharedPreferences(SP_COOKIE_STORE, Context.MODE_PRIVATE);
         loadAllFromPersistence();
@@ -63,7 +64,7 @@ public final class PersistentCookieStore implements CookieStore {
 
 // MARK: - Methods
 
-    public synchronized void add(URI uri, @NotNull HttpCookie cookie) {
+    public synchronized void add(@Nullable URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
@@ -79,7 +80,7 @@ public final class PersistentCookieStore implements CookieStore {
         saveToPersistence(uri, cookie);
     }
 
-    public synchronized List<HttpCookie> get(@NotNull URI uri) {
+    public synchronized @NotNull List<HttpCookie> get(@Nullable URI uri) {
         Guard.notNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
@@ -130,7 +131,7 @@ public final class PersistentCookieStore implements CookieStore {
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized List<HttpCookie> getCookies() {
+    public synchronized @NotNull List<HttpCookie> getCookies() {
         List<HttpCookie> result = new ArrayList<>();
         List<HttpCookie> cookiesToRemoveFromPersistence = new ArrayList<>();
         final Date date = new Date();
@@ -154,13 +155,13 @@ public final class PersistentCookieStore implements CookieStore {
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized List<URI> getURIs() {
+    public synchronized @NotNull List<URI> getURIs() {
         List<URI> result = new ArrayList<>(mMap.keySet());
         result.remove(null); // sigh
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized boolean remove(URI uri, @NotNull HttpCookie cookie) {
+    public synchronized boolean remove(@Nullable URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = mMap.get(CookieUtils.cookiesUri(uri));
@@ -214,13 +215,13 @@ public final class PersistentCookieStore implements CookieStore {
         }
     }
 
-    private void saveToPersistence(URI uri, HttpCookie cookie) {
+    private void saveToPersistence(@Nullable URI uri, @NotNull HttpCookie cookie) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(uri.toString() + SP_KEY_DELIMITER + cookie.getName(), IOUtils.encodeObject(cookie));
         editor.apply();
     }
 
-    private void removeFromPersistence(URI uri, List<HttpCookie> cookiesToRemove) {
+    private void removeFromPersistence(@Nullable URI uri, @NotNull List<HttpCookie> cookiesToRemove) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         for (HttpCookie cookieToRemove : cookiesToRemove) {
             editor.remove(uri.toString() + SP_KEY_DELIMITER + cookieToRemove.getName());
@@ -228,7 +229,7 @@ public final class PersistentCookieStore implements CookieStore {
         editor.apply();
     }
 
-    private void removeFromPersistence(URI uri, HttpCookie cookieToRemove) {
+    private void removeFromPersistence(@Nullable URI uri, @NotNull HttpCookie cookieToRemove) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(uri.toString() + SP_KEY_DELIMITER + cookieToRemove.getName());
         editor.apply();
@@ -240,18 +241,17 @@ public final class PersistentCookieStore implements CookieStore {
 
 // MARK: - Constants
 
-    private static final String TAG = PersistentCookieStore.class.getSimpleName();
+    private static final @NotNull String TAG = PersistentCookieStore.class.getSimpleName();
 
     // Persistence
-    private static final String SP_COOKIE_STORE = "cookieStore";
-    private static final String SP_KEY_DELIMITER = "|"; // Unusual char in URL
-    private static final String SP_KEY_DELIMITER_REGEX = "\\" + SP_KEY_DELIMITER;
+    private static final @NotNull String SP_COOKIE_STORE = "cookieStore";
+    private static final @NotNull String SP_KEY_DELIMITER = "|"; // Unusual char in URL
+    private static final @NotNull String SP_KEY_DELIMITER_REGEX = "\\" + SP_KEY_DELIMITER;
 
 // MARK: - Variables
 
-    private SharedPreferences mSharedPreferences;
+    private @NotNull SharedPreferences mSharedPreferences;
 
     // This map may have null keys!
-    private Map<URI, List<HttpCookie>> mMap = new HashMap<>();
-
+    private @NotNull Map<URI, List<HttpCookie>> mMap = new HashMap<>();
 }

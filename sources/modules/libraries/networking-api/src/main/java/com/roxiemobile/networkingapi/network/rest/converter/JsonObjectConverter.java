@@ -57,9 +57,9 @@ public class JsonObjectConverter extends AbstractCallResultConverter<JsonObject>
 
 // MARK: - Constants
 
-    public static final String TAG = JsonObjectConverter.class.getSimpleName();
+    public static final @NotNull String TAG = JsonObjectConverter.class.getSimpleName();
 
-    private static final MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
+    private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.APPLICATION_JSON,
     };
 }

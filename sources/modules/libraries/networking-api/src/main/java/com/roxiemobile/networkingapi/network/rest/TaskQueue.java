@@ -10,6 +10,7 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.AbstractExecutorService;
@@ -46,14 +47,14 @@ public class TaskQueue {
     /**
      * TODO
      */
-    public static @NotNull <Ti, To> Cancellable enqueue(@NotNull Task<Ti, To> task, Callback<Ti, To> callback) {
+    public static @NotNull <Ti, To> Cancellable enqueue(@NotNull Task<Ti, To> task, @Nullable Callback<Ti, To> callback) {
         return enqueue(task, callback, ThreadUtils.runningOnUiThread());
     }
 
     /**
      * TODO
      */
-    public static @NotNull <Ti, To> Cancellable enqueue(@NotNull Task<Ti, To> task, Callback<Ti, To> callback, boolean callbackOnUiThread) {
+    public static @NotNull <Ti, To> Cancellable enqueue(@NotNull Task<Ti, To> task, @Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
 
         // Create new cancellable task
         final InnerFutureTask futureTask = new InnerFutureTask<>(new InnerRunnableTask<>(task, callback, callbackOnUiThread));
@@ -71,7 +72,7 @@ public class TaskQueue {
     /**
      * TODO
      */
-    public static void cancel(String tag) {
+    public static void cancel(@NotNull String tag) {
         List<Cancellable> cancellableTasks;
 
         synchronized (sInnerLock) {
@@ -119,12 +120,12 @@ public class TaskQueue {
             return cancel(true);
         }
 
-        private final InnerRunnableTask<Ti, To> mRunnableTask;
+        private final @NotNull InnerRunnableTask<Ti, To> mRunnableTask;
     }
 
     private static final class InnerRunnableTask<Ti, To> implements Runnable, Cancellable {
 
-        public InnerRunnableTask(@NotNull Task<Ti, To> task, Callback<Ti, To> callback, boolean callbackOnUiThread) {
+        public InnerRunnableTask(@NotNull Task<Ti, To> task, @Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
             // Init instance variables
             mTask = task.clone();
             mCallback = (callback != null) ? new InnerCallback<>(callback, callbackOnUiThread) : null;
@@ -140,13 +141,13 @@ public class TaskQueue {
             return mCallback.cancel(mTask);
         }
 
-        private final Task<Ti, To> mTask;
-        private final InnerCallback<Ti, To> mCallback;
+        private final @NotNull Task<Ti, To> mTask;
+        private final @NotNull InnerCallback<Ti, To> mCallback;
     }
 
     private static final class InnerCallback<Ti, To> extends CallbackDecorator<Ti, To> {
 
-        private InnerCallback(@NotNull Callback<Ti, To> callback, boolean callbackOnUiThread) {
+        private InnerCallback(@Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
             super(callback);
 
             // Init instance variables
@@ -154,32 +155,32 @@ public class TaskQueue {
         }
 
         @Override
-        public boolean onShouldExecute(Call<Ti> call) {
+        public boolean onShouldExecute(@NotNull Call<Ti> call) {
             return !mDone.get() && awaitDone(mExecutor.submit(() -> InnerCallback.super.onShouldExecute(call)), Boolean.FALSE);
         }
 
         @Override
-        public void onSuccess(Call<Ti> call, ResponseEntity<To> entity) {
+        public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> entity) {
             if (!mDone.getAndSet(true)) {
                 mExecutor.execute(() -> super.onSuccess(call, entity));
             }
         }
 
         @Override
-        public void onFailure(Call<Ti> call, RestApiError error) {
+        public void onFailure(@NotNull Call<Ti> call, @NotNull RestApiError error) {
             if (!mDone.getAndSet(true)) {
                 mExecutor.execute(() -> super.onFailure(call, error));
             }
         }
 
         @Override
-        public void onCancel(Call<Ti> call) {
+        public void onCancel(@NotNull Call<Ti> call) {
             if (!mDone.getAndSet(true)) {
                 mExecutor.execute(() -> super.onCancel(call));
             }
         }
 
-        private <T> T awaitDone(Future<T> future, T defaultValue) {
+        private @Nullable <T> T awaitDone(@NotNull Future<T> future, @Nullable T defaultValue) {
             T result = defaultValue;
             try {
                 // Waits for the computation to complete
@@ -191,7 +192,7 @@ public class TaskQueue {
             return result;
         }
 
-        private boolean cancel(Call<Ti> call) {
+        private boolean cancel(@NotNull Call<Ti> call) {
             boolean result = !mDone.getAndSet(true);
 
             // Cancel the supplied task
@@ -207,17 +208,17 @@ public class TaskQueue {
             return result;
         }
 
-        private final ExecutorService mExecutor;
-        private final AtomicBoolean mDone = new AtomicBoolean(false);
+        private final @NotNull ExecutorService mExecutor;
+        private final @NotNull AtomicBoolean mDone = new AtomicBoolean(false);
     }
 
     private static final class InnerParallelWorkerThreadExecutor extends AbstractExecutorService {
 
         public static class SingletonHolder {
-            public static final InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
+            public static final @NotNull InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
         }
 
-        public static InnerParallelWorkerThreadExecutor shared() {
+        public static @NotNull InnerParallelWorkerThreadExecutor shared() {
             return SingletonHolder.SHARED_INSTANCE;
         }
 
@@ -253,6 +254,7 @@ public class TaskQueue {
         }
 
         @Deprecated
+        @SuppressWarnings("RedundantThrows")
         @Override
         public boolean awaitTermination(long l, @NotNull TimeUnit timeUnit) throws InterruptedException {
             throw new UnsupportedOperationException();
@@ -263,10 +265,10 @@ public class TaskQueue {
         private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
         private static final int KEEP_ALIVE = 1;
 
-        private static final ThreadFactory sThreadFactory = new ThreadFactory() {
-            private final AtomicInteger mCount = new AtomicInteger(1);
+        private static final @NotNull ThreadFactory sThreadFactory = new ThreadFactory() {
+            private final @NotNull AtomicInteger mCount = new AtomicInteger(1);
 
-            public Thread newThread(final @NotNull Runnable runnable) {
+            public @NotNull Thread newThread(final @NotNull Runnable runnable) {
                 String threadName = InnerParallelWorkerThreadExecutor.class.getSimpleName() + " #" + mCount.getAndIncrement();
 
                 return new Thread(() -> {
@@ -276,19 +278,19 @@ public class TaskQueue {
             }
         };
 
-        private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(128);
+        private static final @NotNull BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(128);
 
         // An {@link Executor} that can be used to execute tasks in parallel.
-        private final Executor sThreadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+        private final @NotNull Executor sThreadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
                 KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
     }
 
 // MARK: - Constants
 
-    private static final String TAG = TaskQueue.class.getSimpleName();
+    private static final @NotNull String TAG = TaskQueue.class.getSimpleName();
 
 // MARK: - Variables
 
-    private static final LinkedMultiValueMap<String, Cancellable> sTasks = new LinkedMultiValueMap<>();
-    private static final Object sInnerLock = new Object();
+    private static final @NotNull LinkedMultiValueMap<String, Cancellable> sTasks = new LinkedMultiValueMap<>();
+    private static final @NotNull Object sInnerLock = new Object();
 }

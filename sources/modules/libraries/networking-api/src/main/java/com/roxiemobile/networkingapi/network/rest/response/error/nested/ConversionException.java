@@ -3,6 +3,7 @@ package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ConversionException extends AbstractNestedError {
 
@@ -18,7 +19,7 @@ public class ConversionException extends AbstractNestedError {
     /**
      * Construct a new instance of {@code ConversionException} based on a {@link ResponseEntity} and cause.
      */
-    public ConversionException(@NotNull ResponseEntity<byte[]> entity, Throwable cause) {
+    public ConversionException(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
         super(entity, cause);
     }
 

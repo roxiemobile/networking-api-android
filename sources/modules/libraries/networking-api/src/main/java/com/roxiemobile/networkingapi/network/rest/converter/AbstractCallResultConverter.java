@@ -45,9 +45,6 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
         return newResult;
     }
 
-    public abstract @NotNull ResponseEntity<T> convert(@NotNull ResponseEntity<byte[]> entity)
-            throws ConversionException;
-
     protected abstract @NotNull MediaType[] supportedMediaTypes();
 
 // MARK: - Private Methods

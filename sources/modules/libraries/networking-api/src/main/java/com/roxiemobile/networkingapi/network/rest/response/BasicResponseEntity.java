@@ -8,6 +8,7 @@ import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
@@ -51,7 +52,7 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             mMediaType = entity.mediaType();
         }
 
-        public <Ti> Builder(@NotNull ResponseEntity<Ti> entity, T body) {
+        public <Ti> Builder(@NotNull ResponseEntity<Ti> entity, @Nullable T body) {
             super(entity, body);
 
             // Init instance variables
@@ -60,53 +61,53 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         }
 
         @Override
-        public Builder<T> uri(@NotNull URI uri) {
+        public @NotNull Builder<T> uri(@NotNull URI uri) {
             return (Builder<T>) super.uri(uri);
         }
 
         @Override
-        public Builder<T> headers(HttpHeaders headers) {
+        public @NotNull Builder<T> headers(@Nullable HttpHeaders headers) {
             return (Builder<T>) super.headers(headers);
         }
 
         @Override
-        public Builder<T> cookieStore(CookieStore cookieStore) {
+        public @NotNull Builder<T> cookieStore(@Nullable CookieStore cookieStore) {
             return (Builder<T>) super.cookieStore(cookieStore);
         }
 
         @Override
-        public Builder<T> body(T body) {
+        public @NotNull Builder<T> body(@Nullable T body) {
             return (Builder<T>) super.body(body);
         }
 
-        public Builder<T> status(HttpStatus status) {
+        public @NotNull Builder<T> status(@NotNull HttpStatus status) {
             mStatus = status;
             return this;
         }
 
-        public Builder<T> mediaType(MediaType mediaType) {
+        public @NotNull Builder<T> mediaType(@NotNull MediaType mediaType) {
             mMediaType = mediaType;
             return this;
         }
 
         @Override
-        public ResponseEntity<T> build() {
+        public @NotNull ResponseEntity<T> build() {
             Guard.notNull(uri(), "url is null");
             Guard.notNull(status(), "status is null");
             Guard.notNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);
         }
 
-        protected HttpStatus status() {
+        protected @Nullable HttpStatus status() {
             return mStatus;
         }
 
-        protected MediaType mediaType() {
+        protected @Nullable MediaType mediaType() {
             return mMediaType;
         }
 
-        private HttpStatus mStatus;
-        private MediaType mMediaType;
+        private @Nullable HttpStatus mStatus;
+        private @Nullable MediaType mMediaType;
     }
 
 // MARK: - Variables
