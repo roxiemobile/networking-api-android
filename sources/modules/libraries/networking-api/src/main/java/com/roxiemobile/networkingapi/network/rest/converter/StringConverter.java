@@ -1,7 +1,6 @@
 package com.roxiemobile.networkingapi.network.rest.converter;
 
 import com.roxiemobile.androidcommons.data.Constants.Charsets;
-import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
@@ -19,26 +18,24 @@ public final class StringConverter extends AbstractCallResultConverter<String> {
 
     @Override
     public @NotNull ResponseEntity<String> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
-        ResponseEntity<String> newEntity;
-        String newBody = null;
 
+        @Nullable String newBody = null;
         try {
+
             @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to string
             if (ArrayUtils.isNotEmpty(responseBody)) {
-                String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
+                @NotNull String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
                 newBody = new String(responseBody, charsetName);
             }
         }
         catch (UnsupportedEncodingException ex) {
-            Logger.e(TAG, ex);
             throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
-        return newEntity;
+        return ResponseEntityUtils.copyWith(responseEntity, newBody);
     }
 
     @Override
@@ -47,8 +44,6 @@ public final class StringConverter extends AbstractCallResultConverter<String> {
     }
 
 // MARK: - Constants
-
-    public static final @NotNull String TAG = StringConverter.class.getSimpleName();
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.ALL,

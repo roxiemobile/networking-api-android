@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.Constants.Charsets;
-import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
@@ -24,17 +23,17 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
 
     @Override
     public @NotNull ResponseEntity<JsonObject> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
-        ResponseEntity<JsonObject> newEntity;
-        JsonObject newBody = null;
 
+        @Nullable JsonObject newBody = null;
         try {
+
             @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to JSON object
             if (ArrayUtils.isNotEmpty(responseBody)) {
 
-                String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
-                String jsonString = new String(responseEntity.body(), charsetName).trim();
+                @NotNull String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
+                @NotNull String jsonString = new String(responseEntity.body(), charsetName).trim();
 
                 if (StringUtils.isNotEmpty(jsonString)) {
                     newBody = new JsonParser().parse(jsonString).getAsJsonObject();
@@ -42,13 +41,11 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
             }
         }
         catch (UnsupportedEncodingException | JsonSyntaxException | JsonIOException | IllegalStateException ex) {
-            Logger.e(TAG, ex);
             throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
-        return newEntity;
+        return ResponseEntityUtils.copyWith(responseEntity, newBody);
     }
 
     @Override
@@ -57,8 +54,6 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
     }
 
 // MARK: - Constants
-
-    public static final @NotNull String TAG = JsonObjectConverter.class.getSimpleName();
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.APPLICATION_JSON,
