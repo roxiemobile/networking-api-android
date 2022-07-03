@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Task<Ti, To> extends Call<Ti>, Cloneable {
 
+// MARK: - Methods
+
     /**
      * TODO
      */

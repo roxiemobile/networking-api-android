@@ -23,22 +23,22 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 // MARK: - Properties
 
     @Override
-    public @NotNull URI uri() {
+    public @NotNull URI getLink() {
         return mUri;
     }
 
     @Override
-    public @Nullable HttpHeaders headers() {
+    public @Nullable HttpHeaders getHttpHeaders() {
         return mHttpHeaders;
     }
 
     @Override
-    public @Nullable CookieStore cookieStore() {
+    public @Nullable CookieStore getCookieStore() {
         return mCookieStore;
     }
 
     @Override
-    public @Nullable T body() {
+    public @Nullable T getBody() {
         return mBody;
     }
 
@@ -54,19 +54,19 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
             Guard.notNull(requestEntity, "requestEntity is null");
 
             // Init instance variables
-            mUri = requestEntity.uri();
-            mHttpHeaders = requestEntity.headers();
-            mCookieStore = requestEntity.cookieStore();
-            mBody = requestEntity.body();
+            mUri = requestEntity.getLink();
+            mHttpHeaders = requestEntity.getHttpHeaders();
+            mCookieStore = requestEntity.getCookieStore();
+            mBody = requestEntity.getBody();
         }
 
         public <Ti> Builder(@NotNull RequestEntity<Ti> requestEntity, @Nullable T body) {
             Guard.notNull(requestEntity, "requestEntity is null");
 
             // Init instance variables
-            mUri = requestEntity.uri();
-            mHttpHeaders = requestEntity.headers();
-            mCookieStore = requestEntity.cookieStore();
+            mUri = requestEntity.getLink();
+            mHttpHeaders = requestEntity.getHttpHeaders();
+            mCookieStore = requestEntity.getCookieStore();
             mBody = body;
         }
 

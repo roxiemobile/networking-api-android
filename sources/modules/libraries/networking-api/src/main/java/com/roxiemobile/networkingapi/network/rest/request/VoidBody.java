@@ -16,12 +16,12 @@ public final class VoidBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public @NotNull MediaType mediaType() {
+    public @NotNull MediaType getMediaType() {
         return null;
     }
 
     @Override
-    public @NotNull byte[] body() {
+    public @NotNull byte[] getBody() {
         return null;
     }
 }

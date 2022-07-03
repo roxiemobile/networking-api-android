@@ -7,15 +7,19 @@ import org.jetbrains.annotations.Nullable;
 
 public interface TaskBuilder<Ti, To> {
 
+// MARK: - Properties
+
     /**
      * TODO
      */
-    @Nullable String tag();
+    @Nullable String getTag();
 
     /**
      * The original HTTP request.
      */
-    @Nullable RequestEntity<Ti> requestEntity();
+    @Nullable RequestEntity<Ti> getRequestEntity();
+
+// MARK: - Methods
 
     /**
      * TODO

@@ -8,13 +8,15 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ResponseEntity<T> extends RequestEntity<T> {
 
-    /**
-     * TODO
-     */
-    @NotNull HttpStatus status();
+// MARK: - Properties
 
     /**
      * TODO
      */
-    @NotNull MediaType mediaType();
+    @NotNull HttpStatus getHttpStatus();
+
+    /**
+     * TODO
+     */
+    @NotNull MediaType getMediaType();
 }

@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface CallResultConverter<Ti, To> {
 
+// MARK: - Methods
+
     /**
      * Converts result from one format to another.
      */

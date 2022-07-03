@@ -10,23 +10,25 @@ import java.net.URI;
 
 public interface RequestEntity<T> {
 
-    /**
-     * TODO
-     */
-    @NotNull URI uri();
+// MARK: - Properties
 
     /**
      * TODO
      */
-    @Nullable HttpHeaders headers();
+    @NotNull URI getLink();
 
     /**
      * TODO
      */
-    @Nullable CookieStore cookieStore();
+    @Nullable HttpHeaders getHttpHeaders();
 
     /**
      * TODO
      */
-    @Nullable T body();
+    @Nullable CookieStore getCookieStore();
+
+    /**
+     * TODO
+     */
+    @Nullable T getBody();
 }

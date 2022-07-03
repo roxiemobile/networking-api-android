@@ -28,12 +28,12 @@ public final class FormBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public @NotNull MediaType mediaType() {
+    public @NotNull MediaType getMediaType() {
         return MediaType.APPLICATION_FORM_URLENCODED;
     }
 
     @Override
-    public @NotNull byte[] body() {
+    public @NotNull byte[] getBody() {
         return mBody;
     }
 

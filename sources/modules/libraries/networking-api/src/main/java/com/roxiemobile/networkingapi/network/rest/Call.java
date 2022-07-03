@@ -7,13 +7,15 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Call<T> {
 
+// MARK: - Properties
+
     /**
      * TODO
      */
-    @Nullable String tag();
+    @Nullable String getTag();
 
     /**
      * The original request entity.
      */
-    @NotNull RequestEntity<T> requestEntity();
+    @NotNull RequestEntity<T> getRequestEntity();
 }

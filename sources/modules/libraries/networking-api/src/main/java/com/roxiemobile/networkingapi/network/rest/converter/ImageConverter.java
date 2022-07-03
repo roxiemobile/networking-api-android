@@ -22,7 +22,7 @@ public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
         @Nullable Bitmap newBody = null;
         try {
 
-            @Nullable byte[] responseBody = responseEntity.body();
+            @Nullable byte[] responseBody = responseEntity.getBody();
 
             // Try to convert HTTP response to Bitmap
             if (ArrayUtils.isNotEmpty(responseBody)) {

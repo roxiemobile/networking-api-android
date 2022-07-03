@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Callback<Ti, To> {
 
+// MARK: - Methods
+
     /**
      * TODO
      */

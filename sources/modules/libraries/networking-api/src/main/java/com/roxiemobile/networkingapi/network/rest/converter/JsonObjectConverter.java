@@ -27,13 +27,13 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
         @Nullable JsonObject newBody = null;
         try {
 
-            @Nullable byte[] responseBody = responseEntity.body();
+            @Nullable byte[] responseBody = responseEntity.getBody();
 
             // Try to convert HTTP response to JSON object
             if (ArrayUtils.isNotEmpty(responseBody)) {
 
-                @NotNull String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
-                @NotNull String jsonString = new String(responseEntity.body(), charsetName).trim();
+                @NotNull String charsetName = responseEntity.getMediaType().getCharset(Charsets.UTF_8).name();
+                @NotNull String jsonString = new String(responseEntity.getBody(), charsetName).trim();
 
                 if (StringUtils.isNotEmpty(jsonString)) {
                     newBody = new JsonParser().parse(jsonString).getAsJsonObject();

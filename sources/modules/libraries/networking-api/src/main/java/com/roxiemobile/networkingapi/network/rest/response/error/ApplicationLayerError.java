@@ -41,8 +41,8 @@ public final class ApplicationLayerError extends AbstractRestApiError {
             ResponseEntity<byte[]> responseEntity = responseEntityHolder.getResponseEntity();
 
             // Send error description to consumer
-            consumer.accept("Request url: " + responseEntity.uri());
-            consumer.accept("Status: " + responseEntity.status().value());
+            consumer.accept("Request link: " + responseEntity.getLink());
+            consumer.accept("Status: " + responseEntity.getHttpStatus().value());
 
             // Good, but we need to go deeper :)
             responseEntityHolder.printErrorDescription(consumer);

@@ -19,12 +19,12 @@ public final class JsonBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public @NotNull MediaType mediaType() {
+    public @NotNull MediaType getMediaType() {
         return MEDIA_TYPE;
     }
 
     @Override
-    public @NotNull byte[] body() {
+    public @NotNull byte[] getBody() {
         return (mBody != null) ? DataMapper.toByteArray(mBody) : null;
     }
 
