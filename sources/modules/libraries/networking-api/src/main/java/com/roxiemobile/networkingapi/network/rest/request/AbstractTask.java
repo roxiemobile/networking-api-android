@@ -185,8 +185,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     protected @NotNull RequestEntity<HttpBody> createRequestEntity(@NotNull HttpRoute httpRoute) {
         // Create HTTP request entity
         return new BasicRequestEntity.Builder<>(getRequestEntity(), httpBody())
-                .uri(httpRoute.toURI())
-                .headers(httpHeaders())
+                .link(httpRoute.toURI())
+                .httpHeaders(httpHeaders())
                 .build();
     }
 
