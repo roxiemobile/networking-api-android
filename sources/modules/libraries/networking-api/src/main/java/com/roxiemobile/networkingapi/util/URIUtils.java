@@ -58,5 +58,5 @@ public final class URIUtils {
 
 // MARK: - Constants
 
-    private static @NotNull String TAG = URIUtils.class.getSimpleName();
+    private static final @NotNull String TAG = URIUtils.class.getSimpleName();
 }

@@ -6,7 +6,7 @@ import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ByteArrayBody implements HttpBody {
+public final class ByteArrayBody implements HttpBody {
 
 // MARK: - Construction
 

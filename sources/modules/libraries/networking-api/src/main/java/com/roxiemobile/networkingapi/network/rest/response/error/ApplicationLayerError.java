@@ -7,7 +7,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Response
 
 import org.jetbrains.annotations.NotNull;
 
-public class ApplicationLayerError extends AbstractRestApiError {
+public final class ApplicationLayerError extends AbstractRestApiError {
 
 // MARK: - Construction
 

@@ -6,7 +6,7 @@ import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
 import org.jetbrains.annotations.NotNull;
 
-public class StringBody implements HttpBody {
+public final class StringBody implements HttpBody {
 
 // MARK: - Construction
 
@@ -33,5 +33,5 @@ public class StringBody implements HttpBody {
 
 // MARK: - Variables
 
-    private @NotNull String mBody;
+    private final @NotNull String mBody;
 }

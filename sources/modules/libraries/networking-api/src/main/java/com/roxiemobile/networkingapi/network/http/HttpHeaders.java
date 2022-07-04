@@ -62,7 +62,7 @@ import java.util.TimeZone;
  * @author Sebastien Deleuze
  * @since 1.0
  */
-public class HttpHeaders implements MultiValueMap<String, String>, Serializable {
+public final class HttpHeaders implements MultiValueMap<String, String>, Serializable {
 
     private static final long serialVersionUID = -8578554704772377436L;
 
@@ -334,7 +334,7 @@ public class HttpHeaders implements MultiValueMap<String, String>, Serializable 
             "EEE MMM dd HH:mm:ss yyyy"
     };
 
-    private static TimeZone GMT = TimeZone.getTimeZone("GMT");
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
 
     private final Map<String, List<String>> headers;

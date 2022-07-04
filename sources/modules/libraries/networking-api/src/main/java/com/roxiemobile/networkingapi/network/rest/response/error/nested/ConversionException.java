@@ -5,7 +5,7 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ConversionException extends AbstractNestedError {
+public final class ConversionException extends AbstractNestedError {
 
 // MARK: - Construction
 

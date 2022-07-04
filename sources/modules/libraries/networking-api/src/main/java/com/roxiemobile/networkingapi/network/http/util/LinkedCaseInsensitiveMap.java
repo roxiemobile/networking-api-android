@@ -34,7 +34,7 @@ import java.util.Map;
  * @since 1.0
  */
 @SuppressWarnings("serial")
-public class LinkedCaseInsensitiveMap<V> extends LinkedHashMap<String, V> {
+public final class LinkedCaseInsensitiveMap<V> extends LinkedHashMap<String, V> {
 
     private final Map<String, String> caseInsensitiveKeys;
 

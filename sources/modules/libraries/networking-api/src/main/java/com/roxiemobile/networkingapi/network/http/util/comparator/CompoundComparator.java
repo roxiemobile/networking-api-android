@@ -38,7 +38,7 @@ import java.util.List;
  * @since 2.0
  */
 @SuppressWarnings("serial")
-public class CompoundComparator<T> implements Comparator<T>, Serializable {
+public final class CompoundComparator<T> implements Comparator<T>, Serializable {
 
     private final List<InvertibleComparator<T>> comparators;
 

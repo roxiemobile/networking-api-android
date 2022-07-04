@@ -31,7 +31,7 @@ import java.util.Comparator;
  * @since 2.0
  */
 @SuppressWarnings("serial")
-public class InvertibleComparator<T> implements Comparator<T>, Serializable {
+public final class InvertibleComparator<T> implements Comparator<T>, Serializable {
 
     private final Comparator<T> comparator;
 

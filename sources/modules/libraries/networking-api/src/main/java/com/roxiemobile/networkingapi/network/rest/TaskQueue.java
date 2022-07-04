@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TaskQueue {
+public final class TaskQueue {
 
 // MARK: - Construction
 
@@ -214,8 +214,8 @@ public class TaskQueue {
 
     private static final class InnerParallelWorkerThreadExecutor extends AbstractExecutorService {
 
-        public static class SingletonHolder {
-            public static final @NotNull InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
+        private static final class SingletonHolder {
+            static final @NotNull InnerParallelWorkerThreadExecutor SHARED_INSTANCE = new InnerParallelWorkerThreadExecutor();
         }
 
         public static @NotNull InnerParallelWorkerThreadExecutor shared() {

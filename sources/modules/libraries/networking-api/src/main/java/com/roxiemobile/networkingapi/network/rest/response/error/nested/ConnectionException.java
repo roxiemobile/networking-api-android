@@ -2,7 +2,7 @@ package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 
 import org.jetbrains.annotations.Nullable;
 
-public class ConnectionException extends Exception {
+public final class ConnectionException extends Exception {
 
 // MARK: - Construction
 

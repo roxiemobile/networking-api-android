@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see <a href="http://www.ietf.org/rfc/rfc2617.txt">RFC2617</a>
  */
-public class HttpBasicAuthentication extends HttpAuthentication {
+public final class HttpBasicAuthentication extends HttpAuthentication {
 
 // MARK: - Construction
 

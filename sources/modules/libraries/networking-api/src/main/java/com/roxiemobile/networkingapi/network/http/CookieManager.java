@@ -55,8 +55,9 @@ import java.util.Map;
  *
  * @since 1.6
  */
-public class CookieManager extends CookieHandler {
-    private CookieStore store;
+public final class CookieManager extends CookieHandler {
+
+    private final CookieStore store;
 
     private CookiePolicy policy;
 

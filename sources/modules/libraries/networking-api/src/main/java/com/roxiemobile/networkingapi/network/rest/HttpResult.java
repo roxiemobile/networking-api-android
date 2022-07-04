@@ -5,7 +5,7 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
 
-public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]> {
+public final class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]> {
 
 // MARK: - Construction
 

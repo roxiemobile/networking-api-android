@@ -16,7 +16,7 @@ import okhttp3.internal.Version;
 /**
  * This interceptor adds a custom User-Agent.
  */
-public class UserAgentRequestInterceptor implements Interceptor {
+public final class UserAgentRequestInterceptor implements Interceptor {
 
 // MARK: - Methods
 

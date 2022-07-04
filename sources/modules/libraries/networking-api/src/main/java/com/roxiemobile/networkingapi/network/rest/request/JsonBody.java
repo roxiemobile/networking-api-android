@@ -8,7 +8,7 @@ import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
 import org.jetbrains.annotations.NotNull;
 
-public class JsonBody implements HttpBody {
+public final class JsonBody implements HttpBody {
 
 // MARK: - Construction
 
@@ -35,5 +35,5 @@ public class JsonBody implements HttpBody {
 
 // MARK: - Variables
 
-    private @NotNull JsonElement mBody;
+    private final @NotNull JsonElement mBody;
 }
