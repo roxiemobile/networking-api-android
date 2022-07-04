@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.URI;
 
-public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T>
-{
+public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T> {
+
 // MARK: - Construction
 
     private BasicResponseEntity(@NotNull Builder<T> builder) {
@@ -37,8 +37,8 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
 // MARK: - Inner Types
 
-    public static class Builder<T> extends BasicRequestEntity.Builder<T>
-    {
+    public static class Builder<T> extends BasicRequestEntity.Builder<T> {
+
         public Builder() {
             // Do nothing
         }

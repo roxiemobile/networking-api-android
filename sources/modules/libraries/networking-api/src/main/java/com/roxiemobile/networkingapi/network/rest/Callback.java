@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
-public interface Callback<Ti, To>
-{
+public interface Callback<Ti, To> {
+
     /**
      * TODO
      */

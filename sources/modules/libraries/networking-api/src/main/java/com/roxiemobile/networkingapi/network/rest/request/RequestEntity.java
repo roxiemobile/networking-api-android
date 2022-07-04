@@ -7,8 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 
-public interface RequestEntity<T>
-{
+public interface RequestEntity<T> {
+
     /**
      * TODO
      */

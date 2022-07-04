@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class HttpRoute
-{
+public final class HttpRoute {
+
 // MARK: - Construction
 
     private HttpRoute(@NotNull URI uri) {
@@ -138,8 +138,8 @@ public final class HttpRoute
 
 // MARK: - Inner Types
 
-    public static class QueryParams extends LinkedMultiValueMap<String, String>
-    {
+    public static class QueryParams extends LinkedMultiValueMap<String, String> {
+
         public QueryParams() {
             super();
         }

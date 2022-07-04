@@ -12,8 +12,8 @@ import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ImageConverter extends AbstractCallResultConverter<Bitmap>
-{
+public class ImageConverter extends AbstractCallResultConverter<Bitmap> {
+
 // MARK: - Methods
 
     @Override

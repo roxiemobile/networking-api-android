@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public final class InMemoryCookieStore implements CookieStore
-{
+public final class InMemoryCookieStore implements CookieStore {
+
 // MARK: - Methods
 
     public InMemoryCookieStore(HttpCookie[] cookies) {
@@ -151,5 +151,4 @@ public final class InMemoryCookieStore implements CookieStore
 
     // NOTE: This map may have null keys!
     private final Map<URI, List<HttpCookie>> map = new HashMap<>();
-
 }

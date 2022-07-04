@@ -2,8 +2,8 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 
-public interface Call<T>
-{
+public interface Call<T> {
+
     /**
      * TODO
      */

@@ -2,8 +2,8 @@ package com.roxiemobile.networkingapi.network.rest.response;
 
 import com.annimon.stream.function.Consumer;
 
-public interface RestApiError
-{
+public interface RestApiError {
+
 // MARK: - Properties
 
     /**

@@ -8,8 +8,8 @@ import java.io.IOException;
 
 import okhttp3.Response;
 
-public class ShortCircuitRedirectInterceptor extends AbstractRedirectInterceptor
-{
+public class ShortCircuitRedirectInterceptor extends AbstractRedirectInterceptor {
+
 // MARK: - Methods
 
     /**

@@ -4,8 +4,8 @@ import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
-public class StringBody implements HttpBody
-{
+public class StringBody implements HttpBody {
+
 // MARK: - Construction
 
     public StringBody(String body) {

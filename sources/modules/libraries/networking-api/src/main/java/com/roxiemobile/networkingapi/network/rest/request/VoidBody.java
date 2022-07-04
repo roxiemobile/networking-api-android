@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.request;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
-public class VoidBody implements HttpBody
-{
+public class VoidBody implements HttpBody {
+
 // MARK: - Construction
 
     private VoidBody() {

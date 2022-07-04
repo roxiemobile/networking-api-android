@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FormBody implements HttpBody
-{
+public class FormBody implements HttpBody {
+
 // MARK: - Construction
 
     private FormBody(Builder builder) {
@@ -39,8 +39,8 @@ public class FormBody implements HttpBody
 
 // MARK: - Inner types
 
-    public static final class Builder
-    {
+    public static final class Builder {
+
         public Builder put(@NotNull String name, @NotNull String value) {
             mValues.put(name.trim(), value.trim());
             return this;
@@ -55,17 +55,17 @@ public class FormBody implements HttpBody
 
             final String charsetName = Charsets.UTF_8.name();
             Stream.of(mValues.entrySet())
-                  .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
-                  .forEach(entry -> {
-                      try {
-                          String key = URLEncoder.encode(entry.getKey(), charsetName);
-                          String value = URLEncoder.encode(entry.getValue(), charsetName);
-                          values.add(key + '=' + value);
-                      }
-                      catch (UnsupportedEncodingException e) {
-                          Logger.e(TAG, e);
-                      }
-                  });
+                    .filter(entry -> StringUtils.isNotEmpty(entry.getKey()))
+                    .forEach(entry -> {
+                        try {
+                            String key = URLEncoder.encode(entry.getKey(), charsetName);
+                            String value = URLEncoder.encode(entry.getValue(), charsetName);
+                            values.add(key + '=' + value);
+                        }
+                        catch (UnsupportedEncodingException e) {
+                            Logger.e(TAG, e);
+                        }
+                    });
 
             return TextUtils.join("&", values).getBytes();
         }

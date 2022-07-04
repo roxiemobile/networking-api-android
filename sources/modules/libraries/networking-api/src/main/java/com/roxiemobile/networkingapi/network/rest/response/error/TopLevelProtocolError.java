@@ -5,8 +5,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class TopLevelProtocolError<T> extends AbstractRestApiError
-{
+public abstract class TopLevelProtocolError<T> extends AbstractRestApiError {
+
 // MARK: - Construction
 
     public TopLevelProtocolError(@NotNull ResponseEntity<T> entity) {

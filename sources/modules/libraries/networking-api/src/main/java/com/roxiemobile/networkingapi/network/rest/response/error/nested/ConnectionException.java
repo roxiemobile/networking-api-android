@@ -1,7 +1,7 @@
 package com.roxiemobile.networkingapi.network.rest.response.error.nested;
 
-public class ConnectionException extends Exception
-{
+public class ConnectionException extends Exception {
+
 // MARK: - Construction
 
     /**

@@ -4,8 +4,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
 
-public class UnexpectedMediaTypeException extends AbstractNestedError
-{
+public class UnexpectedMediaTypeException extends AbstractNestedError {
+
 // MARK: - Construction
 
     /**

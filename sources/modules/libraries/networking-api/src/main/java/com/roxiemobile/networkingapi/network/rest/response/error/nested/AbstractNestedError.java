@@ -11,8 +11,8 @@ import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import org.jetbrains.annotations.NotNull;
 
 abstract class AbstractNestedError extends Exception
-        implements ResponseEntityHolder
-{
+        implements ResponseEntityHolder {
+
 // MARK: - Construction
 
     /**

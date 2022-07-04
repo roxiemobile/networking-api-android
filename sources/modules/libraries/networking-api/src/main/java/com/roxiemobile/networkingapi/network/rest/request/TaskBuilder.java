@@ -2,8 +2,8 @@ package com.roxiemobile.networkingapi.network.rest.request;
 
 import com.roxiemobile.networkingapi.network.rest.Task;
 
-public interface TaskBuilder<Ti, To>
-{
+public interface TaskBuilder<Ti, To> {
+
     /**
      * TODO
      */

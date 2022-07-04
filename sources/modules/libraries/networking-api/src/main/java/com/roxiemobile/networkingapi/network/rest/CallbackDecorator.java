@@ -3,8 +3,8 @@ package com.roxiemobile.networkingapi.network.rest;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
-public class CallbackDecorator<Ti, To> implements Callback<Ti, To>
-{
+public class CallbackDecorator<Ti, To> implements Callback<Ti, To> {
+
 // MARK: - Construction
 
     public CallbackDecorator(Callback<Ti, To> callback) {

@@ -17,8 +17,8 @@ import okhttp3.internal.http.RealResponseBody;
 import okio.GzipSource;
 import okio.Okio;
 
-public abstract class AbstractRedirectInterceptor implements Interceptor
-{
+public abstract class AbstractRedirectInterceptor implements Interceptor {
+
 // MARK: - Methods
 
     @Override
@@ -54,9 +54,9 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
             // Uncompress a response body
             GzipSource source = new GzipSource(body.source());
             Headers strippedHeaders = response.headers().newBuilder()
-                                              .removeAll(HttpHeaders.CONTENT_ENCODING)
-                                              .removeAll(HttpHeaders.CONTENT_LENGTH)
-                                              .build();
+                    .removeAll(HttpHeaders.CONTENT_ENCODING)
+                    .removeAll(HttpHeaders.CONTENT_LENGTH)
+                    .build();
 
             // Create new HTTP response
             ResponseBody responseBody = new RealResponseBody(
@@ -65,9 +65,9 @@ public abstract class AbstractRedirectInterceptor implements Interceptor
                     Okio.buffer(source));
 
             response = response.newBuilder()
-                               .headers(strippedHeaders)
-                               .body(ResponseBody.create(responseBody.contentType(), responseBody.bytes()))
-                               .build();
+                    .headers(strippedHeaders)
+                    .body(ResponseBody.create(responseBody.contentType(), responseBody.bytes()))
+                    .build();
         }
 
         // Done
