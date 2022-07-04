@@ -27,28 +27,28 @@ public final class GzipRequestInterceptor implements Interceptor {
 
     @Override
     public @NotNull Response intercept(@NotNull Chain chain) throws IOException {
-        Request originalRequest = chain.request();
+        Request request = chain.request();
 
-        if (originalRequest.body() == null || originalRequest.header(HttpHeaders.CONTENT_ENCODING) != null) {
-            return chain.proceed(originalRequest);
+        if (request.body() == null || request.header(HttpHeaders.CONTENT_ENCODING) != null) {
+            return chain.proceed(request);
         }
 
-        Request compressedRequest = originalRequest.newBuilder()
+        Request newRequest = request.newBuilder()
                 .header(HttpHeaders.CONTENT_ENCODING, ContentCodingType.GZIP_VALUE)
-                .method(originalRequest.method(), requestBodyWithContentLength(gzip(originalRequest.body())))
+                .method(request.method(), requestBodyWithContentLength(gzip(request.body())))
                 .build();
 
-        return chain.proceed(compressedRequest);
+        return chain.proceed(newRequest);
     }
 
 // MARK: - Private Methods
 
-    private @NotNull RequestBody gzip(final @Nullable RequestBody body) {
+    private @NotNull RequestBody gzip(final @Nullable RequestBody requestBody) {
         return new RequestBody() {
 
             @Override
             public @Nullable MediaType contentType() {
-                return body.contentType();
+                return requestBody.contentType();
             }
 
             @Override
@@ -60,7 +60,7 @@ public final class GzipRequestInterceptor implements Interceptor {
             @Override
             public void writeTo(@NotNull BufferedSink sink) throws IOException {
                 BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
-                body.writeTo(gzipSink);
+                requestBody.writeTo(gzipSink);
                 gzipSink.close();
             }
         };

@@ -57,7 +57,7 @@ public final class TaskQueue {
     public static @NotNull <Ti, To> Cancellable enqueue(@NotNull Task<Ti, To> task, @Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
 
         // Create new cancellable task
-        final InnerFutureTask futureTask = new InnerFutureTask<>(new InnerRunnableTask<>(task, callback, callbackOnUiThread));
+        final InnerFutureTask<Ti, To> futureTask = new InnerFutureTask<>(new InnerRunnableTask<>(task, callback, callbackOnUiThread));
         synchronized (sInnerLock) {
             sTasks.add(task.tag(), futureTask);
         }
@@ -128,7 +128,7 @@ public final class TaskQueue {
         public InnerRunnableTask(@NotNull Task<Ti, To> task, @Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
             // Init instance variables
             mTask = task.clone();
-            mCallback = (callback != null) ? new InnerCallback<>(callback, callbackOnUiThread) : null;
+            mCallback = new InnerCallback<>(callback, callbackOnUiThread);
         }
 
         @Override
@@ -160,9 +160,9 @@ public final class TaskQueue {
         }
 
         @Override
-        public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> entity) {
+        public void onSuccess(@NotNull Call<Ti> call, @NotNull ResponseEntity<To> responseEntity) {
             if (!mDone.getAndSet(true)) {
-                mExecutor.execute(() -> super.onSuccess(call, entity));
+                mExecutor.execute(() -> super.onSuccess(call, responseEntity));
             }
         }
 
@@ -186,8 +186,8 @@ public final class TaskQueue {
                 // Waits for the computation to complete
                 result = future.get();
             }
-            catch (ExecutionException | InterruptedException e) {
-                Logger.w(TAG, e);
+            catch (ExecutionException | InterruptedException ex) {
+                Logger.w(TAG, ex);
             }
             return result;
         }
@@ -200,8 +200,8 @@ public final class TaskQueue {
                 try {
                     ((Cancellable) call).cancel();
                 }
-                catch (ClassCastException e) {
-                    Logger.w(TAG, e);
+                catch (ClassCastException ex) {
+                    Logger.w(TAG, ex);
                 }
                 awaitDone(mExecutor.submit(() -> super.onCancel(call)), null);
             }
@@ -256,7 +256,7 @@ public final class TaskQueue {
         @Deprecated
         @SuppressWarnings("RedundantThrows")
         @Override
-        public boolean awaitTermination(long l, @NotNull TimeUnit timeUnit) throws InterruptedException {
+        public boolean awaitTermination(long timeout, @NotNull TimeUnit timeUnit) throws InterruptedException {
             throw new UnsupportedOperationException();
         }
 
@@ -266,7 +266,6 @@ public final class TaskQueue {
         private static final int KEEP_ALIVE = 1;
 
         private static final @NotNull ThreadFactory sThreadFactory = new ThreadFactory() {
-            private final @NotNull AtomicInteger mCount = new AtomicInteger(1);
 
             public @NotNull Thread newThread(final @NotNull Runnable runnable) {
                 String threadName = InnerParallelWorkerThreadExecutor.class.getSimpleName() + " #" + mCount.getAndIncrement();
@@ -276,6 +275,8 @@ public final class TaskQueue {
                     runnable.run();
                 }, threadName);
             }
+
+            private final @NotNull AtomicInteger mCount = new AtomicInteger(1);
         };
 
         private static final @NotNull BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<>(128);

@@ -14,30 +14,30 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
 
     Result(@NotNull S success) {
         // Init instance variables
-        mState = State.SUCCESS;
-        mSuccess = success;
-        mFailure = null;
+        _state = State.SUCCESS;
+        _success = success;
+        _failure = null;
     }
 
     Result(@NotNull F failure) {
         // Init instance variables
-        mState = State.FAILURE;
-        mSuccess = null;
-        mFailure = failure;
+        _state = State.FAILURE;
+        _success = null;
+        _failure = failure;
     }
 
 // MARK: - Methods
 
     public @Nullable S value() {
-        return (mState == State.SUCCESS) ? mSuccess : null;
+        return (_state == State.SUCCESS) ? _success : null;
     }
 
     public @Nullable F error() {
-        return (mState == State.FAILURE) ? mFailure : null;
+        return (_state == State.FAILURE) ? _failure : null;
     }
 
     public boolean isSuccess() {
-        return (mState == State.SUCCESS);
+        return (_state == State.SUCCESS);
     }
 
 // MARK: - Inner Types
@@ -48,8 +48,8 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
 
 // MARK: - Variables
 
-    private final @NotNull State mState;
+    private final @NotNull State _state;
 
-    private final @Nullable S mSuccess;
-    private final @Nullable F mFailure;
+    private final @Nullable S _success;
+    private final @Nullable F _failure;
 }

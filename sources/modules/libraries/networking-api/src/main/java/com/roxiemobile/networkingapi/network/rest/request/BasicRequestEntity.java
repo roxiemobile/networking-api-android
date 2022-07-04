@@ -14,9 +14,8 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 // MARK: - Construction
 
     protected BasicRequestEntity(@NotNull Builder<T> builder) {
-        // Init instance variables
         mUri = builder.mUri;
-        mHeaders = builder.mHeaders;
+        mHttpHeaders = builder.mHttpHeaders;
         mCookieStore = builder.mCookieStore;
         mBody = builder.mBody;
     }
@@ -30,7 +29,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 
     @Override
     public @Nullable HttpHeaders headers() {
-        return mHeaders;
+        return mHttpHeaders;
     }
 
     @Override
@@ -51,33 +50,33 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
             // Do nothing
         }
 
-        public Builder(@NotNull RequestEntity<T> entity) {
-            Guard.notNull(entity, "entity is null");
+        public Builder(@NotNull RequestEntity<T> requestEntity) {
+            Guard.notNull(requestEntity, "requestEntity is null");
 
             // Init instance variables
-            mUri = entity.uri();
-            mHeaders = entity.headers();
-            mCookieStore = entity.cookieStore();
-            mBody = entity.body();
+            mUri = requestEntity.uri();
+            mHttpHeaders = requestEntity.headers();
+            mCookieStore = requestEntity.cookieStore();
+            mBody = requestEntity.body();
         }
 
-        public <Ti> Builder(@NotNull RequestEntity<Ti> entity, @Nullable T body) {
-            Guard.notNull(entity, "entity is null");
+        public <Ti> Builder(@NotNull RequestEntity<Ti> requestEntity, @Nullable T body) {
+            Guard.notNull(requestEntity, "requestEntity is null");
 
             // Init instance variables
-            mUri = entity.uri();
-            mHeaders = entity.headers();
-            mCookieStore = entity.cookieStore();
+            mUri = requestEntity.uri();
+            mHttpHeaders = requestEntity.headers();
+            mCookieStore = requestEntity.cookieStore();
             mBody = body;
         }
 
-        public @NotNull Builder<T> uri(@NotNull URI uri) {
-            mUri = uri;
+        public @NotNull Builder<T> uri(@NotNull URI link) {
+            mUri = link;
             return this;
         }
 
-        public @NotNull Builder<T> headers(@Nullable HttpHeaders headers) {
-            mHeaders = headers;
+        public @NotNull Builder<T> headers(@Nullable HttpHeaders httpHeaders) {
+            this.mHttpHeaders = httpHeaders;
             return this;
         }
 
@@ -101,7 +100,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
         }
 
         private @Nullable URI mUri;
-        private @Nullable HttpHeaders mHeaders;
+        private @Nullable HttpHeaders mHttpHeaders;
         private @Nullable CookieStore mCookieStore;
         private @Nullable T mBody;
     }
@@ -110,7 +109,7 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
 
     private final @NotNull URI mUri;
 
-    private final @Nullable HttpHeaders mHeaders;
+    private final @Nullable HttpHeaders mHttpHeaders;
 
     private final @Nullable CookieStore mCookieStore;
 

@@ -11,31 +11,32 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Conversi
 import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
 
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<Bitmap> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
+    public @NotNull ResponseEntity<Bitmap> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
         ResponseEntity<Bitmap> newEntity;
         Bitmap newBody = null;
 
         try {
-            byte[] body = entity.body();
+            @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to Bitmap
-            if (ArrayUtils.isNotEmpty(body)) {
-                newBody = BitmapFactory.decodeByteArray(body, 0, body.length);
+            if (ArrayUtils.isNotEmpty(responseBody)) {
+                newBody = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
             }
         }
         catch (Exception ex) {
             Logger.e(TAG, ex);
-            throw new ConversionException(entity, ex);
+            throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(entity, newBody);
+        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
         return newEntity;
     }
 

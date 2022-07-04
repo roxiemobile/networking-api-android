@@ -62,8 +62,8 @@ public final class FormBody implements HttpBody {
                             String value = URLEncoder.encode(entry.getValue(), charsetName);
                             values.add(key + '=' + value);
                         }
-                        catch (UnsupportedEncodingException e) {
-                            Logger.e(TAG, e);
+                        catch (UnsupportedEncodingException ex) {
+                            Logger.e(TAG, ex);
                         }
                     });
 

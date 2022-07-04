@@ -16,18 +16,18 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
 
 // MARK: - Methods
 
-    public @NotNull CallResult<T> convert(@NotNull CallResult<byte[]> result) {
+    public @NotNull CallResult<T> convert(@NotNull CallResult<byte[]> callResult) {
         CallResult<T> newResult;
 
         // Handle call result
-        if (result.isSuccess()) {
+        if (callResult.isSuccess()) {
             try {
-                ResponseEntity<byte[]> entity = result.value();
-                checkMediaType(entity);
+                ResponseEntity<byte[]> responseEntity = callResult.value();
+                checkMediaType(responseEntity);
 
                 // Convert response entity
-                ResponseEntity<T> response = convert(entity);
-                newResult = CallResult.success(response);
+                ResponseEntity<T> newResponseEntity = convert(responseEntity);
+                newResult = CallResult.success(newResponseEntity);
             }
             catch (UnexpectedMediaTypeException | ConversionException ex) {
 
@@ -38,7 +38,7 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
         }
         else {
             // Copy an original error
-            newResult = CallResult.failure(result.error());
+            newResult = CallResult.failure(callResult.error());
         }
 
         // Done
@@ -49,10 +49,10 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
 
 // MARK: - Private Methods
 
-    private void checkMediaType(@NotNull ResponseEntity<byte[]> entity) throws UnexpectedMediaTypeException {
-        Guard.notNull(entity, "entity is null");
+    private void checkMediaType(@NotNull ResponseEntity<byte[]> responseEntity) throws UnexpectedMediaTypeException {
+        Guard.notNull(responseEntity, "responseEntity is null");
 
-        MediaType mediaType = entity.mediaType();
+        MediaType mediaType = responseEntity.mediaType();
         boolean found = false;
 
         // Search for compatible MediaType
@@ -66,7 +66,7 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
 
         // Throw exception if on MediaType found
         if (!found) {
-            throw new UnexpectedMediaTypeException(entity);
+            throw new UnexpectedMediaTypeException(responseEntity);
         }
     }
 }

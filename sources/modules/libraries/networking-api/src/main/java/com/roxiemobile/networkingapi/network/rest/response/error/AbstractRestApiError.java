@@ -15,7 +15,6 @@ abstract class AbstractRestApiError implements RestApiError {
 // MARK: - Construction
 
     AbstractRestApiError(@Nullable Throwable cause) {
-        // Init instance variables
         mCause = cause;
     }
 

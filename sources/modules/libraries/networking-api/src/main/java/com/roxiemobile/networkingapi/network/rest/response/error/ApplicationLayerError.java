@@ -37,15 +37,15 @@ public final class ApplicationLayerError extends AbstractRestApiError {
 
         // Log nested error
         if (cause instanceof ResponseEntityHolder) {
-            ResponseEntityHolder entityHolder = (ResponseEntityHolder) getCause();
-            ResponseEntity<byte[]> entity = entityHolder.getResponseEntity();
+            ResponseEntityHolder responseEntityHolder = (ResponseEntityHolder) getCause();
+            ResponseEntity<byte[]> responseEntity = responseEntityHolder.getResponseEntity();
 
             // Send error description to consumer
-            consumer.accept("Request url: " + entity.uri());
-            consumer.accept("Status: " + entity.status().value());
+            consumer.accept("Request url: " + responseEntity.uri());
+            consumer.accept("Status: " + responseEntity.status().value());
 
             // Good, but we need to go deeper :)
-            entityHolder.printErrorDescription(consumer);
+            responseEntityHolder.printErrorDescription(consumer);
         }
         else {
             // Parent processing

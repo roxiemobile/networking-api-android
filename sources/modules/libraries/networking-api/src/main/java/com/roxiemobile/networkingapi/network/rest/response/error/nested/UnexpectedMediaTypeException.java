@@ -12,15 +12,15 @@ public final class UnexpectedMediaTypeException extends AbstractNestedError {
     /**
      * Construct a new instance of {@code UnexpectedMediaTypeException} based on a {@link ResponseEntity}.
      */
-    public UnexpectedMediaTypeException(@NotNull ResponseEntity<byte[]> entity) {
-        super(entity);
+    public UnexpectedMediaTypeException(@NotNull ResponseEntity<byte[]> responseEntity) {
+        super(responseEntity);
     }
 
     /**
      * Construct a new instance of {@code UnexpectedMediaTypeException} based on a {@link ResponseEntity} and cause.
      */
-    public UnexpectedMediaTypeException(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
-        super(entity, cause);
+    public UnexpectedMediaTypeException(@NotNull ResponseEntity<byte[]> responseEntity, @Nullable Throwable cause) {
+        super(responseEntity, cause);
     }
 
 // MARK: - Constants

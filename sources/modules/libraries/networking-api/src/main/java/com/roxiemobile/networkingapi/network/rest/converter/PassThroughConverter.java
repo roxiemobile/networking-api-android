@@ -11,8 +11,8 @@ public final class PassThroughConverter extends AbstractCallResultConverter<byte
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<byte[]> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
-        return entity;
+    public @NotNull ResponseEntity<byte[]> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
+        return responseEntity;
     }
 
     @Override
@@ -23,6 +23,6 @@ public final class PassThroughConverter extends AbstractCallResultConverter<byte
 // MARK: - Constants
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
-            MediaType.ALL
+            MediaType.ALL,
     };
 }

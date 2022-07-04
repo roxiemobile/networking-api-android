@@ -9,12 +9,12 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError {
 
 // MARK: - Construction
 
-    public TopLevelProtocolError(@NotNull ResponseEntity<T> entity) {
+    public TopLevelProtocolError(@NotNull ResponseEntity<T> responseEntity) {
         super(null);
-        Guard.notNull(entity, "entity is null");
+        Guard.notNull(responseEntity, "responseEntity is null");
 
         // Init instance variables
-        mResponseEntity = entity;
+        mResponseEntity = responseEntity;
     }
 
 // MARK: - Properties

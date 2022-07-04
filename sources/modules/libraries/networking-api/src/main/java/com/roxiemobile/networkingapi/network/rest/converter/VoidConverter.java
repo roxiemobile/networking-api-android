@@ -12,8 +12,8 @@ public final class VoidConverter extends AbstractCallResultConverter<Void> {
 // MARK: - Methods
 
     @Override
-    public @NotNull ResponseEntity<Void> convert(@NotNull ResponseEntity<byte[]> entity) throws ConversionException {
-        return new BasicResponseEntity.Builder<Void>(entity, null).build();
+    public @NotNull ResponseEntity<Void> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
+        return new BasicResponseEntity.Builder<Void>(responseEntity, null).build();
     }
 
     @Override
@@ -24,6 +24,6 @@ public final class VoidConverter extends AbstractCallResultConverter<Void> {
 // MARK: - Constants
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
-            MediaType.ALL
+            MediaType.ALL,
     };
 }

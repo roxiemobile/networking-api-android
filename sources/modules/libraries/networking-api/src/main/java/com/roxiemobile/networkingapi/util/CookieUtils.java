@@ -59,8 +59,8 @@ public final class CookieUtils {
             try {
                 uri = new URI("http", uri.getHost(), null, null);
             }
-            catch (URISyntaxException e) {
-                Logger.w(TAG, e);
+            catch (URISyntaxException ex) {
+                Logger.w(TAG, ex);
                 uri = null;
             }
         }
@@ -73,8 +73,8 @@ public final class CookieUtils {
             try {
                 uri = new URI("http", cookie.getDomain(), null, null);
             }
-            catch (URISyntaxException e) {
-                Logger.w(TAG, e);
+            catch (URISyntaxException ex) {
+                Logger.w(TAG, ex);
                 uri = null;
             }
         }
