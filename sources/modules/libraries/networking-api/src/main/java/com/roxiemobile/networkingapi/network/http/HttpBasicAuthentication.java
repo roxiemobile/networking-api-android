@@ -29,13 +29,13 @@ public class HttpBasicAuthentication extends HttpAuthentication {
     /**
      * Returns the value for the 'Authorization' HTTP header.
      */
-    public String getHeaderValue() {
+    public @NotNull String getHeaderValue() {
         byte[] bytes = (mUsername + ":" + mPassword).getBytes();
         return "Basic " + Base64.encodeToString(bytes, Base64.NO_WRAP);
     }
 
 // MARK: - Variables
 
-    private final String mUsername;
-    private final String mPassword;
+    private final @NotNull String mUsername;
+    private final @NotNull String mPassword;
 }

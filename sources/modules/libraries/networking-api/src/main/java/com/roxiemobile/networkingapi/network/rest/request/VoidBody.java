@@ -3,6 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.request;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
+import org.jetbrains.annotations.NotNull;
+
 public class VoidBody implements HttpBody {
 
 // MARK: - Construction
@@ -14,12 +16,12 @@ public class VoidBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public MediaType mediaType() {
+    public @NotNull MediaType mediaType() {
         return null;
     }
 
     @Override
-    public byte[] body() {
+    public @NotNull byte[] body() {
         return null;
     }
 }

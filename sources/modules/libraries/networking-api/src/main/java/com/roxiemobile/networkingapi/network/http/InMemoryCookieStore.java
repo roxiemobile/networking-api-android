@@ -5,6 +5,7 @@ import com.roxiemobile.androidcommons.util.CollectionUtils;
 import com.roxiemobile.networkingapi.util.CookieUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -20,11 +21,11 @@ public final class InMemoryCookieStore implements CookieStore {
 
 // MARK: - Methods
 
-    public InMemoryCookieStore(HttpCookie[] cookies) {
+    public InMemoryCookieStore(@Nullable HttpCookie[] cookies) {
         this((cookies != null) ? Arrays.asList(cookies) : null);
     }
 
-    public InMemoryCookieStore(List<HttpCookie> cookies) {
+    public InMemoryCookieStore(@Nullable List<HttpCookie> cookies) {
         // Add cookies to CookieStore
         if (CollectionUtils.isNotEmpty(cookies)) {
             for (HttpCookie cookie : cookies) {
@@ -33,7 +34,7 @@ public final class InMemoryCookieStore implements CookieStore {
         }
     }
 
-    public InMemoryCookieStore(CookieStore otherCookieStore) {
+    public InMemoryCookieStore(@Nullable CookieStore otherCookieStore) {
         // Copy cookies from other CookieStore
         if (otherCookieStore != null) {
             for (URI uri : otherCookieStore.getURIs()) {
@@ -50,7 +51,7 @@ public final class InMemoryCookieStore implements CookieStore {
 
 // MARK: - Methods
 
-    public synchronized void add(URI uri, @NotNull HttpCookie cookie) {
+    public synchronized void add(@Nullable URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         uri = CookieUtils.cookiesUri(uri);
@@ -65,7 +66,7 @@ public final class InMemoryCookieStore implements CookieStore {
         cookies.add(cookie);
     }
 
-    public synchronized List<HttpCookie> get(@NotNull URI uri) {
+    public synchronized @NotNull List<HttpCookie> get(@Nullable URI uri) {
         Guard.notNull(uri, "uri is null");
 
         List<HttpCookie> result = new ArrayList<>();
@@ -109,7 +110,7 @@ public final class InMemoryCookieStore implements CookieStore {
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized List<HttpCookie> getCookies() {
+    public synchronized @NotNull List<HttpCookie> getCookies() {
         List<HttpCookie> result = new ArrayList<>();
         final Date date = new Date();
 
@@ -128,13 +129,13 @@ public final class InMemoryCookieStore implements CookieStore {
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized List<URI> getURIs() {
+    public synchronized @NotNull List<URI> getURIs() {
         List<URI> result = new ArrayList<>(map.keySet());
         result.remove(null); // sigh
         return Collections.unmodifiableList(result);
     }
 
-    public synchronized boolean remove(URI uri, @NotNull HttpCookie cookie) {
+    public synchronized boolean remove(@Nullable URI uri, @NotNull HttpCookie cookie) {
         Guard.notNull(cookie, "cookie is null");
 
         List<HttpCookie> cookies = map.get(CookieUtils.cookiesUri(uri));
@@ -150,5 +151,5 @@ public final class InMemoryCookieStore implements CookieStore {
 // MARK: - Variables
 
     // NOTE: This map may have null keys!
-    private final Map<URI, List<HttpCookie>> map = new HashMap<>();
+    private final @NotNull Map<URI, List<HttpCookie>> map = new HashMap<>();
 }

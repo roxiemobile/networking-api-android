@@ -2,15 +2,17 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.http.MediaType;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface HttpBody {
 
     /**
      * TODO
      */
-    MediaType mediaType();
+    @NotNull MediaType mediaType();
 
     /**
      * TODO
      */
-    byte[] body();
+    @NotNull byte[] body();
 }

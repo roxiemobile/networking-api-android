@@ -21,7 +21,7 @@ public class ApplicationLayerError extends AbstractRestApiError {
     /**
      * Returns the type of an error.
      */
-    public RestApiErrorType getType() {
+    public @NotNull RestApiErrorType getType() {
         return RestApiErrorType.APPLICATION_LAYER;
     }
 

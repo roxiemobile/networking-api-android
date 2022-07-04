@@ -30,22 +30,22 @@ public class ByteArrayBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public MediaType mediaType() {
+    public @NotNull MediaType mediaType() {
         return mMediaType;
     }
 
     @Override
-    public byte[] body() {
+    public @NotNull byte[] body() {
         return mBody;
     }
 
 // MARK: - Constants
 
-    private static final byte[] EMPTY_ARRAY = new byte[]{};
+    private static final @NotNull byte[] EMPTY_ARRAY = new byte[]{};
 
 // MARK: - Variables
 
-    private final MediaType mMediaType;
+    private final @NotNull MediaType mMediaType;
 
-    private final byte[] mBody;
+    private final @NotNull byte[] mBody;
 }

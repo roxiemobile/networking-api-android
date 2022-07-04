@@ -2,6 +2,9 @@ package com.roxiemobile.networkingapi.util;
 
 import com.roxiemobile.androidcommons.logging.Logger;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -18,7 +21,7 @@ public final class URIUtils {
     /**
      * TODO
      */
-    public static URI tryParseURI(String spec) {
+    public static @Nullable URI tryParseURI(@Nullable String spec) {
         URI result = null;
         try {
             if (spec != null) {
@@ -34,7 +37,7 @@ public final class URIUtils {
     /**
      * Returns the port to use for {@code scheme} connections.
      */
-    public static int getEffectivePort(String scheme, int specifiedPort) {
+    public static int getEffectivePort(@Nullable String scheme, int specifiedPort) {
         if (specifiedPort != -1) {
             return specifiedPort;
         }
@@ -49,11 +52,11 @@ public final class URIUtils {
         }
     }
 
-    public static int getEffectivePort(URI uri) {
+    public static int getEffectivePort(@NotNull URI uri) {
         return getEffectivePort(uri.getScheme(), uri.getPort());
     }
 
 // MARK: - Constants
 
-    private static String TAG = URIUtils.class.getSimpleName();
+    private static @NotNull String TAG = URIUtils.class.getSimpleName();
 }

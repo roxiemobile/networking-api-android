@@ -2,6 +2,9 @@ package com.roxiemobile.networkingapi.network.rest.response;
 
 import com.annimon.stream.function.Consumer;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface RestApiError {
 
 // MARK: - Properties
@@ -9,12 +12,12 @@ public interface RestApiError {
     /**
      * Returns the type of an error.
      */
-    RestApiErrorType getType();
+    @NotNull RestApiErrorType getType();
 
     /**
      * Returns the cause of this {@code RestApiError}, or {@code null} if there is no cause.
      */
-    Throwable getCause();
+    @Nullable Throwable getCause();
 
 // MARK: - Methods
 
@@ -22,7 +25,7 @@ public interface RestApiError {
      * Sends a printable representation of this {@code RestApiError}'s description
      * to the consumer.
      */
-    void printErrorDescription(Consumer<String> consumer);
+    void printErrorDescription(@NotNull Consumer<String> consumer);
 
 // MARK: - Inner Types
 

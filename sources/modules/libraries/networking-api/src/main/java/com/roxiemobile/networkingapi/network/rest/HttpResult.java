@@ -9,11 +9,11 @@ public class HttpResult extends Result<ResponseEntity<byte[]>, Throwable, byte[]
 
 // MARK: - Construction
 
-    private HttpResult(ResponseEntity<byte[]> success) {
+    private HttpResult(@NotNull ResponseEntity<byte[]> success) {
         super(success);
     }
 
-    private HttpResult(Throwable failure) {
+    private HttpResult(@NotNull Throwable failure) {
         super(failure);
     }
 

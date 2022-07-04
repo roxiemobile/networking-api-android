@@ -8,6 +8,7 @@ import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpCookie;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,11 +26,11 @@ public final class CookieUtils {
 
 // MARK: - Methods
 
-    public static HttpCookie getCookie(@NotNull HttpCookie[] cookies, @NotNull String cookieName) {
+    public static @Nullable HttpCookie getCookie(@NotNull HttpCookie[] cookies, @NotNull String cookieName) {
         return getCookie(Arrays.asList(cookies), cookieName);
     }
 
-    public static HttpCookie getCookie(@NotNull List<HttpCookie> cookies, @NotNull String cookieName) {
+    public static @Nullable HttpCookie getCookie(@NotNull List<HttpCookie> cookies, @NotNull String cookieName) {
         Guard.notNull(cookies, "cookies is null");
         Guard.notEmpty(cookieName, "cookieName is empty");
 
@@ -39,11 +40,11 @@ public final class CookieUtils {
                 .orElse(null);
     }
 
-    public static boolean isExpiredOrNull(HttpCookie cookie) {
+    public static boolean isExpiredOrNull(@Nullable HttpCookie cookie) {
         return isExpiredOrNull(cookie, 0);
     }
 
-    public static boolean isExpiredOrNull(HttpCookie cookie, long offsetInMilliseconds) {
+    public static boolean isExpiredOrNull(@Nullable HttpCookie cookie, long offsetInMilliseconds) {
         boolean expired = true;
 
         if (cookie != null) {
@@ -53,7 +54,7 @@ public final class CookieUtils {
         return expired;
     }
 
-    public static URI cookiesUri(URI uri) {
+    public static @Nullable URI cookiesUri(@Nullable URI uri) {
         if (uri != null) {
             try {
                 uri = new URI("http", uri.getHost(), null, null);
@@ -66,7 +67,7 @@ public final class CookieUtils {
         return uri;
     }
 
-    public static URI cookiesUri(HttpCookie cookie) {
+    public static @Nullable URI cookiesUri(@NotNull HttpCookie cookie) {
         URI uri = null;
         if (cookie != null) {
             try {
@@ -80,7 +81,7 @@ public final class CookieUtils {
         return uri;
     }
 
-    public static @NotNull HttpCookie[] asArray(CookieStore cookieStore) {
+    public static @NotNull HttpCookie[] asArray(@NotNull CookieStore cookieStore) {
         HttpCookie[] cookies = EMPTY_COOKIE_ARRAY;
 
         if (cookieStore != null) {
@@ -95,7 +96,7 @@ public final class CookieUtils {
 
 // MARK: - Constants
 
-    private static final String TAG = CookieUtils.class.getSimpleName();
+    private static final @NotNull String TAG = CookieUtils.class.getSimpleName();
 
-    private static final HttpCookie[] EMPTY_COOKIE_ARRAY = new HttpCookie[]{};
+    private static final @NotNull HttpCookie[] EMPTY_COOKIE_ARRAY = new HttpCookie[]{};
 }

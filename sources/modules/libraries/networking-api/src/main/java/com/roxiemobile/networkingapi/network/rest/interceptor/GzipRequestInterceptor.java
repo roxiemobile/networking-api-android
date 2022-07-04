@@ -3,6 +3,9 @@ package com.roxiemobile.networkingapi.network.rest.interceptor;
 import com.roxiemobile.networkingapi.network.http.ContentCodingType;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -23,7 +26,7 @@ public final class GzipRequestInterceptor implements Interceptor {
 // MARK: - Methods
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public @NotNull Response intercept(@NotNull Chain chain) throws IOException {
         Request originalRequest = chain.request();
 
         if (originalRequest.body() == null || originalRequest.header(HttpHeaders.CONTENT_ENCODING) != null) {
@@ -40,10 +43,11 @@ public final class GzipRequestInterceptor implements Interceptor {
 
 // MARK: - Private Methods
 
-    private RequestBody gzip(final RequestBody body) {
+    private @NotNull RequestBody gzip(final @Nullable RequestBody body) {
         return new RequestBody() {
+
             @Override
-            public MediaType contentType() {
+            public @Nullable MediaType contentType() {
                 return body.contentType();
             }
 
@@ -54,7 +58,7 @@ public final class GzipRequestInterceptor implements Interceptor {
             }
 
             @Override
-            public void writeTo(BufferedSink sink) throws IOException {
+            public void writeTo(@NotNull BufferedSink sink) throws IOException {
                 BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
                 body.writeTo(gzipSink);
                 gzipSink.close();
@@ -65,14 +69,15 @@ public final class GzipRequestInterceptor implements Interceptor {
     // Add GZip Request Compression
     // @link https://github.com/square/okhttp/issues/350#issuecomment-123105641
 
-    private RequestBody requestBodyWithContentLength(final RequestBody requestBody) throws IOException {
+    private RequestBody requestBodyWithContentLength(final @NotNull RequestBody requestBody) throws IOException {
 
-        final Buffer buffer = new Buffer();
+        final @NotNull Buffer buffer = new Buffer();
         requestBody.writeTo(buffer);
 
         return new RequestBody() {
+
             @Override
-            public MediaType contentType() {
+            public @Nullable MediaType contentType() {
                 return requestBody.contentType();
             }
 
@@ -82,7 +87,7 @@ public final class GzipRequestInterceptor implements Interceptor {
             }
 
             @Override
-            public void writeTo(BufferedSink sink) throws IOException {
+            public void writeTo(@NotNull BufferedSink sink) throws IOException {
                 sink.write(buffer.snapshot());
             }
         };

@@ -13,7 +13,7 @@ public class NoopRedirectInterceptor extends AbstractRedirectInterceptor {
     /**
      * TODO
      */
-    public Response onRedirect(@NotNull Response response) throws IOException {
+    public @NotNull Response onRedirect(@NotNull Response response) throws IOException {
         return response;
     }
 }

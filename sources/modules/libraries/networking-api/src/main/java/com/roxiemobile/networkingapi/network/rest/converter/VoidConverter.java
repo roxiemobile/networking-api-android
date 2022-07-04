@@ -23,7 +23,7 @@ public class VoidConverter extends AbstractCallResultConverter<Void> {
 
 // MARK: - Constants
 
-    private static final MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
+    private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.ALL
     };
 }

@@ -9,6 +9,7 @@ import com.roxiemobile.networkingapi.network.rest.converter.StringConverter;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 abstract class AbstractNestedError extends Exception
         implements ResponseEntityHolder {
@@ -25,7 +26,7 @@ abstract class AbstractNestedError extends Exception
     /**
      * Construct a new instance of {@code NestedRestApiErrorImpl} based on a {@link ResponseEntity} and cause.
      */
-    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity, Throwable cause) {
+    public AbstractNestedError(@NotNull ResponseEntity<byte[]> entity, @Nullable Throwable cause) {
         super(cause);
         Guard.notNull(entity, "entity is null");
 
@@ -39,7 +40,7 @@ abstract class AbstractNestedError extends Exception
      * Returns the HTTP response entity.
      */
     @Override
-    public ResponseEntity<byte[]> getResponseEntity() {
+    public @NotNull ResponseEntity<byte[]> getResponseEntity() {
         return mResponseEntity;
     }
 
@@ -47,7 +48,7 @@ abstract class AbstractNestedError extends Exception
      * Returns the response body as a byte array.
      */
     @Override
-    public byte[] getResponseBodyAsBytes() {
+    public @Nullable byte[] getResponseBodyAsBytes() {
         return mResponseEntity.body();
     }
 
@@ -55,7 +56,7 @@ abstract class AbstractNestedError extends Exception
      * Returns the response body as a string.
      */
     @Override
-    public String getResponseBodyAsString() {
+    public @Nullable String getResponseBodyAsString() {
         try {
             return CONVERTER.convert(mResponseEntity).body();
         }
@@ -82,12 +83,12 @@ abstract class AbstractNestedError extends Exception
 
 // MARK: - Constants
 
-    private static final String TAG = AbstractNestedError.class.getSimpleName();
+    private static final @NotNull String TAG = AbstractNestedError.class.getSimpleName();
 
-    private static final CallResultConverter<byte[], String> CONVERTER =
+    private static final @NotNull CallResultConverter<byte[], String> CONVERTER =
             new StringConverter();
 
 // MARK: - Variables
 
-    private final ResponseEntity<byte[]> mResponseEntity;
+    private final @NotNull ResponseEntity<byte[]> mResponseEntity;
 }

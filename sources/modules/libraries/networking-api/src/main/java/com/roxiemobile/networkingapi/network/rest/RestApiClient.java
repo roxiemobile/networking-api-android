@@ -44,12 +44,11 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-@SuppressWarnings("unused")
 public final class RestApiClient {
 
 // MARK: - Construction
 
-    private RestApiClient(Builder builder) {
+    private RestApiClient(@NotNull Builder builder) {
         mHttpClientConfig = builder.mHttpClientConfig.clone();
     }
 
@@ -85,7 +84,7 @@ public final class RestApiClient {
 
 // MARK: - Private Methods
 
-    private HttpResult execute(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
+    private @NotNull HttpResult execute(@NotNull String method, @NotNull RequestEntity<HttpBody> entity) {
         Guard.notEmpty(method, "method is empty");
         Guard.notNull(entity, "entity is null");
 
@@ -93,7 +92,7 @@ public final class RestApiClient {
         return execute(createRequest(method, entity), entity.cookieStore());
     }
 
-    private HttpResult execute(Request request, CookieStore cookieStore) {
+    private @NotNull HttpResult execute(@NotNull Request request, @Nullable CookieStore cookieStore) {
         cookieStore = (cookieStore != null) ? cookieStore : new InMemoryCookieStore();
         HttpResult result;
 
@@ -252,7 +251,7 @@ public final class RestApiClient {
     }
 
     @Deprecated
-    public @NotNull HttpHeaders mapping(Headers headers) {
+    public @NotNull HttpHeaders mapping(@Nullable Headers headers) {
         HttpHeaders result = new HttpHeaders();
 
         // Map okhttp3.Headers to HttpHeaders
@@ -267,7 +266,7 @@ public final class RestApiClient {
     }
 
     @Deprecated
-    public @NotNull Headers mapping(HttpHeaders headers) {
+    public @NotNull Headers mapping(@Nullable HttpHeaders headers) {
         Headers.Builder builder = new Headers.Builder();
 
         // Map HttpHeaders to okhttp3.Headers
@@ -286,7 +285,7 @@ public final class RestApiClient {
 
 // MARK: - Private Methods
 
-    private <T> List<T> nullToEmpty(List<T> list) {
+    private @NotNull <T> List<T> nullToEmpty(@Nullable List<T> list) {
         return (list != null) ? list : Collections.emptyList();
     }
 
@@ -307,32 +306,32 @@ public final class RestApiClient {
             return new RestApiClient(this);
         }
 
-        private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG = new DefaultHttpClientConfig();
+        private static final @NotNull HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG = new DefaultHttpClientConfig();
 
-        private HttpClientConfig mHttpClientConfig;
+        private @NotNull HttpClientConfig mHttpClientConfig;
     }
 
     public static class HttpResponseException extends IOException {
 
-        public HttpResponseException(Response response) {
+        public HttpResponseException(@NotNull Response response) {
             mResponse = response;
         }
 
-        public Response getResponse() {
+        public @NotNull Response getResponse() {
             return mResponse;
         }
 
-        private final Response mResponse;
+        private final @NotNull Response mResponse;
     }
 
 // MARK: - Constants
 
-    private static final String TAG = RestApiClient.class.getSimpleName();
+    private static final @NotNull String TAG = RestApiClient.class.getSimpleName();
 
-    private static final OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
-    private static final HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
+    private static final @NotNull OkHttpClient SHARED_HTTP_CLIENT = new OkHttpClient.Builder().build();
+    private static final @NotNull HttpBody EMPTY_HTTP_BODY = new ByteArrayBody();
 
 // MARK: - Variables
 
-    private final HttpClientConfig mHttpClientConfig;
+    private final @NotNull HttpClientConfig mHttpClientConfig;
 }

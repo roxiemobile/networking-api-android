@@ -5,6 +5,7 @@ import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,7 +14,7 @@ abstract class AbstractRestApiError implements RestApiError {
 
 // MARK: - Construction
 
-    AbstractRestApiError(Throwable cause) {
+    AbstractRestApiError(@Nullable Throwable cause) {
         // Init instance variables
         mCause = cause;
     }
@@ -21,7 +22,7 @@ abstract class AbstractRestApiError implements RestApiError {
 // MARK: - Properties
 
     @Override
-    public Throwable getCause() {
+    public @Nullable Throwable getCause() {
         return mCause;
     }
 
@@ -51,5 +52,5 @@ abstract class AbstractRestApiError implements RestApiError {
 
 // MARK: - Variables
 
-    private Throwable mCause;
+    private @Nullable Throwable mCause;
 }

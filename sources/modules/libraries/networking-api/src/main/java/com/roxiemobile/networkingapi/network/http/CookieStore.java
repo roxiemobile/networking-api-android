@@ -16,6 +16,9 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.net.URI;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public interface CookieStore {
      * @param cookie
      *            the cookie to be stored
      */
-    void add(URI uri, HttpCookie cookie);
+    void add(@Nullable URI uri, @NotNull HttpCookie cookie);
 
     /**
      * Retrieves cookies that match the specified URI. Return not expired cookies.
@@ -62,7 +65,7 @@ public interface CookieStore {
      * @throws NullPointerException
      *             if uri is null
      */
-    List<HttpCookie> get(URI uri);
+    @NotNull List<HttpCookie> get(@Nullable URI uri);
 
     /**
      * Get all cookies in cookie store which are not expired.
@@ -70,7 +73,7 @@ public interface CookieStore {
      * @return an empty list if there's no http cookie in store, or an immutable
      *         list of cookies
      */
-    List<HttpCookie> getCookies();
+    @NotNull List<HttpCookie> getCookies();
 
     /**
      * Get a set of URIs, which is composed of associated URI with all the
@@ -79,7 +82,7 @@ public interface CookieStore {
      * @return zero-length list if no cookie in the store is associated with any
      *         URIs, otherwise an immutable list of URIs.
      */
-    List<URI> getURIs();
+    @NotNull List<URI> getURIs();
 
     /**
      * Remove the specified cookie from the store.
@@ -93,7 +96,7 @@ public interface CookieStore {
      * @return true if the specified cookie is contained in this store and
      *         removed successfully
      */
-    boolean remove(URI uri, HttpCookie cookie);
+    boolean remove(@Nullable URI uri, @NotNull HttpCookie cookie);
 
     /**
      * Clear this cookie store.

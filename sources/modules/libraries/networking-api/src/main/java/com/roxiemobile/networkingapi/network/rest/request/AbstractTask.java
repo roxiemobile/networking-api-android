@@ -28,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SuppressWarnings("unused")
 public abstract class AbstractTask<Ti extends HttpBody, To>
         implements Task<Ti, To>, Cancellable {
 
@@ -47,7 +46,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * The tag associated with a task.
      */
-    public final String tag() {
+    public final @Nullable String tag() {
         return mTag;
     }
 
@@ -64,7 +63,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      * Synchronously send the request and return its response.
      */
     @Override
-    public final void execute(Callback<Ti, To> callback) {
+    public final void execute(@Nullable Callback<Ti, To> callback) {
         boolean shouldExecute = true;
 
         CallResult<To> result = null;
@@ -94,7 +93,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      * TODO
      */
     @Override
-    public final Cancellable enqueue(Callback<Ti, To> callback, boolean callbackOnUiThread) {
+    public final @NotNull Cancellable enqueue(@Nullable Callback<Ti, To> callback, boolean callbackOnUiThread) {
         return TaskQueue.enqueue(this, callback, callbackOnUiThread);
     }
 
@@ -102,7 +101,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      * Performs the request and returns the response, or throws an exception if unable to do so.
      * May return null if this call was canceled.
      */
-    protected final CallResult<To> call() throws Exception {
+    protected final @Nullable CallResult<To> call() throws Exception {
         Guard.isFalse(ThreadUtils.runningOnUiThread(), "This method must not be called from the main thread!");
         CallResult<To> result = null;
 
@@ -156,7 +155,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         return result;
     }
 
-    protected abstract HttpResult callExecute();
+    protected abstract @NotNull HttpResult callExecute();
 
     /**
      * TODO
@@ -209,12 +208,12 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected abstract CallResult<To> onSuccess(CallResult<byte[]> httpResult);
+    protected abstract @NotNull CallResult<To> onSuccess(@NotNull CallResult<byte[]> httpResult);
 
     /**
      * TODO
      */
-    protected CallResult<To> onFailure(@NotNull RestApiError error) {
+    protected @NotNull CallResult<To> onFailure(@NotNull RestApiError error) {
         Guard.notNull(error, "error is null");
         return CallResult.failure(error);
     }
@@ -229,7 +228,6 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public final @NotNull Task<Ti, To> clone() {
         return createBuilder().build();
@@ -238,7 +236,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * TODO
      */
-    protected abstract TaskBuilder<Ti, To> createBuilder();
+    protected abstract @NotNull TaskBuilder<Ti, To> createBuilder();
 
     /**
      * TODO
@@ -256,7 +254,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
 // MARK: - Private Methods
 
-    private void yield(CallResult<To> result, @NotNull Callback<Ti, To> callback) {
+    private void yield(@Nullable CallResult<To> result, @NotNull Callback<Ti, To> callback) {
         Guard.notNull(callback, "callback is null");
 
         if (isCancelled()) {
@@ -292,21 +290,21 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             mRequestEntity = task.requestEntity();
         }
 
-        public String tag() {
+        public @Nullable String tag() {
             return mTag;
         }
 
-        public @NotNull BuilderType tag(String tag) {
+        public @NotNull BuilderType tag(@Nullable String tag) {
             mTag = tag;
             //noinspection unchecked
             return (BuilderType) this;
         }
 
-        public RequestEntity<Ti> requestEntity() {
+        public @Nullable RequestEntity<Ti> requestEntity() {
             return mRequestEntity;
         }
 
-        public @NotNull BuilderType requestEntity(RequestEntity<Ti> request) {
+        public @NotNull BuilderType requestEntity(@NotNull RequestEntity<Ti> request) {
             mRequestEntity = request;
             //noinspection unchecked
             return (BuilderType) this;
@@ -324,20 +322,20 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
         protected abstract @NotNull Task<Ti, To> createTask();
 
-        private String mTag;
-        private RequestEntity<Ti> mRequestEntity;
+        private @Nullable String mTag;
+        private @Nullable RequestEntity<Ti> mRequestEntity;
     }
 
 // MARK: - Constants
 
-    private static final HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
+    private static final @NotNull HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
             new DefaultHttpClientConfig();
 
 // MARK: - Variables
 
-    private final String mTag;
+    private final @Nullable String mTag;
 
-    private final RequestEntity<Ti> mRequestEntity;
+    private final @NotNull RequestEntity<Ti> mRequestEntity;
 
-    private final AtomicBoolean mCancelled = new AtomicBoolean(false);
+    private final @NotNull AtomicBoolean mCancelled = new AtomicBoolean(false);
 }

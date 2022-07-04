@@ -23,7 +23,7 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError {
      * Returns the type of an error.
      */
     @Override
-    public RestApiErrorType getType() {
+    public @NotNull RestApiErrorType getType() {
         return RestApiErrorType.TOP_LEVEL_PROTOCOL;
     }
 
@@ -36,5 +36,5 @@ public abstract class TopLevelProtocolError<T> extends AbstractRestApiError {
 
 // MARK: - Variables
 
-    private final ResponseEntity<T> mResponseEntity;
+    private final @NotNull ResponseEntity<T> mResponseEntity;
 }

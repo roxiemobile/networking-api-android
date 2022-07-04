@@ -3,6 +3,8 @@ package com.roxiemobile.networkingapi.network.rest.interceptor;
 import com.annimon.stream.Stream;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.Headers;
@@ -19,7 +21,7 @@ public class UserAgentRequestInterceptor implements Interceptor {
 // MARK: - Methods
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public @NotNull Response intercept(@NotNull Chain chain) throws IOException {
         Request originalRequest = chain.request();
 
         Request updatedRequest = originalRequest.newBuilder()
@@ -31,7 +33,7 @@ public class UserAgentRequestInterceptor implements Interceptor {
 
 // MARK: - Private Methods
 
-    private String createUserAgent(Headers headers) {
+    private @NotNull String createUserAgent(@NotNull Headers headers) {
 
         String value = Stream.of(headers.values(HttpHeaders.USER_AGENT))
                 .filterNot(s -> s.contains(OKHTTP_VERSION))
@@ -43,5 +45,5 @@ public class UserAgentRequestInterceptor implements Interceptor {
 
 // MARK: - Constants
 
-    public static final String OKHTTP_VERSION = Version.userAgent();
+    public static final @NotNull String OKHTTP_VERSION = Version.userAgent();
 }

@@ -16,6 +16,8 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Exception thrown from {@link MediaType#parseMediaType(String)} in case of
  * encountering an invalid media type specification String.
@@ -23,29 +25,24 @@ package com.roxiemobile.networkingapi.network.http;
  * @author Juergen Hoeller
  * @since 2.0
  */
-@SuppressWarnings("serial")
 public class InvalidMediaTypeException extends IllegalArgumentException {
 
-    private String mediaType;
-
+    private @NotNull String mediaType;
 
     /**
      * Create a new InvalidMediaTypeException for the given media type.
      * @param mediaType the offending media type
      * @param msg a detail message indicating the invalid part
      */
-    public InvalidMediaTypeException(String mediaType, String msg) {
+    public InvalidMediaTypeException(@NotNull String mediaType, @NotNull String msg) {
         super("Invalid media type \"" + mediaType + "\": " + msg);
         this.mediaType = mediaType;
-
     }
-
 
     /**
      * Return the offending media type.
      */
-    public String getMediaType() {
+    public @NotNull String getMediaType() {
         return this.mediaType;
     }
-
 }

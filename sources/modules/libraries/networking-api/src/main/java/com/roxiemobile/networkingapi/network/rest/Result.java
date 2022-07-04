@@ -5,18 +5,21 @@ package com.roxiemobile.networkingapi.network.rest;
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
 
 // MARK: - Construction
 
-    Result(S success) {
+    Result(@NotNull S success) {
         // Init instance variables
         mState = State.SUCCESS;
         mSuccess = success;
         mFailure = null;
     }
 
-    Result(F failure) {
+    Result(@NotNull F failure) {
         // Init instance variables
         mState = State.FAILURE;
         mSuccess = null;
@@ -25,11 +28,11 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
 
 // MARK: - Methods
 
-    public S value() {
+    public @Nullable S value() {
         return (mState == State.SUCCESS) ? mSuccess : null;
     }
 
-    public F error() {
+    public @Nullable F error() {
         return (mState == State.FAILURE) ? mFailure : null;
     }
 
@@ -45,8 +48,8 @@ class Result<S extends ResponseEntity<BodyType>, F, BodyType> {
 
 // MARK: - Variables
 
-    private final State mState;
+    private final @NotNull State mState;
 
-    private final S mSuccess;
-    private final F mFailure;
+    private final @Nullable S mSuccess;
+    private final @Nullable F mFailure;
 }

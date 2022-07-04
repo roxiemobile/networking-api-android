@@ -10,6 +10,7 @@ import com.roxiemobile.networkingapi.network.http.util.LinkedMultiValueMap;
 import com.roxiemobile.networkingapi.network.http.util.MultiValueMap;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -33,15 +34,15 @@ public final class HttpRoute {
 
 // MARK: - Methods
 
-    public static HttpRoute buildRoute(URI baseUri) {
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri) {
         return buildRoute(baseUri, null);
     }
 
-    public static HttpRoute buildRoute(URI baseUri, String path) {
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri, @Nullable String path) {
         return buildRoute(baseUri, path, null);
     }
 
-    public static HttpRoute buildRoute(URI baseUri, String path, MultiValueMap<String, String> params) {
+    public static @NotNull HttpRoute buildRoute(@Nullable URI baseUri, @Nullable String path, @Nullable MultiValueMap<String, String> params) {
         String uriString = null;
 
         // Build new URI
@@ -79,17 +80,18 @@ public final class HttpRoute {
         return route;
     }
 
-    public URI toURI() {
+    public @NotNull URI toURI() {
         return mUri;
     }
 
-    public String toString() {
+    public @NotNull String toString() {
         return mUri.toString();
     }
 
 // MARK: - Private Methods
 
-    private static String buildQueryString(MultiValueMap<String, String> params, Charset charset) {
+    @SuppressWarnings("SameParameterValue")
+    private static @NotNull String buildQueryString(@NotNull MultiValueMap<String, String> params, @NotNull Charset charset) {
         List<String> components = new LinkedList<>();
 
         try {
@@ -109,8 +111,7 @@ public final class HttpRoute {
         return TextUtils.join("&", components);
     }
 
-    @SuppressWarnings("UnusedAssignment")
-    private static List<String> buildQueryStringComponents(String key, List<String> values, Charset charset)
+    private static @NotNull List<String> buildQueryStringComponents(@NotNull String key, @NotNull List<String> values, @NotNull Charset charset)
             throws UnsupportedEncodingException {
 
         if (key == null || CollectionUtils.isEmpty(values) || charset == null) {
@@ -148,16 +149,16 @@ public final class HttpRoute {
             super(initialCapacity);
         }
 
-        public QueryParams(MultiValueMap<String, String> otherMap) {
+        public QueryParams(@Nullable MultiValueMap<String, String> otherMap) {
             super(otherMap == null ? Collections.emptyMap() : otherMap);
         }
     }
 
 // MARK: - Constants
 
-    private static String TAG = HttpRoute.class.getSimpleName();
+    private static @NotNull String TAG = HttpRoute.class.getSimpleName();
 
 // MARK: - Variables
 
-    private URI mUri;
+    private @NotNull URI mUri;
 }
