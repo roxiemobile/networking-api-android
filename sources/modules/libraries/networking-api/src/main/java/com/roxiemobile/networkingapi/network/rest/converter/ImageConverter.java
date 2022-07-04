@@ -3,7 +3,6 @@ package com.roxiemobile.networkingapi.network.rest.converter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
@@ -19,10 +18,10 @@ public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
 
     @Override
     public @NotNull ResponseEntity<Bitmap> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
-        ResponseEntity<Bitmap> newEntity;
-        Bitmap newBody = null;
 
+        @Nullable Bitmap newBody = null;
         try {
+
             @Nullable byte[] responseBody = responseEntity.body();
 
             // Try to convert HTTP response to Bitmap
@@ -31,13 +30,11 @@ public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
             }
         }
         catch (Exception ex) {
-            Logger.e(TAG, ex);
             throw new ConversionException(responseEntity, ex);
         }
 
         // Create new response entity
-        newEntity = ResponseEntityUtils.copyWith(responseEntity, newBody);
-        return newEntity;
+        return ResponseEntityUtils.copyWith(responseEntity, newBody);
     }
 
     @Override
@@ -46,8 +43,6 @@ public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
     }
 
 // MARK: - Constants
-
-    public static final @NotNull String TAG = ImageConverter.class.getSimpleName();
 
     private static final @NotNull MediaType[] SUPPORTED_MEDIA_TYPES = new MediaType[]{
             MediaType.IMAGE_JPEG,

@@ -12,37 +12,40 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Unexpect
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public abstract class AbstractCallResultConverter<T> implements CallResultConverter<byte[], T> {
 
 // MARK: - Methods
 
     public @NotNull CallResult<T> convert(@NotNull CallResult<byte[]> callResult) {
-        CallResult<T> newResult;
+        @NotNull CallResult<T> newCallResult;
 
         // Handle call result
         if (callResult.isSuccess()) {
             try {
-                ResponseEntity<byte[]> responseEntity = callResult.value();
+                @NotNull ResponseEntity<byte[]> responseEntity = Objects.requireNonNull(callResult.value(), "responseEntity is null");
                 checkMediaType(responseEntity);
 
                 // Convert response entity
-                ResponseEntity<T> newResponseEntity = convert(responseEntity);
-                newResult = CallResult.success(newResponseEntity);
+                @NotNull ResponseEntity<T> newResponseEntity = convert(responseEntity);
+                newCallResult = CallResult.success(newResponseEntity);
             }
             catch (UnexpectedMediaTypeException | ConversionException ex) {
 
                 // Build new error with caught exception
-                RestApiError error = new ApplicationLayerError(ex);
-                newResult = CallResult.failure(error);
+                @NotNull RestApiError error = new ApplicationLayerError(ex);
+                newCallResult = CallResult.failure(error);
             }
         }
         else {
             // Copy an original error
-            newResult = CallResult.failure(callResult.error());
+            @NotNull RestApiError error = Objects.requireNonNull(callResult.error(), "error is null");
+            newCallResult = CallResult.failure(error);
         }
 
         // Done
-        return newResult;
+        return newCallResult;
     }
 
     protected abstract @NotNull MediaType[] supportedMediaTypes();
@@ -52,15 +55,14 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
     private void checkMediaType(@NotNull ResponseEntity<byte[]> responseEntity) throws UnexpectedMediaTypeException {
         Guard.notNull(responseEntity, "responseEntity is null");
 
-        MediaType mediaType = responseEntity.mediaType();
+        @NotNull MediaType mediaType = responseEntity.mediaType();
         boolean found = false;
 
         // Search for compatible MediaType
-        if (mediaType != null) {
-            for (MediaType type : supportedMediaTypes()) {
-                if (found = mediaType.isCompatibleWith(type)) {
-                    break;
-                }
+        for (MediaType type : supportedMediaTypes()) {
+            if (mediaType.isCompatibleWith(type)) {
+                found = true;
+                break;
             }
         }
 
