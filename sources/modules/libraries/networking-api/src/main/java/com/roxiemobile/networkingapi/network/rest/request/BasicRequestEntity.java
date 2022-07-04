@@ -1,6 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
-import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 
@@ -52,8 +51,6 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
         }
 
         public Builder(@NotNull RequestEntity<T> requestEntity) {
-            Guard.notNull(requestEntity, "requestEntity is null");
-
             this.link = requestEntity.getLink();
             this.httpHeaders = requestEntity.getHttpHeaders();
             this.cookieStore = requestEntity.getCookieStore();
@@ -61,8 +58,6 @@ public class BasicRequestEntity<T> implements RequestEntity<T> {
         }
 
         public <Ti> Builder(@NotNull RequestEntity<Ti> requestEntity, @Nullable T body) {
-            Guard.notNull(requestEntity, "requestEntity is null");
-
             this.link = requestEntity.getLink();
             this.httpHeaders = requestEntity.getHttpHeaders();
             this.cookieStore = requestEntity.getCookieStore();
