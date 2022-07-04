@@ -6,13 +6,15 @@ import org.jetbrains.annotations.NotNull;
 
 public interface HttpBody {
 
-    /**
-     * TODO
-     */
-    @NotNull MediaType mediaType();
+// MARK: - Properties
 
     /**
      * TODO
      */
-    @NotNull byte[] body();
+    @NotNull MediaType getMediaType();
+
+    /**
+     * TODO
+     */
+    @NotNull byte[] getBody();
 }

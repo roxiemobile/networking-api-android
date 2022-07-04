@@ -27,12 +27,12 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 // MARK: - Properties
 
     @Override
-    public @NotNull HttpStatus status() {
+    public @NotNull HttpStatus getHttpStatus() {
         return mHttpStatus;
     }
 
     @Override
-    public @NotNull MediaType mediaType() {
+    public @NotNull MediaType getMediaType() {
         return mMediaType;
     }
 
@@ -48,16 +48,16 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             super(responseEntity);
 
             // Init instance variables
-            mHttpStatus = responseEntity.status();
-            mMediaType = responseEntity.mediaType();
+            mHttpStatus = responseEntity.getHttpStatus();
+            mMediaType = responseEntity.getMediaType();
         }
 
         public <Ti> Builder(@NotNull ResponseEntity<Ti> responseEntity, @Nullable T body) {
             super(responseEntity, body);
 
             // Init instance variables
-            mHttpStatus = responseEntity.status();
-            mMediaType = responseEntity.mediaType();
+            mHttpStatus = responseEntity.getHttpStatus();
+            mMediaType = responseEntity.getMediaType();
         }
 
         @Override

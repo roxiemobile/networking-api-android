@@ -59,7 +59,7 @@ public final class TaskQueue {
         // Create new cancellable task
         final InnerFutureTask<Ti, To> futureTask = new InnerFutureTask<>(new InnerRunnableTask<>(task, callback, callbackOnUiThread));
         synchronized (sInnerLock) {
-            sTasks.add(task.tag(), futureTask);
+            sTasks.add(task.getTag(), futureTask);
         }
 
         // Execute the FutureTask on the background thread
@@ -101,7 +101,7 @@ public final class TaskQueue {
 
             // Remove the completed task
             synchronized (sInnerLock) {
-                List<Cancellable> tasks = sTasks.get(mRunnableTask.mTask.tag());
+                List<Cancellable> tasks = sTasks.get(mRunnableTask.mTask.getTag());
 
                 if (tasks != null) {
                     tasks.remove(this);

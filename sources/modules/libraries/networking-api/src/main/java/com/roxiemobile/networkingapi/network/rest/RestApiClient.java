@@ -89,7 +89,7 @@ public final class RestApiClient {
         Guard.notNull(requestEntity, "requestEntity is null");
 
         // Execute HTTP request
-        return execute(createRequest(httpMethod, requestEntity), requestEntity.cookieStore());
+        return execute(createRequest(httpMethod, requestEntity), requestEntity.getCookieStore());
     }
 
     private @NotNull HttpResult execute(@NotNull Request request, @Nullable CookieStore cookieStore) {
@@ -124,7 +124,7 @@ public final class RestApiClient {
         @NotNull Request.Builder instance = new Request.Builder();
 
         // Create request body
-        @Nullable HttpBody httpBody = requestEntity.body();
+        @Nullable HttpBody httpBody = requestEntity.getBody();
         @Nullable RequestBody requestBody = null;
 
         // NOTE: Workaround for OkHttp crash on POST with empty request body
@@ -133,15 +133,15 @@ public final class RestApiClient {
         }
 
         if (httpBody != null) {
-            @Nullable okhttp3.MediaType mediaType = okhttp3.MediaType.parse(httpBody.mediaType().toString());
-            requestBody = RequestBody.create(mediaType, httpBody.body());
+            @Nullable okhttp3.MediaType mediaType = okhttp3.MediaType.parse(httpBody.getMediaType().toString());
+            requestBody = RequestBody.create(mediaType, httpBody.getBody());
         }
 
         // Build HTTP request
-        @Nullable HttpHeaders httpHeaders = requestEntity.headers();
+        @Nullable HttpHeaders httpHeaders = requestEntity.getHttpHeaders();
 
         instance.method(httpMethod, requestBody)
-                .url(requestEntity.uri().toString())
+                .url(requestEntity.getLink().toString())
                 .headers(mapping(httpHeaders));
 
         if (requestBody != null) {

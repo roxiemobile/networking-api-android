@@ -55,7 +55,7 @@ public abstract class AbstractCallResultConverter<T> implements CallResultConver
     private void checkMediaType(@NotNull ResponseEntity<byte[]> responseEntity) throws UnexpectedMediaTypeException {
         Guard.notNull(responseEntity, "responseEntity is null");
 
-        @NotNull MediaType mediaType = responseEntity.mediaType();
+        @NotNull MediaType mediaType = responseEntity.getMediaType();
         boolean found = false;
 
         // Search for compatible MediaType

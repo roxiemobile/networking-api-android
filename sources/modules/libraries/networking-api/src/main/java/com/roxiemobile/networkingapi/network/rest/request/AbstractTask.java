@@ -36,8 +36,8 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     protected AbstractTask(@NotNull TaskBuilder<Ti, To> builder) {
         Guard.notNull(builder, "builder is null");
 
-        mTag = builder.tag();
-        mRequestEntity = builder.requestEntity();
+        mTag = builder.getTag();
+        mRequestEntity = builder.getRequestEntity();
     }
 
 // MARK: - Properties
@@ -45,14 +45,14 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
     /**
      * The tag associated with a task.
      */
-    public final @Nullable String tag() {
+    public final @Nullable String getTag() {
         return mTag;
     }
 
     /**
      * The original request entity.
      */
-    public final @NotNull RequestEntity<Ti> requestEntity() {
+    public final @NotNull RequestEntity<Ti> getRequestEntity() {
         return mRequestEntity;
     }
 
@@ -115,7 +115,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             if (httpResult.isSuccess()) {
 
                 ResponseEntity<byte[]> responseEntity = httpResult.value();
-                HttpStatus httpStatus = responseEntity.status();
+                HttpStatus httpStatus = responseEntity.getHttpStatus();
 
                 // Create a new call result
                 if (httpStatus.is2xxSuccessful()) {
@@ -184,7 +184,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      */
     protected @NotNull RequestEntity<HttpBody> createRequestEntity(@NotNull HttpRoute httpRoute) {
         // Create HTTP request entity
-        return new BasicRequestEntity.Builder<>(requestEntity(), httpBody())
+        return new BasicRequestEntity.Builder<>(getRequestEntity(), httpBody())
                 .uri(httpRoute.toURI())
                 .headers(httpHeaders())
                 .build();
@@ -194,14 +194,14 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      * TODO
      */
     protected @NotNull HttpHeaders httpHeaders() {
-        return HttpHeaders.readOnlyHttpHeaders(requestEntity().headers());
+        return HttpHeaders.readOnlyHttpHeaders(getRequestEntity().getHttpHeaders());
     }
 
     /**
      * TODO
      */
     protected @Nullable HttpBody httpBody() {
-        return requestEntity().body();
+        return getRequestEntity().getBody();
     }
 
     /**
@@ -284,11 +284,11 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         }
 
         protected Builder(@NotNull Task<Ti, To> task) {
-            mTag = task.tag();
-            mRequestEntity = task.requestEntity();
+            mTag = task.getTag();
+            mRequestEntity = task.getRequestEntity();
         }
 
-        public @Nullable String tag() {
+        public @Nullable String getTag() {
             return mTag;
         }
 
@@ -298,7 +298,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             return (BuilderType) this;
         }
 
-        public @Nullable RequestEntity<Ti> requestEntity() {
+        public @Nullable RequestEntity<Ti> getRequestEntity() {
             return mRequestEntity;
         }
 
@@ -315,7 +315,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
         protected void checkInvalidState() {
             Guard.notNull(mRequestEntity, "requestEntity is null");
-            Guard.notNull(mRequestEntity.uri(), "requestEntity.uri is null");
+            Guard.notNull(mRequestEntity.getLink(), "requestEntity.link is null");
         }
 
         protected abstract @NotNull Task<Ti, To> createTask();

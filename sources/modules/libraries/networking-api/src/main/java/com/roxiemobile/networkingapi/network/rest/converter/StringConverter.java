@@ -22,11 +22,11 @@ public final class StringConverter extends AbstractCallResultConverter<String> {
         @Nullable String newBody = null;
         try {
 
-            @Nullable byte[] responseBody = responseEntity.body();
+            @Nullable byte[] responseBody = responseEntity.getBody();
 
             // Try to convert HTTP response to string
             if (ArrayUtils.isNotEmpty(responseBody)) {
-                @NotNull String charsetName = responseEntity.mediaType().getCharset(Charsets.UTF_8).name();
+                @NotNull String charsetName = responseEntity.getMediaType().getCharset(Charsets.UTF_8).name();
                 newBody = new String(responseBody, charsetName);
             }
         }

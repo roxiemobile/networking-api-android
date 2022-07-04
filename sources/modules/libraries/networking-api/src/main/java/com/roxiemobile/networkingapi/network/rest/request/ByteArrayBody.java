@@ -29,12 +29,12 @@ public final class ByteArrayBody implements HttpBody {
 // MARK: - Methods
 
     @Override
-    public @NotNull MediaType mediaType() {
+    public @NotNull MediaType getMediaType() {
         return mMediaType;
     }
 
     @Override
-    public @NotNull byte[] body() {
+    public @NotNull byte[] getBody() {
         return mBody;
     }
 

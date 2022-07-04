@@ -47,17 +47,17 @@ abstract class AbstractNestedError extends Exception
      * Returns the response body as a byte array.
      */
     @Override
-    public @Nullable byte[] getResponseBodyAsBytes() {
-        return mResponseEntity.body();
+    public @Nullable byte[] responseBodyAsBytes() {
+        return mResponseEntity.getBody();
     }
 
     /**
      * Returns the response body as a string.
      */
     @Override
-    public @Nullable String getResponseBodyAsString() {
+    public @Nullable String responseBodyAsString() {
         try {
-            return CONVERTER.convert(mResponseEntity).body();
+            return CONVERTER.convert(mResponseEntity).getBody();
         }
         catch (ConversionException ex) {
             Logger.e(TAG, ex);
@@ -73,7 +73,7 @@ abstract class AbstractNestedError extends Exception
      */
     @Override
     public void printErrorDescription(@NotNull Consumer<String> consumer) {
-        String message = getResponseBodyAsString();
+        String message = responseBodyAsString();
 
         if (StringUtils.isNotEmpty(message)) {
             consumer.accept(message);

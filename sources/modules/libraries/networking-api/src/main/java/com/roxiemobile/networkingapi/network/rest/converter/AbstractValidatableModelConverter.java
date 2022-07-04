@@ -32,7 +32,7 @@ public abstract class AbstractValidatableModelConverter<T extends ValidatableMod
         @Nullable T newBody = null;
         try {
 
-            @Nullable byte[] responseBody = responseEntity.body();
+            @Nullable byte[] responseBody = responseEntity.getBody();
 
             // Try to convert HTTP response to POJO
             if (ArrayUtils.isNotEmpty(responseBody)) {
