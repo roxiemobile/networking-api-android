@@ -1,6 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.request;
 
-import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.HttpBody;
 
@@ -11,11 +10,8 @@ public final class ByteArrayBody implements HttpBody {
 // MARK: - Construction
 
     public ByteArrayBody(@NotNull byte[] body, @NotNull MediaType mediaType) {
-        Guard.notNull(body, "body is null");
-        Guard.notNull(mediaType, "mediaType is null");
-
-        mBody = body;
-        mMediaType = mediaType;
+        _body = body;
+        _mediaType = mediaType;
     }
 
     public ByteArrayBody(@NotNull byte[] body) {
@@ -30,12 +26,12 @@ public final class ByteArrayBody implements HttpBody {
 
     @Override
     public @NotNull MediaType getMediaType() {
-        return mMediaType;
+        return _mediaType;
     }
 
     @Override
     public @NotNull byte[] getBody() {
-        return mBody;
+        return _body;
     }
 
 // MARK: - Constants
@@ -44,7 +40,7 @@ public final class ByteArrayBody implements HttpBody {
 
 // MARK: - Variables
 
-    private final @NotNull MediaType mMediaType;
+    private final @NotNull MediaType _mediaType;
 
-    private final @NotNull byte[] mBody;
+    private final @NotNull byte[] _body;
 }

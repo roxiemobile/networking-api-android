@@ -13,7 +13,7 @@ public final class JsonBody implements HttpBody {
 // MARK: - Construction
 
     public JsonBody(@NotNull JsonElement body) {
-        mBody = body;
+        _body = body;
     }
 
 // MARK: - Methods
@@ -25,7 +25,7 @@ public final class JsonBody implements HttpBody {
 
     @Override
     public @NotNull byte[] getBody() {
-        return (mBody != null) ? DataMapper.toByteArray(mBody) : null;
+        return DataMapper.toByteArray(_body);
     }
 
 // MARK: - Constants
@@ -35,5 +35,5 @@ public final class JsonBody implements HttpBody {
 
 // MARK: - Variables
 
-    private final @NotNull JsonElement mBody;
+    private final @NotNull JsonElement _body;
 }
