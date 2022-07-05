@@ -61,13 +61,13 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         }
 
         @Override
-        public @NotNull Builder<T> uri(@NotNull URI link) {
-            return (Builder<T>) super.uri(link);
+        public @NotNull Builder<T> link(@NotNull URI link) {
+            return (Builder<T>) super.link(link);
         }
 
         @Override
-        public @NotNull Builder<T> headers(@Nullable HttpHeaders httpHeaders) {
-            return (Builder<T>) super.headers(httpHeaders);
+        public @NotNull Builder<T> httpHeaders(@Nullable HttpHeaders httpHeaders) {
+            return (Builder<T>) super.httpHeaders(httpHeaders);
         }
 
         @Override
@@ -92,7 +92,6 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
 
         @Override
         public @NotNull ResponseEntity<T> build() {
-            Guard.notNull(uri(), "url is null");
             Guard.notNull(status(), "httpStatus is null");
             Guard.notNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);

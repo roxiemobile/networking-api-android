@@ -224,8 +224,8 @@ public final class RestApiClient {
         // Handle HTTP response
         @NotNull HttpStatus httpStatus = HttpStatus.valueOf(response.code());
         @NotNull BasicResponseEntity.Builder<byte[]> builder = new BasicResponseEntity.Builder<byte[]>()
-                .uri(response.request().url().uri())
-                .headers(mapping(response.headers()))
+                .link(response.request().url().uri())
+                .httpHeaders(mapping(response.headers()))
                 .status(httpStatus)
                 // @see https://tools.ietf.org/html/rfc7231#section-3.1.1.5
                 .mediaType(MediaType.APPLICATION_OCTET_STREAM)
