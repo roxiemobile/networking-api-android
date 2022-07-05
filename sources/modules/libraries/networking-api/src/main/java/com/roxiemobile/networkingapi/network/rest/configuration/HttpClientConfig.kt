@@ -10,12 +10,7 @@ interface HttpClientConfig: Cloneable {
     /**
      * TODO
      */
-    val connectionTimeout: Long
-
-    /**
-     * TODO
-     */
-    val readTimeout: Long
+    val requestTimeoutConfig: RequestTimeoutConfig?
 
     /**
      * TODO
