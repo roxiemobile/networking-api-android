@@ -2,36 +2,31 @@ package com.roxiemobile.networkingapi.network.rest.configuration
 
 import com.roxiemobile.androidcommons.logging.Logger
 import com.roxiemobile.androidcommons.logging.Logger.LogLevel
-import com.roxiemobile.networkingapi.network.NetworkConfig.Timeout
 import com.roxiemobile.networkingapi.network.rest.interceptor.Interceptors
 import com.roxiemobile.networkingapi.network.rest.interceptor.UserAgentRequestInterceptor
 import com.roxiemobile.networkingapi.network.ssl.TlsConfig
 import okhttp3.Interceptor
 import java.util.Collections
 
-class DefaultHttpClientConfig: HttpClientConfig {
-
-// MARK: - Methods
-
-    override val connectionTimeout: Long = Timeout.CONNECTION
-
-    override val readTimeout: Long = Timeout.READ
-
-    override val tlsConfig: TlsConfig? = null
-
-    override val interceptors: List<Interceptor>? = null
-
-    override val networkInterceptors: List<Interceptor>? = NETWORK_INTERCEPTORS
+data class DefaultHttpClientConfig(
+    override val requestTimeoutConfig: RequestTimeoutConfig? = DefaultRequestTimeoutConfig.SHARED,
+    override val tlsConfig: TlsConfig? = null,
+    override val interceptors: List<Interceptor>? = null,
+    override val networkInterceptors: List<Interceptor>? = NETWORK_INTERCEPTORS,
+): HttpClientConfig {
 
 // MARK: - Methods
 
     override fun clone(): HttpClientConfig {
-        return DefaultHttpClientConfig()
+        return copy()
     }
 
 // MARK: - Companion
 
     companion object {
+
+        @JvmField
+        val SHARED = DefaultHttpClientConfig()
 
         private val NETWORK_INTERCEPTORS = Collections.unmodifiableList(
             mutableListOf<Interceptor>().apply {

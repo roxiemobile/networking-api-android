@@ -176,7 +176,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      * TODO
      */
     protected @NotNull HttpClientConfig httpClientConfig() {
-        return DEFAULT_HTTP_CLIENT_CONFIG;
+        return DefaultHttpClientConfig.SHARED;
     }
 
     /**
@@ -324,11 +324,6 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
         private @Nullable String mTag;
         private @Nullable RequestEntity<Ti> mRequestEntity;
     }
-
-// MARK: - Constants
-
-    private static final @NotNull HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG =
-            new DefaultHttpClientConfig();
 
 // MARK: - Variables
 

@@ -5,17 +5,19 @@ import com.annimon.stream.Stream;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
-import com.roxiemobile.networkingapi.network.HttpKeys.MethodName;
 import com.roxiemobile.networkingapi.network.http.CompatJavaNetCookieJar;
 import com.roxiemobile.networkingapi.network.http.CookieManager;
 import com.roxiemobile.networkingapi.network.http.CookiePolicy;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
+import com.roxiemobile.networkingapi.network.http.HttpMethod;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
 import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore;
 import com.roxiemobile.networkingapi.network.http.MediaType;
 import com.roxiemobile.networkingapi.network.rest.configuration.DefaultHttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.configuration.DefaultRequestTimeoutConfig;
 import com.roxiemobile.networkingapi.network.rest.configuration.HttpClientConfig;
+import com.roxiemobile.networkingapi.network.rest.configuration.RequestTimeoutConfig;
 import com.roxiemobile.networkingapi.network.rest.request.ByteArrayBody;
 import com.roxiemobile.networkingapi.network.rest.request.RequestEntity;
 import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
@@ -29,6 +31,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -55,37 +58,37 @@ public final class RestApiClient {
 // MARK: - Methods
 
     public @NotNull HttpResult get(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.GET, requestEntity);
+        return execute(HttpMethod.GET, requestEntity);
     }
 
     public @NotNull HttpResult post(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.POST, requestEntity);
+        return execute(HttpMethod.POST, requestEntity);
     }
 
     public @NotNull HttpResult put(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.PUT, requestEntity);
+        return execute(HttpMethod.PUT, requestEntity);
     }
 
     public @NotNull HttpResult patch(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.PATCH, requestEntity);
+        return execute(HttpMethod.PATCH, requestEntity);
     }
 
     public @NotNull HttpResult delete(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.DELETE, requestEntity);
+        return execute(HttpMethod.DELETE, requestEntity);
     }
 
     public @NotNull HttpResult head(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.HEAD, requestEntity);
+        return execute(HttpMethod.HEAD, requestEntity);
     }
 
     public @NotNull HttpResult options(@NotNull RequestEntity<HttpBody> requestEntity) {
-        return execute(MethodName.OPTIONS, requestEntity);
+        return execute(HttpMethod.OPTIONS, requestEntity);
     }
 
 // MARK: - Private Methods
 
-    private @NotNull HttpResult execute(@NotNull String httpMethod, @NotNull RequestEntity<HttpBody> requestEntity) {
-        Guard.notBlank(httpMethod, "httpMethod is blank");
+    private @NotNull HttpResult execute(@NotNull HttpMethod httpMethod, @NotNull RequestEntity<HttpBody> requestEntity) {
+        Guard.notNull(httpMethod, "httpMethod is null");
         Guard.notNull(requestEntity, "requestEntity is null");
 
         // Execute HTTP request
@@ -120,7 +123,7 @@ public final class RestApiClient {
         return httpResult;
     }
 
-    private @NotNull Request createRequest(@NotNull String httpMethod, @NotNull RequestEntity<HttpBody> requestEntity) {
+    private @NotNull Request createRequest(@NotNull HttpMethod httpMethod, @NotNull RequestEntity<HttpBody> requestEntity) {
         @NotNull Request.Builder instance = new Request.Builder();
 
         // Create request body
@@ -128,7 +131,7 @@ public final class RestApiClient {
         @Nullable RequestBody requestBody = null;
 
         // NOTE: Workaround for OkHttp crash on POST with empty request body
-        if (httpBody == null && httpMethod.equals(MethodName.POST)) {
+        if (httpBody == null && httpMethod == HttpMethod.POST) {
             httpBody = EMPTY_HTTP_BODY;
         }
 
@@ -140,7 +143,7 @@ public final class RestApiClient {
         // Build HTTP request
         @Nullable HttpHeaders httpHeaders = requestEntity.getHttpHeaders();
 
-        instance.method(httpMethod, requestBody)
+        instance.method(httpMethod.getValue(), requestBody)
                 .url(requestEntity.getLink().toString())
                 .headers(mapping(httpHeaders));
 
@@ -166,11 +169,15 @@ public final class RestApiClient {
         // +> Certificate Pinning
         // +> RxJava Integration with CallAdapter
 
+        @NotNull RequestTimeoutConfig requestTimeoutConfig = Optional
+                .ofNullable(mHttpClientConfig.getRequestTimeoutConfig())
+                .orElse(DefaultRequestTimeoutConfig.SHARED);
+
         @NotNull OkHttpClient.Builder builder = SHARED_HTTP_CLIENT.newBuilder()
                 // Set the timeout until a connection is established
-                .connectTimeout(mHttpClientConfig.getConnectionTimeout(), TimeUnit.MILLISECONDS)
+                .connectTimeout(requestTimeoutConfig.getConnectionTimeout(), TimeUnit.MILLISECONDS)
                 // Set the default socket timeout which is the timeout for waiting for data
-                .readTimeout(mHttpClientConfig.getReadTimeout(), TimeUnit.MILLISECONDS)
+                .readTimeout(requestTimeoutConfig.getReadTimeout(), TimeUnit.MILLISECONDS)
                 // Set the handler that can accept cookies from incoming HTTP responses and provides cookies to outgoing HTTP requests
                 .cookieJar(cookieJar);
 
@@ -292,19 +299,17 @@ public final class RestApiClient {
     public static final class Builder {
 
         public Builder() {
-            mHttpClientConfig = DEFAULT_HTTP_CLIENT_CONFIG;
+            mHttpClientConfig = DefaultHttpClientConfig.SHARED;
         }
 
         public @NotNull Builder httpClientConfig(@Nullable HttpClientConfig httpClientConfig) {
-            mHttpClientConfig = (httpClientConfig != null) ? httpClientConfig.clone() : DEFAULT_HTTP_CLIENT_CONFIG;
+            mHttpClientConfig = (httpClientConfig != null) ? httpClientConfig.clone() : DefaultHttpClientConfig.SHARED;
             return this;
         }
 
         public @NotNull RestApiClient build() {
             return new RestApiClient(this);
         }
-
-        private static final @NotNull HttpClientConfig DEFAULT_HTTP_CLIENT_CONFIG = new DefaultHttpClientConfig();
 
         private @NotNull HttpClientConfig mHttpClientConfig;
     }
