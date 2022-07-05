@@ -1,5 +1,6 @@
-package com.roxiemobile.networkingapi.network.rest
+package com.roxiemobile.networkingapi.network.rest.converter
 
+import com.roxiemobile.networkingapi.network.rest.CallResult
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException
 
