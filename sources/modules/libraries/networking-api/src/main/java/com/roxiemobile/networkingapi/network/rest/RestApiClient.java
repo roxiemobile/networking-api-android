@@ -226,7 +226,7 @@ public final class RestApiClient {
         @NotNull BasicResponseEntity.Builder<byte[]> builder = new BasicResponseEntity.Builder<byte[]>()
                 .link(response.request().url().uri())
                 .httpHeaders(mapping(response.headers()))
-                .status(httpStatus)
+                .httpStatus(httpStatus)
                 // @see https://tools.ietf.org/html/rfc7231#section-3.1.1.5
                 .mediaType(MediaType.APPLICATION_OCTET_STREAM)
                 .cookieStore(cookieStore);

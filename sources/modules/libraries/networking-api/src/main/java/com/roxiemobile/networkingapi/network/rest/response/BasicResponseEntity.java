@@ -1,6 +1,5 @@
 package com.roxiemobile.networkingapi.network.rest.response;
 
-import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.networkingapi.network.http.CookieStore;
 import com.roxiemobile.networkingapi.network.http.HttpHeaders;
 import com.roxiemobile.networkingapi.network.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
+import java.util.Objects;
 
 public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements ResponseEntity<T> {
 
@@ -19,21 +19,20 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
     private BasicResponseEntity(@NotNull Builder<T> builder) {
         super(builder);
 
-        // Init instance variables
-        mHttpStatus = builder.status();
-        mMediaType = builder.mediaType();
+        _httpStatus = Objects.requireNonNull(builder.httpStatus, "httpStatus is null");
+        _mediaType = Objects.requireNonNull(builder.mediaType, "mediaType is null");
     }
 
 // MARK: - Properties
 
     @Override
     public @NotNull HttpStatus getHttpStatus() {
-        return mHttpStatus;
+        return _httpStatus;
     }
 
     @Override
     public @NotNull MediaType getMediaType() {
-        return mMediaType;
+        return _mediaType;
     }
 
 // MARK: - Inner Types
@@ -47,17 +46,15 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
         public Builder(@NotNull ResponseEntity<T> responseEntity) {
             super(responseEntity);
 
-            // Init instance variables
-            mHttpStatus = responseEntity.getHttpStatus();
-            mMediaType = responseEntity.getMediaType();
+            this.httpStatus = responseEntity.getHttpStatus();
+            this.mediaType = responseEntity.getMediaType();
         }
 
         public <Ti> Builder(@NotNull ResponseEntity<Ti> responseEntity, @Nullable T body) {
             super(responseEntity, body);
 
-            // Init instance variables
-            mHttpStatus = responseEntity.getHttpStatus();
-            mMediaType = responseEntity.getMediaType();
+            this.httpStatus = responseEntity.getHttpStatus();
+            this.mediaType = responseEntity.getMediaType();
         }
 
         @Override
@@ -80,38 +77,28 @@ public class BasicResponseEntity<T> extends BasicRequestEntity<T> implements Res
             return (Builder<T>) super.body(body);
         }
 
-        public @NotNull Builder<T> status(@NotNull HttpStatus httpStatus) {
-            mHttpStatus = httpStatus;
+        public @NotNull Builder<T> httpStatus(@NotNull HttpStatus httpStatus) {
+            this.httpStatus = httpStatus;
             return this;
         }
 
         public @NotNull Builder<T> mediaType(@NotNull MediaType mediaType) {
-            mMediaType = mediaType;
+            this.mediaType = mediaType;
             return this;
         }
 
         @Override
         public @NotNull ResponseEntity<T> build() {
-            Guard.notNull(status(), "httpStatus is null");
-            Guard.notNull(mediaType(), "mediaType is null");
             return new BasicResponseEntity<>(this);
         }
 
-        protected @Nullable HttpStatus status() {
-            return mHttpStatus;
-        }
-
-        protected @Nullable MediaType mediaType() {
-            return mMediaType;
-        }
-
-        private @Nullable HttpStatus mHttpStatus;
-        private @Nullable MediaType mMediaType;
+        private @Nullable HttpStatus httpStatus;
+        private @Nullable MediaType mediaType;
     }
 
 // MARK: - Variables
 
-    private final @NotNull HttpStatus mHttpStatus;
+    private final @NotNull HttpStatus _httpStatus;
 
-    private final @NotNull MediaType mMediaType;
+    private final @NotNull MediaType _mediaType;
 }
