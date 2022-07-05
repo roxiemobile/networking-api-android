@@ -8,9 +8,9 @@ import com.roxiemobile.androidcommons.data.Constants.Charsets;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.androidcommons.util.StringUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
+import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
-import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +45,7 @@ public final class JsonObjectConverter extends AbstractCallResultConverter<JsonO
         }
 
         // Create new response entity
-        return ResponseEntityUtils.copyWith(responseEntity, newBody);
+        return BasicResponseEntity.of(responseEntity, newBody);
     }
 
     @Override

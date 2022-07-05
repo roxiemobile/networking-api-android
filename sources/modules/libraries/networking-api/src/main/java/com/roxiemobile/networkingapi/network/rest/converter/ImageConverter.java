@@ -5,9 +5,9 @@ import android.graphics.BitmapFactory;
 
 import com.roxiemobile.androidcommons.util.ArrayUtils;
 import com.roxiemobile.networkingapi.network.http.MediaType;
+import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
-import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,7 @@ public final class ImageConverter extends AbstractCallResultConverter<Bitmap> {
         }
 
         // Create new response entity
-        return ResponseEntityUtils.copyWith(responseEntity, newBody);
+        return BasicResponseEntity.of(responseEntity, newBody);
     }
 
     @Override

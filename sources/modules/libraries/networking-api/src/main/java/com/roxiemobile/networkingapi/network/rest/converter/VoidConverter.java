@@ -13,7 +13,7 @@ public final class VoidConverter extends AbstractCallResultConverter<Void> {
 
     @Override
     public @NotNull ResponseEntity<Void> convert(@NotNull ResponseEntity<byte[]> responseEntity) throws ConversionException {
-        return new BasicResponseEntity.Builder<Void>(responseEntity, null).build();
+        return BasicResponseEntity.of(responseEntity);
     }
 
     @Override

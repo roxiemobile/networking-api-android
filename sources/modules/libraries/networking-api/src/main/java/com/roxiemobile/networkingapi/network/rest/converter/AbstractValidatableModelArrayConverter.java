@@ -5,9 +5,9 @@ import com.google.gson.JsonSyntaxException;
 import com.roxiemobile.androidcommons.data.mapper.DataMapper;
 import com.roxiemobile.androidcommons.data.model.ValidatableModel;
 import com.roxiemobile.androidcommons.util.ArrayUtils;
+import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConversionException;
-import com.roxiemobile.networkingapi.util.ResponseEntityUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +45,7 @@ public abstract class AbstractValidatableModelArrayConverter<T extends Validatab
         }
 
         // Create new response entity
-        return ResponseEntityUtils.copyWith(responseEntity, newBody);
+        return BasicResponseEntity.of(responseEntity, newBody);
     }
 
 // MARK: - Variables
