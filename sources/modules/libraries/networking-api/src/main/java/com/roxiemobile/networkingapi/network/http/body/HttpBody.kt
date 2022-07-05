@@ -1,4 +1,4 @@
-package com.roxiemobile.networkingapi.network.rest
+package com.roxiemobile.networkingapi.network.http.body
 
 import com.roxiemobile.networkingapi.network.http.MediaType
 
