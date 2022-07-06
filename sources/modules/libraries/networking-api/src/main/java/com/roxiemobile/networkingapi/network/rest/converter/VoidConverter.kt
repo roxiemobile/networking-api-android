@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.roxiemobile.networkingapi.network.rest.converter
 
 import com.roxiemobile.networkingapi.network.http.MediaType

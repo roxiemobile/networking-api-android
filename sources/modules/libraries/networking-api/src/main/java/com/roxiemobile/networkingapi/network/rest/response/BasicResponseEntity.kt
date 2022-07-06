@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.roxiemobile.networkingapi.network.rest.response
 
 import com.roxiemobile.networkingapi.network.http.CookieStore
