@@ -104,20 +104,20 @@ public final class RestApiClient {
             try {
                 // Create and execute HTTP request
                 @NotNull Response response = createClient(cookieStore).newCall(request).execute();
-                httpResult = HttpResult.success(createResponseEntity(response, cookieStore));
+                httpResult = HttpResult.Companion.success(createResponseEntity(response, cookieStore));
             }
             catch (HttpResponseException ex) {
                 Logger.e(TAG, ex);
 
                 // Handle interrupted HTTP requests
-                httpResult = HttpResult.success(createResponseEntity(ex.getResponse(), cookieStore));
+                httpResult = HttpResult.Companion.success(createResponseEntity(ex.getResponse(), cookieStore));
             }
         }
         catch (Exception ex) {
             Logger.e(TAG, ex);
 
             // Handle any other errors
-            httpResult = HttpResult.failure(ex);
+            httpResult = HttpResult.Companion.failure(ex);
         }
 
         // Done

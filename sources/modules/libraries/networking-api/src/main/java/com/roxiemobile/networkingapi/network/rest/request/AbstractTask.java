@@ -79,7 +79,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
             }
         }
         catch (Throwable ex) {
-            callResult = CallResult.failure(new ApplicationLayerError(ex));
+            callResult = CallResult.Companion.failure(new ApplicationLayerError(ex));
         }
 
         // Yielding result to listener
@@ -119,7 +119,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
 
                 // Create a new call result
                 if (httpStatus.is2xxSuccessful()) {
-                    callResult = onSuccess(CallResult.success(responseEntity));
+                    callResult = onSuccess(CallResult.Companion.success(responseEntity));
                 }
                 else {
                     ResponseException cause = new ResponseException(responseEntity);
@@ -215,7 +215,7 @@ public abstract class AbstractTask<Ti extends HttpBody, To>
      */
     protected @NotNull CallResult<To> onFailure(@NotNull RestApiError error) {
         Guard.notNull(error, "error is null");
-        return CallResult.failure(error);
+        return CallResult.Companion.failure(error);
     }
 
     /**
