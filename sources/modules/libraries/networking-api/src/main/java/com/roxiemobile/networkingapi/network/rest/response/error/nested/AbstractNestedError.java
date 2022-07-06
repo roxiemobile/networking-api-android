@@ -4,7 +4,7 @@ import com.annimon.stream.function.Consumer;
 import com.roxiemobile.androidcommons.diagnostics.Guard;
 import com.roxiemobile.androidcommons.logging.Logger;
 import com.roxiemobile.androidcommons.util.StringUtils;
-import com.roxiemobile.networkingapi.network.rest.CallResultConverter;
+import com.roxiemobile.networkingapi.network.rest.converter.CallResultConverter;
 import com.roxiemobile.networkingapi.network.rest.converter.StringConverter;
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity;
 
