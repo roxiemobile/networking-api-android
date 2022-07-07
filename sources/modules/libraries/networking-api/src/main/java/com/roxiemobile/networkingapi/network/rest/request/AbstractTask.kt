@@ -179,7 +179,7 @@ abstract class AbstractTask<Ti: HttpBody, To>:
         // Create HTTP request entity
         return BasicRequestEntity.Builder
             .of(_requestEntity, httpBody())
-            .link(httpRoute.toURI())
+            .link(httpRoute.link)
             .httpHeaders(httpHeaders())
             .build()
     }
