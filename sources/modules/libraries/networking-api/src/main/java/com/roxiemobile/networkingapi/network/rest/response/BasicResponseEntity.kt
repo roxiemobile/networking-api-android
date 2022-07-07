@@ -28,9 +28,7 @@ class BasicResponseEntity<T>: BasicRequestEntity<T>, ResponseEntity<T> {
 
     class Builder<T>: BasicRequestEntity.Builder<T> {
 
-        constructor() {
-            // Do nothing
-        }
+        constructor()
 
         constructor(responseEntity: ResponseEntity<T>): super(responseEntity) {
             this.httpStatus = responseEntity.httpStatus
