@@ -279,5 +279,5 @@ class RestApiClient {
 
 // MARK: - Variables
 
-    private var _httpClientConfig: HttpClientConfig
+    private val _httpClientConfig: HttpClientConfig
 }
