@@ -29,9 +29,7 @@ open class BasicRequestEntity<T>: RequestEntity<T> {
 
     open class Builder<T> {
 
-        constructor() {
-            // Do nothing
-        }
+        constructor()
 
         constructor(requestEntity: RequestEntity<T>) {
             this.link = requestEntity.link
