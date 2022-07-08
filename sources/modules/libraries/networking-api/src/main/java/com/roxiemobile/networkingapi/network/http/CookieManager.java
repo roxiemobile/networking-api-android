@@ -16,7 +16,7 @@
 
 package com.roxiemobile.networkingapi.network.http;
 
-import com.roxiemobile.networkingapi.util.URIUtils;
+import com.roxiemobile.networkingapi.network.http.util.LinkUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -179,7 +179,7 @@ public final class CookieManager extends CookieHandler {
 
             // if the cookie has the placeholder port list "", set the port.
             if ("".equals(cookie.getPortlist())) {
-                cookie.setPortlist(Integer.toString(URIUtils.getEffectivePort(uri)));
+                cookie.setPortlist(Integer.toString(LinkUtils.INSTANCE.getEffectivePort(uri)));
             }
 
             // if the cookie conforms to the policy, add it into the store

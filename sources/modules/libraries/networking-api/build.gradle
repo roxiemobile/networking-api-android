@@ -40,8 +40,11 @@ kotlin {
 
 dependencies {
 
+    implementation DEP.androidx.coreKtx
+    implementation DEP.jetbrains.kotlinx.immutableCollections
     implementation DEP.kotlin.stdlibJdk8
     implementation DEP.roxiemobile.androidCommons
+    implementation DEP.roxiemobile.kotlinCommons
     implementation DEP.square.okhttp3.loggingInterceptor
     implementation DEP.square.okhttp3.okhttp
     implementation DEP.square.okhttp3.urlConnection

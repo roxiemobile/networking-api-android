@@ -24,8 +24,8 @@ import android.os.Parcelable;
 
 import com.roxiemobile.androidcommons.data.model.ParcelableObject;
 import com.roxiemobile.networkingapi.network.http.util.InetAddress;
+import com.roxiemobile.networkingapi.network.http.util.LinkUtils;
 import com.roxiemobile.networkingapi.network.http.util.ObjectUtils;
-import com.roxiemobile.networkingapi.util.URIUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -175,7 +175,7 @@ public final class HttpCookie extends ParcelableObject
             return true;
         }
         return Arrays.asList(cookie.getPortlist().split(","))
-                .contains(Integer.toString(URIUtils.getEffectivePort(uri)));
+                .contains(Integer.toString(LinkUtils.INSTANCE.getEffectivePort(uri)));
     }
 
     /**
