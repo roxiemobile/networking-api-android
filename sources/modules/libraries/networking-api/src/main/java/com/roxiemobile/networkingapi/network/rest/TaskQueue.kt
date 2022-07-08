@@ -131,9 +131,9 @@ object TaskQueue {
             }
         }
 
-        override fun onFailure(call: Call<Ti>, error: RestApiError) {
+        override fun onFailure(call: Call<Ti>, restApiError: RestApiError) {
             if (!_done.getAndSet(true)) {
-                _executor.execute { super.onFailure(call, error) }
+                _executor.execute { super.onFailure(call, restApiError) }
             }
         }
 

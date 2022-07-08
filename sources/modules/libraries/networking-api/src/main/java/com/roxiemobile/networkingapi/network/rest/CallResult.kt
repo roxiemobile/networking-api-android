@@ -10,7 +10,7 @@ class CallResult<T>: Result<ResponseEntity<T>, RestApiError, T> {
 
     private constructor(responseEntity: ResponseEntity<T>): super(responseEntity)
 
-    private constructor(error: RestApiError): super(error)
+    private constructor(restApiError: RestApiError): super(restApiError)
 
 // MARK: - Companion
 
@@ -20,8 +20,8 @@ class CallResult<T>: Result<ResponseEntity<T>, RestApiError, T> {
             return CallResult(responseEntity)
         }
 
-        fun <T> failure(error: RestApiError): CallResult<T> {
-            return CallResult(error)
+        fun <T> failure(restApiError: RestApiError): CallResult<T> {
+            return CallResult(restApiError)
         }
     }
 }

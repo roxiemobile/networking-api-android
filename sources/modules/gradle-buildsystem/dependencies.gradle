@@ -28,7 +28,7 @@ ext.PLG = [
 
 ext.DEP_VER = [
         androidx: [
-                core: '1.7.0',
+                core: '1.8.0',
                 espresso: '3.4.0',
                 junit: '1.1.3',
         ],

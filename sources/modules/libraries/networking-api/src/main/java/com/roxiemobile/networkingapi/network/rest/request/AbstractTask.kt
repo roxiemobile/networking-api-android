@@ -14,6 +14,7 @@ import com.roxiemobile.networkingapi.network.rest.Task
 import com.roxiemobile.networkingapi.network.rest.TaskQueue
 import com.roxiemobile.networkingapi.network.rest.configuration.DefaultHttpClientConfig
 import com.roxiemobile.networkingapi.network.rest.configuration.HttpClientConfig
+import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError
 import com.roxiemobile.networkingapi.network.rest.response.error.ApplicationLayerError
 import com.roxiemobile.networkingapi.network.rest.response.error.TransportLayerError
@@ -93,55 +94,40 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     protected fun call(): CallResult<To>? {
         check(!ThreadUtils.runningOnUiThread()) { "This method must not be called from the main thread!" }
 
-        var callResult: CallResult<To>? = null
-        var error: RestApiError? = null
-
-        // Send request to the server
         val httpResult: HttpResult = callExecute()
+        var callResult: CallResult<To>? = null
 
-        // Are HTTP response is still needed?
         if (!isCancelled()) {
 
-            // Handle HTTP response
-            if (httpResult.isSuccess) {
+            callResult = httpResult.fold(
+                onSuccess = { responseEntity ->
 
-                val responseEntity = checkNotNull(httpResult.value()) { "httpResult.value() is null" }
-                val httpStatus = responseEntity.httpStatus
+                    val httpStatus = responseEntity.httpStatus
 
-                // Create a new call result
-                if (httpStatus.is2xxSuccessful) {
-                    callResult = onSuccess(CallResult.success(responseEntity))
-                }
-                else {
-                    val cause = ResponseException(responseEntity)
-                    // Build application layer error
-                    error = ApplicationLayerError(cause)
-                }
-            }
-            else {
-                var cause = checkNotNull(httpResult.error()) { "httpResult.error() is null" }
+                    if (httpStatus.is1xxInformational || httpStatus.is2xxSuccessful) {
+                        onSuccess(responseEntity)
+                    }
+                    else {
+                        val cause = ResponseException(responseEntity)
+                        onFailure(ApplicationLayerError(cause))
+                    }
+                },
+                onFailure = { error ->
 
-                // Wrap up HTTP connection error
-                if (cause is IOException) {
-                    cause = ConnectionException(cause)
-                }
+                    val cause = when (error) {
+                        // Wrap the HTTP connection error
+                        is IOException -> ConnectionException(error)
+                        else -> error
+                    }
 
-                // Build transport layer error
-                error = TransportLayerError(cause)
-            }
-
-            // Handle error
-            if (error != null) {
-                callResult = onFailure(error)
-            }
+                    onFailure(TransportLayerError(cause))
+                },
+            )
         }
         else {
-
-            // Handle request cancellation
             onCancel()
         }
 
-        // Done
         return callResult
     }
 
@@ -199,17 +185,14 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     }
 
     /**
-     *
      * TODO
      */
-    protected abstract fun onSuccess(callResult: CallResult<ByteArray>): CallResult<To>
+    protected abstract fun onSuccess(responseEntity: ResponseEntity<ByteArray>): CallResult<To>
 
     /**
      * TODO
      */
-    protected open fun onFailure(error: RestApiError): CallResult<To> {
-        return CallResult.failure(error)
-    }
+    protected abstract fun onFailure(restApiError: RestApiError): CallResult<To>
 
     /**
      * TODO
