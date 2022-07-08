@@ -3,6 +3,7 @@ package com.roxiemobile.networkingapi.network.rest
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError
 
+@Deprecated("Class must be `final`")
 open class CallbackDecorator<Ti, To>: Callback<Ti, To> {
 
 // MARK: - Construction
