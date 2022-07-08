@@ -23,8 +23,8 @@ open class CallbackDecorator<Ti, To>: Callback<Ti, To> {
         _callback?.onSuccess(call, responseEntity)
     }
 
-    override fun onFailure(call: Call<Ti>, error: RestApiError) {
-        _callback?.onFailure(call, error)
+    override fun onFailure(call: Call<Ti>, restApiError: RestApiError) {
+        _callback?.onFailure(call, restApiError)
     }
 
     override fun onCancel(call: Call<Ti>) {

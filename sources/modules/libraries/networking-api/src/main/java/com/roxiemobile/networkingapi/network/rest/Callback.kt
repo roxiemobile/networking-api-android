@@ -20,7 +20,7 @@ interface Callback<Ti, To> {
     /**
      * TODO
      */
-    fun onFailure(call: Call<Ti>, error: RestApiError)
+    fun onFailure(call: Call<Ti>, restApiError: RestApiError)
 
     /**
      * TODO
