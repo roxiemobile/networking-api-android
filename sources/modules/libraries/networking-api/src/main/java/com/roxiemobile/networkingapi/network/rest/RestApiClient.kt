@@ -11,7 +11,6 @@ import com.roxiemobile.networkingapi.network.http.CookieStore
 import com.roxiemobile.networkingapi.network.http.HttpHeaders
 import com.roxiemobile.networkingapi.network.http.HttpMethod
 import com.roxiemobile.networkingapi.network.http.HttpStatus
-import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore
 import com.roxiemobile.networkingapi.network.http.MediaType
 import com.roxiemobile.networkingapi.network.http.body.ByteArrayBody
 import com.roxiemobile.networkingapi.network.http.body.HttpBody
@@ -71,28 +70,26 @@ class RestApiClient {
 // MARK: - Private Methods
 
     private fun execute(httpMethod: HttpMethod, requestEntity: RequestEntity<HttpBody>): HttpResult {
-
         val request = createRequest(httpMethod, requestEntity)
-        val cookieStore = requestEntity.cookieStore ?: InMemoryCookieStore()
 
         // Execute HTTP request
-        return execute(request, cookieStore)
+        return execute(request, requestEntity.cookieStore)
     }
 
     private fun execute(request: Request, cookieStore: CookieStore): HttpResult {
         var httpResult: HttpResult
 
         try {
-            try {
+            httpResult = try {
                 // Create and execute HTTP request
                 val response = createClient(cookieStore).newCall(request).execute()
-                httpResult = HttpResult.success(createResponseEntity(response, cookieStore))
+                HttpResult.success(createResponseEntity(response, cookieStore))
             }
             catch (ex: HttpResponseException) {
                 Logger.w(TAG, ex)
 
                 // Handle interrupted HTTP requests
-                httpResult = HttpResult.success(createResponseEntity(ex.response, cookieStore))
+                HttpResult.success(createResponseEntity(ex.response, cookieStore))
             }
         }
         catch (ex: Exception) {
@@ -257,8 +254,8 @@ class RestApiClient {
         internal var httpClientConfig: HttpClientConfig? = null
             private set
 
-        internal fun httpClientConfig(httpClientConfig: HttpClientConfig?): Builder {
-            this.httpClientConfig = httpClientConfig?.clone()
+        internal fun httpClientConfig(httpClientConfig: HttpClientConfig): Builder {
+            this.httpClientConfig = httpClientConfig.clone()
             return this
         }
 

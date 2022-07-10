@@ -1,8 +1,10 @@
-@file:Suppress("DEPRECATION", "MemberVisibilityCanBePrivate", "UNCHECKED_CAST", "unused")
+@file:Suppress("DEPRECATION", "UNCHECKED_CAST", "unused")
 
 package com.roxiemobile.networkingapi.network.rest.request
 
 import com.roxiemobile.androidcommons.concurrent.ThreadUtils
+import com.roxiemobile.java.util.toBase62
+import com.roxiemobile.networkingapi.network.http.CookieStore
 import com.roxiemobile.networkingapi.network.http.HttpHeaders
 import com.roxiemobile.networkingapi.network.http.body.HttpBody
 import com.roxiemobile.networkingapi.network.rest.CallResult
@@ -20,8 +22,9 @@ import com.roxiemobile.networkingapi.network.rest.response.error.ApplicationLaye
 import com.roxiemobile.networkingapi.network.rest.response.error.TransportLayerError
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ConnectionException
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseException
-import com.roxiemobile.networkingapi.network.rest.routing.HttpRoute
 import java.io.IOException
+import java.net.URI
+import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractTask<Ti: HttpBody, To>:
@@ -30,9 +33,10 @@ abstract class AbstractTask<Ti: HttpBody, To>:
 
 // MARK: - Construction
 
-    protected constructor(builder: TaskBuilder<Ti, To>) {
-        _tag = builder.tag
-        _requestEntity = requireNotNull(builder.requestEntity) { "requestEntity is null" }
+    protected constructor(builder: Builder<Ti, To, *>) {
+        this.tag = builder.tag ?: createTag()
+        this.requestEntity = requireNotNull(builder.requestEntity) { "requestEntity is null" }
+        this.httpClientConfig = builder.httpClientConfig ?: DefaultHttpClientConfig.SHARED
     }
 
 // MARK: - Properties
@@ -40,14 +44,17 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     /**
      * The tag associated with a task.
      */
-    final override val tag: String?
-        get() = _tag
+    final override val tag: String
 
     /**
      * The original request entity.
      */
     final override val requestEntity: RequestEntity<Ti>
-        get() = _requestEntity
+
+    /**
+     * TODO
+     */
+    val httpClientConfig: HttpClientConfig
 
 // MARK: - Methods
 
@@ -97,8 +104,10 @@ abstract class AbstractTask<Ti: HttpBody, To>:
         val httpResult: HttpResult = callExecute()
         var callResult: CallResult<To>? = null
 
-        if (!isCancelled()) {
-
+        if (_cancelled.get()) {
+            onCancel()
+        }
+        else {
             callResult = httpResult.fold(
                 onSuccess = { responseEntity ->
 
@@ -124,9 +133,6 @@ abstract class AbstractTask<Ti: HttpBody, To>:
                 },
             )
         }
-        else {
-            onCancel()
-        }
 
         return callResult
     }
@@ -141,12 +147,9 @@ abstract class AbstractTask<Ti: HttpBody, To>:
      */
     protected fun createClient(): RestApiClient {
 
-        // Get HTTP client config
-        val httpClientConfig = httpClientConfig()
-
-        // Create/init HTTP client
+        // Create HTTP client
         return RestApiClient.Builder()
-            .httpClientConfig(httpClientConfig)
+            .httpClientConfig(httpClientConfig())
             .build()
     }
 
@@ -154,34 +157,51 @@ abstract class AbstractTask<Ti: HttpBody, To>:
      * TODO
      */
     protected open fun httpClientConfig(): HttpClientConfig {
-        return DefaultHttpClientConfig.SHARED
+        return this.httpClientConfig
     }
 
     /**
      * TODO
      */
-    protected open fun createRequestEntity(httpRoute: HttpRoute): RequestEntity<HttpBody> {
+    protected fun createRequestEntity(): RequestEntity<HttpBody> {
 
         // Create HTTP request entity
-        return BasicRequestEntity.Builder
-            .of(_requestEntity, httpBody())
-            .link(httpRoute.link)
+        return BasicRequestEntity.Builder<HttpBody>()
+            .link(link())
             .httpHeaders(httpHeaders())
+            .cookieStore(cookieStore())
+            .body(httpBody())
             .build()
     }
 
     /**
      * TODO
      */
+    protected open fun link(): URI {
+        return this.requestEntity.link
+    }
+
+    /**
+     * TODO
+     */
     protected open fun httpHeaders(): HttpHeaders {
-        return HttpHeaders.readOnlyHttpHeaders(_requestEntity.httpHeaders)
+        return HttpHeaders().also {
+            it.putAll(this.requestEntity.httpHeaders)
+        }
+    }
+
+    /**
+     * TODO
+     */
+    protected open fun cookieStore(): CookieStore {
+        return this.requestEntity.cookieStore
     }
 
     /**
      * TODO
      */
     protected open fun httpBody(): HttpBody? {
-        return _requestEntity.body
+        return this.requestEntity.body
     }
 
     /**
@@ -211,7 +231,7 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     /**
      * TODO
      */
-    protected abstract fun createBuilder(): TaskBuilder<Ti, To>
+    abstract fun createBuilder(): TaskBuilder<Ti, To>
 
     /**
      * TODO
@@ -220,18 +240,11 @@ abstract class AbstractTask<Ti: HttpBody, To>:
         return !_cancelled.getAndSet(true)
     }
 
-    /**
-     * TODO
-     */
-    fun isCancelled(): Boolean {
-        return _cancelled.get()
-    }
-
 // MARK: - Private Methods
 
     private fun yieldTo(callback: Callback<Ti, To>, callResult: CallResult<To>?) {
 
-        if (isCancelled()) {
+        if (_cancelled.get()) {
             callback.onCancel(this)
         }
         else {
@@ -253,44 +266,62 @@ abstract class AbstractTask<Ti: HttpBody, To>:
 
 // MARK: - Inner Types
 
-    abstract class Builder<Ti, To, BuilderType: TaskBuilder<Ti, To>>(): TaskBuilder<Ti, To> {
+    abstract class Builder<Ti: HttpBody, To, BuilderType: TaskBuilder<Ti, To>>:
+        TaskBuilder<Ti, To> {
 
-        protected constructor(task: Task<Ti, To>): this() {
-            _tag = task.tag
-            _requestEntity = task.requestEntity
+        protected constructor()
+
+        protected constructor(builder: Builder<Ti, To, BuilderType>) {
+            this.tag = builder.tag
+            this.requestEntity = builder.requestEntity
+            this.httpClientConfig = builder.httpClientConfig
         }
 
-        override val tag: String?
-            get() = _tag
+        protected constructor(task: AbstractTask<Ti, To>) {
+            this.tag = task.tag
+            this.requestEntity = task.requestEntity
+            this.httpClientConfig = task.httpClientConfig
+        }
 
-        override val requestEntity: RequestEntity<Ti>?
-            get() = _requestEntity
+        internal var tag: String? = null
+            private set
 
-        fun tag(tag: String?): BuilderType {
-            _tag = tag
+        internal var requestEntity: RequestEntity<Ti>? = null
+            private set
+
+        internal var httpClientConfig: HttpClientConfig? = null
+            private set
+
+        override fun tag(tag: String?): BuilderType {
+            this.tag = tag
             return this as BuilderType
         }
 
-        fun requestEntity(requestEntity: RequestEntity<Ti>): BuilderType {
-            _requestEntity = requestEntity
+        override fun requestEntity(requestEntity: RequestEntity<Ti>): BuilderType {
+            this.requestEntity = requestEntity.clone()
             return this as BuilderType
         }
 
-        override fun build(): Task<Ti, To> {
-            return createTask()
+        override fun httpClientConfig(httpClientConfig: HttpClientConfig): BuilderType {
+            this.httpClientConfig = httpClientConfig.clone()
+            return this as BuilderType
         }
 
-        protected abstract fun createTask(): Task<Ti, To>
+        abstract override fun build(): AbstractTask<Ti, To>
 
-        private var _tag: String? = null
-        private var _requestEntity: RequestEntity<Ti>? = null
+        abstract override fun clone(): Builder<Ti, To, BuilderType>
+    }
+
+// MARK: - Companion
+
+    companion object {
+
+        private fun createTag(): String {
+            return "urn:tag:" + UUID.randomUUID().toBase62()
+        }
     }
 
 // MARK: - Variables
-
-    private val _tag: String?
-
-    private val _requestEntity: RequestEntity<Ti>
 
     private val _cancelled = AtomicBoolean(false)
 }

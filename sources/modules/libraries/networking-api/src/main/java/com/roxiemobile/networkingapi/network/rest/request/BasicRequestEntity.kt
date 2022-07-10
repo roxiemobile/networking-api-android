@@ -2,16 +2,17 @@ package com.roxiemobile.networkingapi.network.rest.request
 
 import com.roxiemobile.networkingapi.network.http.CookieStore
 import com.roxiemobile.networkingapi.network.http.HttpHeaders
+import com.roxiemobile.networkingapi.network.http.InMemoryCookieStore
 import java.net.URI
 
-open class BasicRequestEntity<T>: RequestEntity<T> {
+open class BasicRequestEntity<TBody>: RequestEntity<TBody> {
 
 // MARK: - Construction
 
-    protected constructor(builder: Builder<T>) {
+    protected constructor(builder: Builder<TBody>) {
         this.link = requireNotNull(builder.link) { "link is null" }
-        this.httpHeaders = builder.httpHeaders
-        this.cookieStore = builder.cookieStore
+        this.httpHeaders = builder.httpHeaders ?: HttpHeaders()
+        this.cookieStore = builder.cookieStore ?: InMemoryCookieStore()
         this.body = builder.body
     }
 
@@ -19,23 +20,27 @@ open class BasicRequestEntity<T>: RequestEntity<T> {
 
     final override val link: URI
 
-    final override val httpHeaders: HttpHeaders?
+    final override val httpHeaders: HttpHeaders
 
-    final override val cookieStore: CookieStore?
+    final override val cookieStore: CookieStore
 
-    final override val body: T?
+    final override val body: TBody?
+
+// MARK: - Methods
+
+    override fun clone(): RequestEntity<TBody> {
+        return Builder(this).build()
+    }
 
 // MARK: - Inner Types
 
-    open class Builder<T> {
+    open class Builder<TBody> {
 
-        constructor()
-
-        constructor(requestEntity: RequestEntity<T>) {
-            this.link = requestEntity.link
-            this.httpHeaders = requestEntity.httpHeaders
-            this.cookieStore = requestEntity.cookieStore
-            this.body = requestEntity.body
+        constructor(requestEntity: RequestEntity<TBody>? = null) {
+            this.link = requestEntity?.link
+            this.httpHeaders = requestEntity?.httpHeaders
+            this.cookieStore = requestEntity?.cookieStore
+            this.body = requestEntity?.body
         }
 
         internal var link: URI? = null
@@ -47,30 +52,30 @@ open class BasicRequestEntity<T>: RequestEntity<T> {
         internal var cookieStore: CookieStore? = null
             private set
 
-        internal var body: T? = null
+        internal var body: TBody? = null
             private set
 
-        open fun link(link: URI): Builder<T> {
+        open fun link(link: URI): Builder<TBody> {
             this.link = link
             return this
         }
 
-        open fun httpHeaders(httpHeaders: HttpHeaders?): Builder<T> {
+        open fun httpHeaders(httpHeaders: HttpHeaders): Builder<TBody> {
             this.httpHeaders = httpHeaders
             return this
         }
 
-        open fun cookieStore(cookieStore: CookieStore?): Builder<T> {
+        open fun cookieStore(cookieStore: CookieStore): Builder<TBody> {
             this.cookieStore = cookieStore
             return this
         }
 
-        open fun body(body: T?): Builder<T> {
+        open fun body(body: TBody?): Builder<TBody> {
             this.body = body
             return this
         }
 
-        open fun build(): RequestEntity<T> {
+        open fun build(): RequestEntity<TBody> {
             return BasicRequestEntity(this)
         }
 
