@@ -9,7 +9,7 @@ interface Call<T> {
     /**
      * TODO
      */
-    val tag: String?
+    val tag: String
 
     /**
      * The original request entity.

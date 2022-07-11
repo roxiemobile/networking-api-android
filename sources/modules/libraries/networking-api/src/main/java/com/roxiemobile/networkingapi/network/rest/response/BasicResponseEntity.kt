@@ -1,5 +1,3 @@
-@file:Suppress("unused")
-
 package com.roxiemobile.networkingapi.network.rest.response
 
 import com.roxiemobile.networkingapi.network.http.CookieStore
@@ -9,11 +7,11 @@ import com.roxiemobile.networkingapi.network.http.MediaType
 import com.roxiemobile.networkingapi.network.rest.request.BasicRequestEntity
 import java.net.URI
 
-class BasicResponseEntity<T>: BasicRequestEntity<T>, ResponseEntity<T> {
+class BasicResponseEntity<TBody>: BasicRequestEntity<TBody>, ResponseEntity<TBody> {
 
 // MARK: - Construction
 
-    private constructor(builder: Builder<T>): super(builder) {
+    private constructor(builder: Builder<TBody>): super(builder) {
         this.httpStatus = requireNotNull(builder.httpStatus) { "httpStatus is null" }
         this.mediaType = requireNotNull(builder.mediaType) { "mediaType is null" }
     }
@@ -24,15 +22,19 @@ class BasicResponseEntity<T>: BasicRequestEntity<T>, ResponseEntity<T> {
 
     override val mediaType: MediaType
 
+// MARK: - Methods
+
+    override fun clone(): ResponseEntity<TBody> {
+        return Builder(this).build()
+    }
+
 // MARK: - Inner Types
 
-    class Builder<T>: BasicRequestEntity.Builder<T> {
+    class Builder<TBody>: BasicRequestEntity.Builder<TBody> {
 
-        constructor()
-
-        constructor(responseEntity: ResponseEntity<T>): super(responseEntity) {
-            this.httpStatus = responseEntity.httpStatus
-            this.mediaType = responseEntity.mediaType
+        constructor(responseEntity: ResponseEntity<TBody>? = null): super(responseEntity) {
+            this.httpStatus = responseEntity?.httpStatus
+            this.mediaType = responseEntity?.mediaType
         }
 
         internal var httpStatus: HttpStatus? = null
@@ -41,33 +43,33 @@ class BasicResponseEntity<T>: BasicRequestEntity<T>, ResponseEntity<T> {
         internal var mediaType: MediaType? = null
             private set
 
-        override fun link(link: URI): Builder<T> {
-            return super.link(link) as Builder<T>
+        override fun link(link: URI): Builder<TBody> {
+            return super.link(link) as Builder<TBody>
         }
 
-        override fun httpHeaders(httpHeaders: HttpHeaders?): Builder<T> {
-            return super.httpHeaders(httpHeaders) as Builder<T>
+        override fun httpHeaders(httpHeaders: HttpHeaders): Builder<TBody> {
+            return super.httpHeaders(httpHeaders) as Builder<TBody>
         }
 
-        override fun cookieStore(cookieStore: CookieStore?): Builder<T> {
-            return super.cookieStore(cookieStore) as Builder<T>
+        override fun cookieStore(cookieStore: CookieStore): Builder<TBody> {
+            return super.cookieStore(cookieStore) as Builder<TBody>
         }
 
-        override fun body(body: T?): Builder<T> {
-            return super.body(body) as Builder<T>
+        override fun body(body: TBody?): Builder<TBody> {
+            return super.body(body) as Builder<TBody>
         }
 
-        fun httpStatus(httpStatus: HttpStatus): Builder<T> {
+        fun httpStatus(httpStatus: HttpStatus): Builder<TBody> {
             this.httpStatus = httpStatus
             return this
         }
 
-        fun mediaType(mediaType: MediaType): Builder<T> {
+        fun mediaType(mediaType: MediaType): Builder<TBody> {
             this.mediaType = mediaType
             return this
         }
 
-        override fun build(): ResponseEntity<T> {
+        override fun build(): ResponseEntity<TBody> {
             return BasicResponseEntity(this)
         }
 

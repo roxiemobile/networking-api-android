@@ -8,16 +8,16 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.URLEncoder
 
-object HttpRouteFactory {
+object LinkFactory {
 
 // MARK: - Methods
 
     @Throws(IllegalStateException::class)
-    fun createRoute(
+    fun create(
         baseLink: URI? = null,
         path: String? = null,
-        parameters: QueryParameters? = null,
-    ): HttpRoute {
+        queryParameters: QueryParameters? = null,
+    ): URI {
 
         var linkText: String? = null
 
@@ -31,16 +31,16 @@ object HttpRouteFactory {
             }
 
             // Append query parameters to link
-            if (parameters != null && parameters.size > 0) {
-                linkText += "?" + buildQueryString(parameters)
+            if (queryParameters != null && queryParameters.size > 0) {
+                linkText += "?" + buildQueryString(queryParameters)
             }
         }
 
         // Build new HTTP route
-        var httpRoute: HttpRoute? = null
+        var link: URI? = null
         try {
             if (linkText != null) {
-                httpRoute = HttpRoute(URI(linkText).normalize())
+                link = URI(linkText).normalize()
             }
         }
         catch (ex: URISyntaxException) {
@@ -48,12 +48,12 @@ object HttpRouteFactory {
         }
 
         // Validate result
-        if (httpRoute == null) {
+        if (link == null) {
             error("Failed to create HTTP route for path: ${path}")
         }
 
         // Done
-        return httpRoute
+        return link
     }
 
 // MARK: - Private Methods
@@ -107,5 +107,5 @@ object HttpRouteFactory {
 
 // MARK: - Constants
 
-    private val TAG = HttpRoute::class.java.simpleName
+    private val TAG = LinkFactory::class.java.simpleName
 }

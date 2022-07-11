@@ -4,7 +4,7 @@ import com.roxiemobile.networkingapi.network.http.CookieStore
 import com.roxiemobile.networkingapi.network.http.HttpHeaders
 import java.net.URI
 
-interface RequestEntity<T> {
+interface RequestEntity<TBody>: Cloneable {
 
 // MARK: - Properties
 
@@ -16,15 +16,22 @@ interface RequestEntity<T> {
     /**
      * TODO
      */
-    val httpHeaders: HttpHeaders?
+    val httpHeaders: HttpHeaders
 
     /**
      * TODO
      */
-    val cookieStore: CookieStore?
+    val cookieStore: CookieStore
 
     /**
      * TODO
      */
-    val body: T?
+    val body: TBody?
+
+// MARK: - Methods
+
+    /**
+     * TODO
+     */
+    public override fun clone(): RequestEntity<TBody>
 }

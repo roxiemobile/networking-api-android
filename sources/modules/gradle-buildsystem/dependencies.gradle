@@ -41,7 +41,7 @@ ext.DEP_VER = [
         kotlin: PLG_VER.kotlin,
         roxiemobile: [
                 androidCommons: '0.9.2',
-                kotlinCommons: '1.0.0',
+                kotlinCommons: '1.0.1',
         ],
         square: [
                 okhttp3: [
