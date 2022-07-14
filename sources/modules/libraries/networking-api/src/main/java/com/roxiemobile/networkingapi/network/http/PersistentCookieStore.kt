@@ -1,4 +1,4 @@
-@file:Suppress("UsePropertyAccessSyntax")
+@file:Suppress("UsePropertyAccessSyntax", "unused")
 
 package com.roxiemobile.networkingapi.network.http
 

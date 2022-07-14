@@ -25,9 +25,6 @@ data class DefaultHttpClientConfig(
 
     companion object {
 
-        @JvmField
-        val SHARED = DefaultHttpClientConfig()
-
         private val NETWORK_INTERCEPTORS = Collections.unmodifiableList(
             mutableListOf<Interceptor>().apply {
 
@@ -40,5 +37,8 @@ data class DefaultHttpClientConfig(
                 }
             }
         )
+
+        @JvmField
+        val SHARED = DefaultHttpClientConfig()
     }
 }

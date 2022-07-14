@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.roxiemobile.networkingapi.network.rest.interceptor
 
 import okhttp3.Response
