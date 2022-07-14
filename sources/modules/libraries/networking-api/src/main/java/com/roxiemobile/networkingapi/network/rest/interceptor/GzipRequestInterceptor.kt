@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.roxiemobile.networkingapi.network.rest.interceptor
 
 import com.roxiemobile.networkingapi.network.http.ContentCodingType

@@ -97,7 +97,7 @@ object TaskQueue {
             _callback = InnerCallback(callback, callbackOnUiThread)
         }
 
-        val tag: String?
+        val tag: String
             get() = _task.tag
 
         override fun run() {
@@ -214,12 +214,10 @@ object TaskQueue {
 
         companion object {
 
-            @JvmField
-            val SHARED = InnerParallelWorkerThreadExecutor()
-
             private val CPU_COUNT: Int = Runtime.getRuntime().availableProcessors()
             private val CORE_POOL_SIZE: Int = CPU_COUNT + 1
             private val MAXIMUM_POOL_SIZE: Int = CPU_COUNT * 2 + 1
+
             private const val KEEP_ALIVE: Long = 1
 
             private val POOL_WORK_QUEUE: BlockingQueue<Runnable> = LinkedBlockingQueue(128)
@@ -240,6 +238,9 @@ object TaskQueue {
 
                 private val _count = AtomicInteger(1)
             }
+
+            @JvmField
+            val SHARED = InnerParallelWorkerThreadExecutor()
         }
 
         /**
