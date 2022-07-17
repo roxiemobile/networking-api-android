@@ -25,6 +25,7 @@ import com.roxiemobile.networkingapi.network.rest.response.error.nested.Response
 import java.io.IOException
 import java.net.URI
 import java.util.UUID
+import java.util.concurrent.CancellationException
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AbstractTask<Ti: HttpBody, To>:
@@ -98,14 +99,14 @@ abstract class AbstractTask<Ti: HttpBody, To>:
      * Performs the request and returns the response, or throws an exception if unable
      * to do so. May return `null` if this call was canceled.
      */
-    protected fun call(): CallResult<To>? {
+    protected fun call(): CallResult<To> {
         check(!ThreadUtils.runningOnUiThread()) { "This method must not be called from the main thread!" }
 
         val httpResult: HttpResult = callExecute()
-        var callResult: CallResult<To>? = null
+        val callResult: CallResult<To>
 
         if (_cancelled.get()) {
-            onCancel()
+            callResult = onCancelled()
         }
         else {
             callResult = httpResult.fold(
@@ -114,11 +115,11 @@ abstract class AbstractTask<Ti: HttpBody, To>:
                     val httpStatus = responseEntity.httpStatus
 
                     if (httpStatus.is1xxInformational || httpStatus.is2xxSuccessful) {
-                        onSuccess(responseEntity)
+                        onSucceeded(responseEntity)
                     }
                     else {
                         val cause = ResponseException(responseEntity)
-                        onFailure(ApplicationLayerError(cause))
+                        onFailed(ApplicationLayerError(cause))
                     }
                 },
                 onFailure = { error ->
@@ -129,7 +130,10 @@ abstract class AbstractTask<Ti: HttpBody, To>:
                         else -> error
                     }
 
-                    onFailure(TransportLayerError(cause))
+                    when (cause) {
+                        is CancellationException -> onCancelled()
+                        else -> onFailed(TransportLayerError(cause))
+                    }
                 },
             )
         }
@@ -207,19 +211,17 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     /**
      * TODO
      */
-    protected abstract fun onSuccess(responseEntity: ResponseEntity<ByteArray>): CallResult<To>
+    protected abstract fun onSucceeded(responseEntity: ResponseEntity<ByteArray>): CallResult<To>
 
     /**
      * TODO
      */
-    protected abstract fun onFailure(restApiError: RestApiError): CallResult<To>
+    protected abstract fun onFailed(restApiError: RestApiError): CallResult<To>
 
     /**
      * TODO
      */
-    protected open fun onCancel() {
-        // Do nothing
-    }
+    protected abstract fun onCancelled(): CallResult<To>
 
     /**
      * TODO
@@ -245,22 +247,24 @@ abstract class AbstractTask<Ti: HttpBody, To>:
     private fun yieldTo(callback: Callback<Ti, To>, callResult: CallResult<To>?) {
 
         if (_cancelled.get()) {
-            callback.onCancel(this)
+            callback.onCancelled(this)
         }
-        else {
-            if (callResult != null) {
-                if (callResult.isSuccess) {
-                    val value = checkNotNull(callResult.value()) { "value is null" }
-                    callback.onSuccess(this, value)
-                }
-                else {
-                    val error = checkNotNull(callResult.error()) { "error is null" }
-                    callback.onFailure(this, error)
-                }
+        else if (callResult != null) {
+            if (callResult.isSuccess) {
+                val value = checkNotNull(callResult.value()) { "value is null" }
+                callback.onSucceeded(this, value)
             }
             else {
-                error("!isCancelled() && (callResult == null)")
+                val exception = checkNotNull(callResult.error()) { "exception is null" }
+                when (exception) {
+                    is CancellationException -> callback.onCancelled(this)
+                    is RestApiError -> callback.onFailed(this, exception)
+                    else -> error("Unsupported exception: ${exception.javaClass.name}")
+                }
             }
+        }
+        else {
+            error("!isCancelled() && (callResult == null)")
         }
     }
 

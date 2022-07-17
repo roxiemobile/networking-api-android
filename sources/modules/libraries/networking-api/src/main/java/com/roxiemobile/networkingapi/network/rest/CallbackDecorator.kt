@@ -3,15 +3,8 @@ package com.roxiemobile.networkingapi.network.rest
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 import com.roxiemobile.networkingapi.network.rest.response.RestApiError
 
-@Deprecated("Class must be `final`")
-open class CallbackDecorator<Ti, To>: Callback<Ti, To> {
-
-// MARK: - Construction
-
-    @JvmOverloads
-    constructor(callback: Callback<Ti, To>? = null) {
-        _callback = callback
-    }
+open class CallbackDecorator<Ti, To>(callback: Callback<Ti, To>?):
+    Callback<Ti, To> {
 
 // MARK: - Methods
 
@@ -19,19 +12,19 @@ open class CallbackDecorator<Ti, To>: Callback<Ti, To> {
         return _callback?.onShouldExecute(call) ?: true
     }
 
-    override fun onSuccess(call: Call<Ti>, responseEntity: ResponseEntity<To>) {
-        _callback?.onSuccess(call, responseEntity)
+    override fun onSucceeded(call: Call<Ti>, responseEntity: ResponseEntity<To>) {
+        _callback?.onSucceeded(call, responseEntity)
     }
 
-    override fun onFailure(call: Call<Ti>, restApiError: RestApiError) {
-        _callback?.onFailure(call, restApiError)
+    override fun onFailed(call: Call<Ti>, restApiError: RestApiError) {
+        _callback?.onFailed(call, restApiError)
     }
 
-    override fun onCancel(call: Call<Ti>) {
-        _callback?.onCancel(call)
+    override fun onCancelled(call: Call<Ti>) {
+        _callback?.onCancelled(call)
     }
 
 // MARK: - Variables
 
-    private val _callback: Callback<Ti, To>?
+    private val _callback: Callback<Ti, To>? = callback
 }

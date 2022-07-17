@@ -10,20 +10,28 @@ interface Callback<Ti, To> {
     /**
      * TODO
      */
-    fun onShouldExecute(call: Call<Ti>): Boolean
+    fun onShouldExecute(call: Call<Ti>): Boolean {
+        return true
+    }
 
     /**
      * TODO
      */
-    fun onSuccess(call: Call<Ti>, responseEntity: ResponseEntity<To>)
+    fun onSucceeded(call: Call<Ti>, responseEntity: ResponseEntity<To>) {
+        // Do nothing
+    }
 
     /**
      * TODO
      */
-    fun onFailure(call: Call<Ti>, restApiError: RestApiError)
+    fun onFailed(call: Call<Ti>, restApiError: RestApiError) {
+        // Do nothing
+    }
 
     /**
      * TODO
      */
-    fun onCancel(call: Call<Ti>)
+    fun onCancelled(call: Call<Ti>) {
+        // Do nothing
+    }
 }
