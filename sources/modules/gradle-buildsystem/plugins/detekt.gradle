@@ -1,3 +1,5 @@
+//file:noinspection UnnecessaryQualifiedReference
+
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
 // @link https://github.com/arturbosch/detekt/issues/2047#issuecomment-545681072
@@ -21,7 +23,7 @@ detekt {
 }
 
 // @link https://searchfox.org/mozilla-mobile/source/android-components/build.gradle
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
     exclude "**/build/**"
     exclude "**/resources/**"
 }

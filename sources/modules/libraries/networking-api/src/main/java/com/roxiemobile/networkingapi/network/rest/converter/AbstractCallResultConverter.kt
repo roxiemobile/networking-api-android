@@ -12,38 +12,34 @@ abstract class AbstractCallResultConverter<T>: CallResultConverter<ByteArray, T>
 // MARK: - Methods
 
     override fun convert(callResult: CallResult<ByteArray>): CallResult<T> {
-        var newCallResult: CallResult<T>
 
         // Handle call result
-        if (callResult.isSuccess) {
-            try {
+        val newCallResult = callResult.fold(
+            onSuccess = { responseEntity ->
+                try {
+                    checkMediaType(responseEntity)
 
-                val responseEntity = checkNotNull(callResult.value()) { "responseEntity is null" }
-                checkMediaType(responseEntity)
-
-                // Convert response entity
-                val newResponseEntity = convert(responseEntity)
-                newCallResult = CallResult.success(newResponseEntity)
-            }
-            catch (ex: Exception) {
-                when (ex) {
-                    is ConversionException,
-                    is UnexpectedMediaTypeException -> {
-                        // Build new error with caught exception
-                        val error = ApplicationLayerError(ex)
-                        newCallResult = CallResult.failure(error)
-                    }
-                    else -> {
-                        throw ex
+                    // Convert response entity
+                    val newResponseEntity = convert(responseEntity)
+                    CallResult.success(newResponseEntity)
+                }
+                catch (ex: Exception) {
+                    when (ex) {
+                        is ConversionException,
+                        is UnexpectedMediaTypeException -> {
+                            // Build new error with caught exception
+                            CallResult.failure(ApplicationLayerError(ex))
+                        }
+                        else -> {
+                            throw ex
+                        }
                     }
                 }
-            }
-        }
-        else {
-            // Copy the original error
-            val error = checkNotNull(callResult.error()) { "error is null" }
-            newCallResult = CallResult.failure(error)
-        }
+            },
+            onFailure = { exception ->
+                CallResult.failure(exception)
+            },
+        )
 
         return newCallResult
     }
