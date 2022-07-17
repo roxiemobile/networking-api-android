@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "unused")
+@file:Suppress("unused")
 
 package com.roxiemobile.networkingapi.network.rest
 
@@ -22,10 +22,13 @@ import com.roxiemobile.networkingapi.network.rest.response.BasicResponseEntity
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 import okhttp3.CookieJar
 import okhttp3.Headers
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import okhttp3.internal.platform.Platform
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -108,24 +111,19 @@ class RestApiClient {
 
         // Create request body
         var httpBody = requestEntity.body
-        var requestBody: RequestBody? = null
 
         // NOTE: Workaround for OkHttp crash on POST with empty request body
         if (httpBody == null && httpMethod == HttpMethod.POST) {
             httpBody = EMPTY_HTTP_BODY
         }
 
-        if (httpBody != null) {
-            val mediaType = okhttp3.MediaType.parse(httpBody.mediaType.toString())
-            requestBody = RequestBody.create(mediaType, httpBody.body)
-        }
-
         // Build HTTP request
         val httpHeaders = requestEntity.httpHeaders
+        val requestBody = httpBody?.toRequestBody()
 
         builder.method(httpMethod.value, requestBody)
             .url(requestEntity.link.toString())
-            .headers(mapping(httpHeaders))
+            .headers(httpHeaders.toHeaders())
 
         requestBody?.contentType()?.let { contentType ->
             builder.header(HttpHeaders.CONTENT_TYPE, contentType.toString())
@@ -173,12 +171,8 @@ class RestApiClient {
                 ?.let(builder::hostnameVerifier)
 
             tlsConfig.sslSocketFactory?.let { sslSocketFactory ->
-                val trustManager = tlsConfig.trustManager
-
-                when (trustManager) {
-                    null -> builder.sslSocketFactory(sslSocketFactory)
-                    else -> builder.sslSocketFactory(sslSocketFactory, trustManager)
-                }
+                val trustManager = tlsConfig.trustManager ?: Platform.get().platformTrustManager()
+                builder.sslSocketFactory(sslSocketFactory, trustManager)
             }
         }
 
@@ -189,9 +183,9 @@ class RestApiClient {
     @Throws(IOException::class)
     private fun createResponseEntity(response: Response, cookieStore: CookieStore): ResponseEntity<ByteArray> {
 
-        val link = response.request().url().uri()
-        val httpHeaders = mapping(response.headers())
-        val httpStatus = HttpStatus.valueOf(response.code())
+        val link = response.request.url.toUri()
+        val httpHeaders = response.headers.toHttpHeaders()
+        val httpStatus = HttpStatus.valueOf(response.code)
 
         // Handle HTTP response
         val builder = BasicResponseEntity.Builder<ByteArray>()
@@ -202,7 +196,7 @@ class RestApiClient {
             .mediaType(MediaType.APPLICATION_OCTET_STREAM)
             .cookieStore(cookieStore)
 
-        response.body()?.let { responseBody ->
+        response.body?.let { responseBody ->
 
             // Set MediaType
             responseBody.contentType()?.let { contentType ->
@@ -213,34 +207,6 @@ class RestApiClient {
             // Set response body
             val body = ArrayUtils.emptyToNull(responseBody.bytes())
             builder.body(body)
-        }
-
-        // Done
-        return builder.build()
-    }
-
-    @Deprecated("Must be removed")
-    fun mapping(headers: Headers?): HttpHeaders {
-        val httpHeaders = HttpHeaders()
-
-        // Map okhttp3.Headers to HttpHeaders
-        headers?.names()?.forEach { name ->
-            httpHeaders[name] = headers.values(name)
-        }
-
-        // Done
-        return httpHeaders
-    }
-
-    @Deprecated("Must be removed")
-    fun mapping(headers: HttpHeaders?): Headers {
-        val builder = Headers.Builder()
-
-        // Map HttpHeaders to okhttp3.Headers
-        headers?.entries?.forEach { entry ->
-            entry.value.forEach { value ->
-                builder.add(entry.key, value)
-            }
         }
 
         // Done
@@ -269,7 +235,38 @@ class RestApiClient {
 // MARK: - Companion
 
     companion object {
+
+        private fun HttpBody.toRequestBody(): RequestBody {
+            val contentType = this.mediaType.toString().toMediaTypeOrNull()
+            return this.body.toRequestBody(contentType)
+        }
+
+        private fun HttpHeaders.toHeaders(): Headers {
+            val builder = Headers.Builder()
+
+            // Map HttpHeaders to okhttp3.Headers
+            this.entries.forEach { entry ->
+                entry.value.forEach { value ->
+                    builder.add(entry.key, value)
+                }
+            }
+
+            return builder.build()
+        }
+
+        private fun Headers.toHttpHeaders(): HttpHeaders {
+            val httpHeaders = HttpHeaders()
+
+            // Map okhttp3.Headers to HttpHeaders
+            names().forEach { name ->
+                httpHeaders[name] = values(name)
+            }
+
+            return HttpHeaders.readOnlyHttpHeaders(httpHeaders)
+        }
+
         private val TAG = RestApiClient::class.java.simpleName
+
         private val SHARED_HTTP_CLIENT = OkHttpClient.Builder().build()
         private val EMPTY_HTTP_BODY: HttpBody = ByteArrayBody()
     }

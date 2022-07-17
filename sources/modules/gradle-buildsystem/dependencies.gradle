@@ -45,7 +45,7 @@ ext.DEP_VER = [
         ],
         square: [
                 okhttp3: [
-                        okhttp: '3.12.13',
+                        okhttp: '4.10.0',
                 ],
         ],
 ]

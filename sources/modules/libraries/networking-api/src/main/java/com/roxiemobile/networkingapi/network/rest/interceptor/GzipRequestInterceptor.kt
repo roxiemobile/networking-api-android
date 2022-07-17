@@ -12,7 +12,7 @@ import okhttp3.Response
 import okio.Buffer
 import okio.BufferedSink
 import okio.GzipSink
-import okio.Okio
+import okio.buffer
 import java.io.IOException
 
 /**
@@ -26,13 +26,13 @@ class GzipRequestInterceptor: Interceptor {
     override fun intercept(chain: Chain): Response {
         val request = chain.request()
 
-        if (request.body() == null || request.header(HttpHeaders.CONTENT_ENCODING) != null) {
+        if (request.body == null || request.header(HttpHeaders.CONTENT_ENCODING) != null) {
             return chain.proceed(request)
         }
 
         val newRequest = request.newBuilder()
             .header(HttpHeaders.CONTENT_ENCODING, ContentCodingType.GZIP_VALUE)
-            .method(request.method(), requestBodyWithContentLength(gzip(request.body())))
+            .method(request.method, requestBodyWithContentLength(gzip(request.body)))
             .build()
 
         return chain.proceed(newRequest)
@@ -53,9 +53,9 @@ class GzipRequestInterceptor: Interceptor {
             }
 
             override fun writeTo(sink: BufferedSink) {
-                GzipSink(sink).use {
-                    Okio.buffer(it).use { gzipSink ->
-                        requestBody?.writeTo(gzipSink)
+                GzipSink(sink).use { gzipSink ->
+                    gzipSink.buffer().use {
+                        requestBody?.writeTo(it)
                     }
                 }
             }
@@ -79,7 +79,7 @@ class GzipRequestInterceptor: Interceptor {
             }
 
             override fun contentLength(): Long {
-                return buffer.size()
+                return buffer.size
             }
 
             override fun writeTo(sink: BufferedSink) {
