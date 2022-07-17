@@ -1,5 +1,3 @@
-@file:Suppress("CanBePrimaryConstructorProperty")
-
 package com.roxiemobile.networkingapi.network.rest.response.error
 
 import com.annimon.stream.function.Consumer
@@ -8,14 +6,7 @@ import java.io.PrintWriter
 import java.io.StringWriter
 
 abstract class AbstractRestApiError(cause: Throwable? = null):
-    RestApiError {
-
-// MARK: - Properties
-
-    /**
-     * Returns the cause of this `RestApiError`, or `null` if there is no cause.
-     */
-    override val cause: Throwable? = cause
+    RestApiError(cause) {
 
 // MARK: - Methods
 

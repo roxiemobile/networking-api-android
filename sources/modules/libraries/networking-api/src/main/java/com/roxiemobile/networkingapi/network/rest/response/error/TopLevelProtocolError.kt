@@ -3,20 +3,14 @@
 package com.roxiemobile.networkingapi.network.rest.response.error
 
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
-import com.roxiemobile.networkingapi.network.rest.response.RestApiError.RestApiErrorType
 
-abstract class TopLevelProtocolError<T>(responseEntity: ResponseEntity<T>):
+open class TopLevelProtocolError(responseEntity: ResponseEntity<*>):
     AbstractRestApiError() {
 
 // MARK: - Properties
 
     /**
-     * Returns the type of an error.
+     * Returns the HTTP response entity.
      */
-    override val type = RestApiErrorType.TOP_LEVEL_PROTOCOL
-
-    /**
-     * Returns the response entity.
-     */
-    val responseEntity: ResponseEntity<T> = responseEntity
+    val responseEntity: ResponseEntity<*> = responseEntity
 }
