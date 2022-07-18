@@ -1,8 +1,8 @@
-@file:Suppress("DEPRECATION", "UNCHECKED_CAST", "unused")
+@file:Suppress("UNCHECKED_CAST", "unused")
 
 package com.roxiemobile.networkingapi.network.rest.request
 
-import com.roxiemobile.androidcommons.concurrent.ThreadUtils
+import android.os.Looper
 import com.roxiemobile.java.util.toBase62
 import com.roxiemobile.networkingapi.network.http.CookieStore
 import com.roxiemobile.networkingapi.network.http.HttpHeaders
@@ -100,7 +100,7 @@ abstract class AbstractTask<Ti: HttpBody, To>:
      * to do so. May return `null` if this call was canceled.
      */
     protected fun call(): CallResult<To> {
-        check(!ThreadUtils.runningOnUiThread()) { "This method must not be called from the main thread!" }
+        check(!Looper.getMainLooper().isCurrentThread) { "This method must not be called from the main thread!" }
 
         val httpResult: HttpResult = callExecute()
         val callResult: CallResult<To>
@@ -122,12 +122,12 @@ abstract class AbstractTask<Ti: HttpBody, To>:
                         onFailed(ApplicationLayerError(cause))
                     }
                 },
-                onFailure = { error ->
+                onFailure = { exception ->
 
-                    val cause = when (error) {
+                    val cause = when (exception) {
                         // Wrap the HTTP connection error
-                        is IOException -> ConnectionException(error)
-                        else -> error
+                        is IOException -> ConnectionException(exception)
+                        else -> exception
                     }
 
                     when (cause) {
@@ -250,18 +250,18 @@ abstract class AbstractTask<Ti: HttpBody, To>:
             callback.onCancelled(this)
         }
         else if (callResult != null) {
-            if (callResult.isSuccess) {
-                val value = checkNotNull(callResult.value()) { "value is null" }
-                callback.onSucceeded(this, value)
-            }
-            else {
-                val exception = checkNotNull(callResult.error()) { "exception is null" }
-                when (exception) {
-                    is CancellationException -> callback.onCancelled(this)
-                    is RestApiError -> callback.onFailed(this, exception)
-                    else -> error("Unsupported exception: ${exception.javaClass.name}")
-                }
-            }
+            callResult.fold(
+                onSuccess = { value ->
+                    callback.onSucceeded(this, value)
+                },
+                onFailure = { exception ->
+                    when (exception) {
+                        is CancellationException -> callback.onCancelled(this)
+                        is RestApiError -> callback.onFailed(this, exception)
+                        else -> error("Unsupported exception: ${exception.javaClass.name}")
+                    }
+                },
+            )
         }
         else {
             error("!isCancelled() && (callResult == null)")
