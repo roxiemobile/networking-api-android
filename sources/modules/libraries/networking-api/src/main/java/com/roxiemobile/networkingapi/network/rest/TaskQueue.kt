@@ -125,21 +125,21 @@ object TaskQueue {
             return !_done.get() && awaitDone(_executor.submit<Boolean> { super.onShouldExecute(call) }, false)
         }
 
-        override fun onSuccess(call: Call<Ti>, responseEntity: ResponseEntity<To>) {
+        override fun onSucceeded(call: Call<Ti>, responseEntity: ResponseEntity<To>) {
             if (!_done.getAndSet(true)) {
-                _executor.execute { super.onSuccess(call, responseEntity) }
+                _executor.execute { super.onSucceeded(call, responseEntity) }
             }
         }
 
-        override fun onFailure(call: Call<Ti>, restApiError: RestApiError) {
+        override fun onFailed(call: Call<Ti>, restApiError: RestApiError) {
             if (!_done.getAndSet(true)) {
-                _executor.execute { super.onFailure(call, restApiError) }
+                _executor.execute { super.onFailed(call, restApiError) }
             }
         }
 
-        override fun onCancel(call: Call<Ti>) {
+        override fun onCancelled(call: Call<Ti>) {
             if (!_done.getAndSet(true)) {
-                _executor.execute { super.onCancel(call) }
+                _executor.execute { super.onCancelled(call) }
             }
         }
 
@@ -154,7 +154,7 @@ object TaskQueue {
                 catch (ex: ClassCastException) {
                     Logger.w(TAG, ex)
                 }
-                awaitDone(_executor.submit { super.onCancel(call) })
+                awaitDone(_executor.submit { super.onCancelled(call) })
             }
             return result
         }
