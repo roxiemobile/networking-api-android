@@ -8,7 +8,6 @@ import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.internal.Version
 
 /**
  * This interceptor adds a custom User-Agent.
@@ -21,7 +20,7 @@ class UserAgentRequestInterceptor: Interceptor {
         val request: Request = chain.request()
 
         val newRequest = request.newBuilder()
-            .header(HttpHeaders.USER_AGENT, createUserAgent(request.headers()))
+            .header(HttpHeaders.USER_AGENT, createUserAgent(request.headers))
             .build()
 
         return chain.proceed(newRequest)
@@ -32,16 +31,16 @@ class UserAgentRequestInterceptor: Interceptor {
     private fun createUserAgent(headers: Headers): String {
 
         val userAgentText = headers.values(HttpHeaders.USER_AGENT)
-            .filterNot { it.contains(OKHTTP_VERSION) }
-            .map { it + " " + OKHTTP_VERSION }
+            .filterNot { it.contains(OKHTTP_USER_AGENT) }
+            .map { it + " " + OKHTTP_USER_AGENT }
             .firstOrNull()
 
-        return userAgentText ?: OKHTTP_VERSION
+        return userAgentText ?: OKHTTP_USER_AGENT
     }
 
 // MARK: - Constants
 
     companion object {
-        val OKHTTP_VERSION: String = Version.userAgent()
+        const val OKHTTP_USER_AGENT: String = okhttp3.internal.userAgent
     }
 }

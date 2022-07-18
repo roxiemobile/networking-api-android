@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION", "SameParameterValue", "unused")
+@file:Suppress("SameParameterValue", "unused")
 
 package com.roxiemobile.networkingapi.network.rest
 

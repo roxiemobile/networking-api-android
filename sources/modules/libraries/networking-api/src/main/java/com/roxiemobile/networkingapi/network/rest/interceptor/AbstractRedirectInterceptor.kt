@@ -7,7 +7,7 @@ import okhttp3.Response
 import okhttp3.ResponseBody
 import okhttp3.internal.http.RealResponseBody
 import okio.GzipSource
-import okio.Okio
+import okio.buffer
 import java.io.IOException
 
 abstract class AbstractRedirectInterceptor: Interceptor {
@@ -42,13 +42,13 @@ abstract class AbstractRedirectInterceptor: Interceptor {
     protected fun decompressResponse(response: Response): Response {
         var newResponse = response
 
-        val responseBody = response.body()
+        val responseBody = response.body
         if (responseBody != null && "gzip".equals(response.header(HttpHeaders.CONTENT_ENCODING), ignoreCase = true)) {
 
             // Uncompress a response body
             GzipSource(responseBody.source()).use { gzipSource ->
 
-                val strippedHeaders = response.headers().newBuilder()
+                val strippedHeaders = response.headers.newBuilder()
                     .removeAll(HttpHeaders.CONTENT_ENCODING)
                     .removeAll(HttpHeaders.CONTENT_LENGTH)
                     .build()
@@ -57,7 +57,7 @@ abstract class AbstractRedirectInterceptor: Interceptor {
                 val newResponseBody = RealResponseBody(
                     strippedHeaders[HttpHeaders.CONTENT_TYPE],
                     strippedHeaders[HttpHeaders.CONTENT_LENGTH]?.toLongOrNull() ?: -1L,
-                    Okio.buffer(gzipSource),
+                    gzipSource.buffer(),
                 )
 
                 newResponse = response.newBuilder()
