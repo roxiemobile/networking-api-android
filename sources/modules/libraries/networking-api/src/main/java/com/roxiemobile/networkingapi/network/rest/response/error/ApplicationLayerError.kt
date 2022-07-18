@@ -1,17 +1,10 @@
 package com.roxiemobile.networkingapi.network.rest.response.error
 
 import com.annimon.stream.function.Consumer
-import com.roxiemobile.networkingapi.network.rest.response.RestApiError.RestApiErrorType
 import com.roxiemobile.networkingapi.network.rest.response.error.nested.ResponseEntityHolder
 
-class ApplicationLayerError(cause: Throwable): AbstractRestApiError(cause) {
-
-// MARK: - Properties
-
-    /**
-     * Returns the type of an error.
-     */
-    override val type = RestApiErrorType.APPLICATION_LAYER
+class ApplicationLayerError(cause: Throwable):
+    AbstractRestApiError(cause) {
 
 // MARK: - Methods
 

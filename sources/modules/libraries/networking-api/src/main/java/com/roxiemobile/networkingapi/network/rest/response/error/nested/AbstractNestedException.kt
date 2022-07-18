@@ -5,18 +5,11 @@ import com.roxiemobile.androidcommons.logging.Logger
 import com.roxiemobile.networkingapi.network.rest.converter.StringConverter
 import com.roxiemobile.networkingapi.network.rest.response.ResponseEntity
 
-abstract class AbstractNestedException:
-    Exception,
+abstract class AbstractNestedException(
+    responseEntity: ResponseEntity<ByteArray>,
+    cause: Throwable? = null,
+): Exception(cause),
     ResponseEntityHolder {
-
-// MARK: - Construction
-
-    /**
-     * Construct a new instance of nested exception based on a [ResponseEntity] and cause.
-     */
-    constructor(responseEntity: ResponseEntity<ByteArray>, cause: Throwable? = null): super(cause) {
-        _responseEntity = responseEntity
-    }
 
 // MARK: - Properties
 
@@ -72,5 +65,5 @@ abstract class AbstractNestedException:
 
 // MARK: - Variables
 
-    private val _responseEntity: ResponseEntity<ByteArray>
+    private val _responseEntity: ResponseEntity<ByteArray> = responseEntity
 }
