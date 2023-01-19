@@ -9,7 +9,7 @@ import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.internal.Version;
+import okhttp3.internal.Util;
 
 /**
  * This interceptor adds a custom User-Agent.
@@ -43,5 +43,5 @@ public class UserAgentRequestInterceptor implements Interceptor
 
 // MARK: - Constants
 
-    public static final String OKHTTP_VERSION = Version.userAgent();
+    public static final String OKHTTP_VERSION = Util.userAgent;
 }

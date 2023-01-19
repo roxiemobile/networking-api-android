@@ -15,6 +15,8 @@
  */
 package com.roxiemobile.networkingapi.network.http;
 
+import static okhttp3.internal.platform.Platform.WARN;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,11 +26,8 @@ import java.util.Map;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
+import okhttp3.internal.Util;
 import okhttp3.internal.platform.Platform;
-
-import static okhttp3.internal.Util.delimiterOffset;
-import static okhttp3.internal.Util.trimSubstring;
-import static okhttp3.internal.platform.Platform.WARN;
 
 /** A cookie jar that delegates to a {@link java.net.CookieHandler}. */
 public final class CompatJavaNetCookieJar implements CookieJar {
@@ -48,7 +47,7 @@ public final class CompatJavaNetCookieJar implements CookieJar {
       try {
         cookieHandler.put(url.uri(), multimap);
       } catch (IOException e) {
-        Platform.get().log(WARN, "Saving cookies failed for " + url.resolve("/..."), e);
+        Platform.get().log("Saving cookies failed for " + url.resolve("/..."), WARN, e);
       }
     }
   }
@@ -60,7 +59,7 @@ public final class CompatJavaNetCookieJar implements CookieJar {
     try {
       cookieHeaders = cookieHandler.get(url.uri(), headers);
     } catch (IOException e) {
-      Platform.get().log(WARN, "Loading cookies failed for " + url.resolve("/..."), e);
+      Platform.get().log("Loading cookies failed for " + url.resolve("/..."), WARN, e);
       return Collections.emptyList();
     }
 
@@ -88,14 +87,14 @@ public final class CompatJavaNetCookieJar implements CookieJar {
   private List<Cookie> decodeHeaderAsJavaNetCookies(HttpUrl url, String header) {
     List<Cookie> result = new ArrayList<>();
     for (int pos = 0, limit = header.length(), pairEnd; pos < limit; pos = pairEnd + 1) {
-      pairEnd = delimiterOffset(header, pos, limit, ";,");
-      int equalsSign = delimiterOffset(header, pos, pairEnd, '=');
-      String name = trimSubstring(header, pos, equalsSign);
+      pairEnd = Util.delimiterOffset(header, ";,", pos, limit);
+      int equalsSign = Util.delimiterOffset(header, '=', pos, pairEnd);
+      String name = Util.trimSubstring(header, pos, equalsSign);
       if (name.startsWith("$")) continue;
 
       // We have either name=value or just a name.
       String value = equalsSign < pairEnd
-          ? trimSubstring(header, equalsSign + 1, pairEnd)
+          ? Util.trimSubstring(header, equalsSign + 1, pairEnd)
           : "";
 
       // If the value is "quoted", drop the quotes.
